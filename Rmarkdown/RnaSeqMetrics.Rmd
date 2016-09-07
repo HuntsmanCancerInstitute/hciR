@@ -1,0 +1,93 @@
+---
+title: "RnaSeqMetric plots"
+author: "Chris Stubben"
+output: html_document
+params:
+   output: out
+   pattern: txt$
+   recursive: TRUE
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, comment="")
+opts <- paste0('pattern="', params$pattern, '", path="', params$output, '"')
+if(params$recursive)  opts <- paste0(opts, ", recursive=TRUE")
+library(highcharter)
+library(forcats)
+```
+
+This file was created using [R Markdown] and contains code to create interactive plots using [CollectRnaSeqMetrics] output.
+Load the required libraries and read the files using `read_RnaSeqMetrics` in
+the [hciR] package.
+
+```r
+library(hciR)
+library(highcharter)
+library(forcats)
+rna <- read_RnaSeqMetrics(`r opts`)
+```
+
+```{r load2, echo=FALSE}
+rna <- read_RnaSeqMetrics(path=params$output, pattern=params$pattern, recursive=params$recursive)
+```
+
+```{r rna}
+lapply(rna, head)
+```
+
+Plot the coverage for each sample using [highcharter].  Additional options are added to remove the legend,
+change the tooltip display, add zooming and export options (png, pdf, etc)
+
+```{r cov}
+hchart(rna$coverage, "line", x=Position, y=Coverage, group=Sample) %>%
+ hc_plotOptions(series=list(showInLegend=FALSE)) %>%
+  hc_tooltip(pointFormat = "<b>{series.name}</b><br>{point.x}, {point.y:.3f}", headerFormat="") %>%
+   hc_chart(zoomType = "xy")  %>%
+    hc_exporting(enabled=TRUE, filename = "coverage")
+```
+
+Plot any of the 20 metrics.
+
+```{r bar}
+c1 <- subset(rna$metrics, Key=="Pf_aligned_bases")
+hchart(c1, "column", x=Sample, y= round(Value/1e6,1) ) %>%
+ hc_yAxis(title=list(text="Bases (millions)")) %>%
+  hc_exporting(enabled=TRUE, filename = "bar")
+
+```
+
+Combine similar metrics like number of bases and plot together.   The new [forcats] package is used
+to sort the legend keys by the order that lines appear in the plot.
+
+
+```{r bases}
+c2 <-  subset(rna$metrics, Key %in% c("Pf_aligned_bases", "Coding_bases", "Utr_bases", "Intronic_bases")  )
+c2$Key <- fct_reorder( c2$Key, c2$Value, .desc=TRUE)
+highchart() %>%
+  hc_xAxis(categories = unique(c2$Sample)) %>%
+  hc_yAxis(title=list(text="Bases (millions)") ) %>%
+    hc_add_series_df(data = c2, type="line", x=Sample, y= round(Value/1e6, 1), group=Key)  %>%
+     hc_exporting(enabled=TRUE, filename = "bases")
+
+```
+
+Combine Median values.
+
+```{r median}
+c2 <-  subset(rna$metrics, Key %in% c("Median_cv_coverage", "Median_5prime_bias", "Median_3prime_bias",
+ "Median_5prime_to_3prime_bias"))
+ c2$Key <- fct_reorder( c2$Key, c2$Value, .desc=TRUE)
+ highchart() %>%
+   hc_xAxis(categories = unique(c2$Sample)) %>%
+   hc_yAxis(title=list(text="Median") ) %>%
+     hc_add_series_df(data = c2, type="line", x=Sample, y=Value, group=Key)  %>%
+     hc_exporting(enabled=TRUE, filename = "median")
+```
+
+<br>
+
+[forcats]: https://blog.rstudio.org/2016/08/31/forcats-0-1-0
+[highcharter]: http://jkunst.com/highcharter/index.html
+[hciR]: https://github.com/HuntsmanCancerInstitute/hciR
+[R Markdown]: http://rmarkdown.rstudio.com
+[CollectRnaSeqMetrics]: https://broadinstitute.github.io/picard/command-line-overview.html#CollectRnaSeqMetrics

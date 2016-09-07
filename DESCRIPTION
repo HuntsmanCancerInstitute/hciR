@@ -1,0 +1,12 @@
+Package: hciR
+Title: RNA-seq workflows at HCI
+Version: 0.1
+Date: 2016-09-07
+Author: Chris Stubben
+Maintainer: Chris Stubben <chris.stubben@hci.utah.edu>
+Imports:
+    dplyr
+Suggests:
+    forcats
+License: GPL-3
+Description: Create interactive graphics and reports with output from RNA-seq workflows
