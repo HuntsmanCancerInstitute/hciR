@@ -1,2 +1,4 @@
 Rmarkdown
 Rscripts
+^.*\.Rproj$
+^\.Rproj\.user$

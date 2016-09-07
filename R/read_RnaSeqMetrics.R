@@ -22,7 +22,7 @@
 #'    # read output files matching Control-1 in current directory
 #'    read_RnaSeqMetrics( pattern="Control-1")
 #'    # read all files in out/ directory and all subdirectories
-#'    read_RnaSeqMetrics(out", "*", recursive=TRUE)
+#'    read_RnaSeqMetrics("out", "*", recursive=TRUE)
 #' }
 
 read_RnaSeqMetrics<- function( path=".", pattern="\\.txt$",  split= "[_.]", ...){
@@ -50,20 +50,20 @@ read_RnaSeqMetrics<- function( path=".", pattern="\\.txt$",  split= "[_.]", ...)
     if( length(n1) == 0)  stop("Line starting with PF_BASES not found in ", n[i] )
 
     zz <- textConnection(x[n1:(n1+1)])
-    x1 <- read.delim(zz)
+    x1 <- utils::read.delim(zz)
     close(zz)
     ## long format
     y <- data.frame(Sample= samples[i],
              Key= paste0(substr(names(x1), 1,1), tolower(substring(names(x1), 2) )),
              Value= as.vector(unlist(x1)), stringsAsFactors=FALSE)
-    y <- subset(y, !is.na(Value))
+    y <- subset(y, !is.na(y$Value))
     out1[[i]] <- y
 
     n2 <- grep("^normalized_position", x)
     if( length(n2) == 0)  stop("Line starting with normalized_position not found in ", n[i] )
 
     zz <- textConnection(x[n2:length(x)])
-    x2 <- read.delim(zz)
+    x2 <- utils::read.delim(zz)
     close(zz)
     names(x2) <- c("Position", "Coverage")
     out2[[i]] <- cbind(Sample=samples[i], x2)
