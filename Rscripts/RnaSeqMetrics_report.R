@@ -3,8 +3,6 @@
 suppressPackageStartupMessages(library("optparse"))
 suppressPackageStartupMessages(library("rmarkdown"))
 
-source("~/Documents/R/packages/hciR/R/read_RnaSeqMetrics.R")
-
 opts <-  list(
     make_option(c("-o", "--output"), default="out",
        help="CollectRnaSeqMetrics output directory, default out/"),

@@ -2,7 +2,7 @@
 #'
 #' Reads CollectRnaSeqMetric output files and creates metrics and coverage tables.
 #'
-#' The path and pattern options are used by \code{\link{list.files}}.
+#' The output and pattern options are used by \code{\link{list.files}}.
 #'
 #' @param path the path name to CollectRnaSeqMetrics output files; the default
 #'        corresponds to the working directory.

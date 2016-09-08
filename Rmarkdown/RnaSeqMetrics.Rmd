@@ -12,6 +12,7 @@ params:
 knitr::opts_chunk$set(warning=FALSE, comment="")
 opts <- paste0('pattern="', params$pattern, '", path="', params$output, '"')
 if(params$recursive)  opts <- paste0(opts, ", recursive=TRUE")
+library(hciR)
 library(highcharter)
 library(forcats)
 ```
