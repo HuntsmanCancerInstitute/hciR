@@ -3,7 +3,7 @@ title: "RnaSeqMetric plots"
 author: "Chris Stubben"
 output: html_document
 params:
-   output: out
+   output: Metrics
    pattern: txt$
    recursive: TRUE
 ---
@@ -14,32 +14,17 @@ opts <- paste0('pattern="', params$pattern, '", path="', params$output, '"')
 if(params$recursive)  opts <- paste0(opts, ", recursive=TRUE")
 library(hciR)
 library(highcharter)
-library(forcats)
-```
-
-This file was created using [R Markdown] and contains code to create interactive plots using [CollectRnaSeqMetrics] output.
-Load the required libraries and read the files using `read_RnaSeqMetrics` in
-the [hciR] package.
-
-```r
-library(hciR)
-library(highcharter)
-library(forcats)
-rna <- read_RnaSeqMetrics(`r opts`)
-```
-
-```{r load2, echo=FALSE}
+library(tidyr)
+library(DT)
 rna <- read_RnaSeqMetrics(path=params$output, pattern=params$pattern, recursive=params$recursive)
 ```
 
-```{r rna}
-lapply(rna, head)
-```
+This file was created using [R Markdown] and reads output files from [CollectRnaSeqMetrics].
+The [link] to definitions on the [CollectRnaSeqMetrics] page describes the different metrics in more detail.
 
-Plot the coverage for each sample using [highcharter].  Additional options are added to remove the legend,
-change the tooltip display, add zooming and export options (png, pdf, etc)
+### Transcript coverage
 
-```{r cov}
+```{r cov, echo=FALSE}
 hchart(rna$coverage, "line", x=Position, y=Coverage, group=Sample) %>%
  hc_plotOptions(series=list(showInLegend=FALSE)) %>%
   hc_tooltip(pointFormat = "<b>{series.name}</b><br>{point.x}, {point.y:.3f}", headerFormat="") %>%
@@ -47,48 +32,29 @@ hchart(rna$coverage, "line", x=Position, y=Coverage, group=Sample) %>%
     hc_exporting(enabled=TRUE, filename = "coverage")
 ```
 
-Plot any of the 20 metrics.
+### Percent aligned
 
-```{r bar}
-c1 <- subset(rna$metrics, Key=="Pf_aligned_bases")
-hchart(c1, "column", x=Sample, y= round(Value/1e6,1) ) %>%
- hc_yAxis(title=list(text="Bases (millions)")) %>%
-  hc_exporting(enabled=TRUE, filename = "bar")
+<br>
 
-```
-
-Combine similar metrics like number of bases and plot together.   The new [forcats] package is used
-to sort the legend keys by the order that lines appear in the plot.
-
-
-```{r bases}
-c2 <-  subset(rna$metrics, Key %in% c("Pf_aligned_bases", "Coding_bases", "Utr_bases", "Intronic_bases")  )
-c2$Key <- fct_reorder( c2$Key, c2$Value, .desc=TRUE)
-highchart() %>%
-  hc_xAxis(categories = unique(c2$Sample)) %>%
-  hc_yAxis(title=list(text="Bases (millions)") ) %>%
-    hc_add_series_df(data = c2, type="line", x=Sample, y= round(Value/1e6, 1), group=Key)  %>%
-     hc_exporting(enabled=TRUE, filename = "bases")
-
-```
-
-Combine Median values.
-
-```{r median}
-c2 <-  subset(rna$metrics, Key %in% c("Median_cv_coverage", "Median_5prime_bias", "Median_3prime_bias",
- "Median_5prime_to_3prime_bias"))
- c2$Key <- fct_reorder( c2$Key, c2$Value, .desc=TRUE)
- highchart() %>%
-   hc_xAxis(categories = unique(c2$Sample)) %>%
-   hc_yAxis(title=list(text="Median") ) %>%
-     hc_add_series_df(data = c2, type="line", x=Sample, y=Value, group=Key)  %>%
-     hc_exporting(enabled=TRUE, filename = "median")
+```{r metrics, echo=FALSE}
+x <- spread(rna$metrics, Key, Value)
+x <- x[, c("Sample", "Pf_aligned_bases", "Pct_coding_bases", "Pct_utr_bases", "Pct_intergenic_bases",
+           "Pct_intronic_bases", "Pct_ribosomal_bases", "Pct_usable_bases")]
+names(x) <- gsub("Pct_|_bases", "",  names(x))
+names(x)[1:2] <- c("sample", "aligned bases")
+### turn off pagination for small tables ONLY  where dom = "p"
+DOM <- "Brtip"
+if(nrow(x)<=10) DOM <- "Brti"
+datatable(x,  extensions = 'Buttons', options = list(
+    dom = DOM,
+    buttons = c('copy', 'csv', 'excel', 'pdf')
+  )) %>% formatPercentage( 3:8, 2)
 ```
 
 <br>
 
-[forcats]: https://blog.rstudio.org/2016/08/31/forcats-0-1-0
+
 [highcharter]: http://jkunst.com/highcharter/index.html
-[hciR]: https://github.com/HuntsmanCancerInstitute/hciR
 [R Markdown]: http://rmarkdown.rstudio.com
 [CollectRnaSeqMetrics]: https://broadinstitute.github.io/picard/command-line-overview.html#CollectRnaSeqMetrics
+[link]: https://broadinstitute.github.io/picard/picard-metric-definitions.html#RnaSeqMetrics
