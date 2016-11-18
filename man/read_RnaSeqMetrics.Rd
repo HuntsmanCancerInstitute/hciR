@@ -4,18 +4,14 @@
 \alias{read_RnaSeqMetrics}
 \title{Read CollectRnaSeqMetrics output}
 \usage{
-read_RnaSeqMetrics(path = ".", pattern = "\\\\.txt$", split = "[_.]", ...)
+read_RnaSeqMetrics(path = ".", pattern = "\\\\.txt$")
 }
 \arguments{
-\item{path}{the path name to CollectRnaSeqMetrics output files; the default
+\item{path}{the path name to CollectRnaSeqMetrics output files, the default
 corresponds to the working directory.}
 
 \item{pattern}{a regular expression, default ".txt$". Only file names which
 match the regular expression will be loaded.}
-
-\item{split}{a regular expression to parse sample name from file name, default is name before _ or . "[_.]".}
-
-\item{\dots}{additional options passed to \code{\link{list.files}}}
 }
 \value{
 A list with coverage and stats data.frames
@@ -23,17 +19,12 @@ A list with coverage and stats data.frames
 \description{
 Reads CollectRnaSeqMetric output files and creates metrics and coverage tables.
 }
-\details{
-The path and pattern options are used by \code{\link{list.files}}.
-}
 \examples{
 \dontrun{
    # read all *.txt files in out/ directory
    read_RnaSeqMetrics( "out")
    # read output files matching Control-1 in current directory
    read_RnaSeqMetrics( pattern="Control-1")
-   # read all files in out/ directory and all subdirectories
-   read_RnaSeqMetrics("out", "*", recursive=TRUE)
 }
 }
 \author{
