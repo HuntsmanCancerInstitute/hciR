@@ -47,7 +47,7 @@
 read_RSEM <- function(path = ".", pattern = "genes.results$", reshape = TRUE, stats = FALSE){
    if(!stats){
       res1 <- read_sample_files(path, pattern)
-      if(reshape)  res1 <- dplyr::select( res1, sample, gene_id, expected_count) %>% spread(sample, expected_count)
+      if(reshape)  res1 <- dplyr::select( res1, sample, gene_id, expected_count) %>% tidyr::spread(sample, expected_count)
    }else{
       cntF <- list.files(path, "\\.cnt$", recursive=TRUE, full.names=TRUE)
       if(length(cntF)==0) stop("No *.cnt files found")
@@ -59,11 +59,11 @@ read_RSEM <- function(path = ".", pattern = "genes.results$", reshape = TRUE, st
          x1 <- as.matrix(x1)  # to select rows without unlisting
          ## Reads per alignment starting in row 4
          x2 <- read.table(file = cntF[i], skip=3, sep="\t")
-         cnt <- bind_rows(
+         cnt <- dplyr::bind_rows(
            tibble(row=1, stat=c("Unaligned", "Aligned",  "Filtered", "Total" ), n=1:4,  value=x1[1,1:4] ),
            tibble(row=2, stat=c("Unique",    "Multiple", "Uncertain" ),         n=1:3,  value=x1[2,1:3] ),
            tibble(row=3, stat=c("Hits"),                                        n=1,    value=x1[3,1] ),
-           tibble(row=1:nrow(x2)+3, stat="Reads per alignment",                 n= x2[,1], value=x2[,2] )
+           tibble(row=1:nrow(x2)+3, stat="Reads per alignment",                 n=x2[,1], value=x2[,2] )
                         )
          # add sample and file ending
          cnt <- tibble::add_column(cnt, sample=samples[i], file = "count", .before=1)
@@ -89,14 +89,15 @@ read_RSEM <- function(path = ".", pattern = "genes.results$", reshape = TRUE, st
             rspd <- tibble(row=13, stat= "Read start position",  n=1:x3[12], value=as.numeric(strsplit(x3[13], " ")[[1]]) )
          }
          # TO DO get Quality scores
-         model <- bind_rows(fld, rld, rspd)
+         model <- dplyr::bind_rows(fld, rld, rspd)
          model <- tibble::add_column(model, sample=samples[i], file = "model", .before=1)
-         out1[[i]] <- bind_rows(cnt, model)
+         out1[[i]] <- dplyr::bind_rows(cnt, model)
       }
-      res1 <- bind_rows(out1)
+      res1 <- dplyr::bind_rows(out1)
       if(reshape){
-         res1 <-  filter(res1, file=="count", row <= 3 ) %>%
-              dplyr::select(sample, stat, value) %>% spread(stat, value)
+         res1 <-  dplyr::filter(res1, file=="count", row <= 3 ) %>%
+                   dplyr::select(sample, stat, value) %>%
+                    tidyr::spread(stat, value)
       }
   }
   res1

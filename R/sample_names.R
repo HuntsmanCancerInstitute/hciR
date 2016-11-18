@@ -10,6 +10,7 @@
 #' @author Chris Stubben
 #'
 #' @examples
+#'  # File name or parent directory should be unique
 #'  sample_names(c("align1/1355X1.counts", "align2/1355X2.counts"))
 #'  sample_names(c("align1/1355X1/Log.out", "align2/1355X2/Log.out"))
 #' @export

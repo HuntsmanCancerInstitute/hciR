@@ -35,20 +35,20 @@ read_RnaSeqMetrics<- function( path=".", pattern="\\.txt$" ){
     n1 <- grep("^PF_BASES", x)
   # warn and skip instead?
     if( length(n1) == 0)  stop("Line starting with PF_BASES not found in ", n[i] )
-    x1 <- read_tsv( paste(x[n1:(n1+1)], collapse ="\n") )
+    x1 <- readr::read_tsv( paste(x[n1:(n1+1)], collapse ="\n") )
     names(x1) <- tolower(names(x1))
     ## long format, convert to numeric, remove NAs and add sample name
-    out1[[i]] <- gather(x1)  %>%
-                  mutate(value = as.numeric(value)) %>%
-                   filter(!is.na(value) ) %>%
-                    add_column( sample= samples[i], .before=1)
+    out1[[i]] <- tidyr::gather(x1)  %>%
+                  dplyr::mutate(value = as.numeric(value)) %>%
+                   dplyr::filter(!is.na(value) ) %>%
+                    tibble::add_column( sample= samples[i], .before=1)
 
     n2 <- grep("^normalized_position", x)
     if( length(n2) == 0)  stop("Line starting with normalized_position not found in ", n[i] )
      # normalized_position All_Reads.normalized_coverage
-     x2 <- read_tsv( paste(x[n2:length(x)], collapse ="\n") , skip=1, col_names =  c("position", "coverage"))
+     x2 <- readr::read_tsv( paste(x[n2:length(x)], collapse ="\n") , skip=1, col_names =  c("position", "coverage"))
      out2[[i]] <- tibble::add_column (x2, sample= samples[i], .before=1)
   }
   message("Read ", length(outfiles), " files")
-  list(metrics= bind_rows( out1), coverage=bind_rows( out2))
+  list(metrics= dplyr::bind_rows( out1), coverage=dplyr::bind_rows( out2))
 }
