@@ -30,7 +30,7 @@ read_RnaSeqMetrics<- function( path=".", pattern="\\.txt$" ){
   out2 <- vector("list", length(outfiles))
 
   for(i in seq_along( outfiles)){
-    x <- readLines( outfiles[i] )
+    x <- readr::read_lines( outfiles[i] )
 
     n1 <- grep("^PF_BASES", x)
   # warn and skip instead?

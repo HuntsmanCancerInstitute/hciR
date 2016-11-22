@@ -10,7 +10,7 @@ read_featureCounts(path = ".", pattern, reshape = TRUE, stats = FALSE)
 \item{path}{the path to featureCounts output files, the default
 corresponds to the working directory.}
 
-\item{pattern}{regular expression for file name matching, deafult .counts and .summary}
+\item{pattern}{regular expression for file name matching, default .counts and .summary}
 
 \item{reshape}{reshape into wide format with samples in rows (count matrix)}
 
@@ -31,8 +31,9 @@ Reads featureCount count or alignment summary files and optionally reshape into
  fc <- read_featureCounts(".", stats=TRUE, reshape=FALSE)
  fc
  filter(fc, count!=0) \%>\%
-   hchart("bar", x=sample ,  y=count, group=status) \%>\%
-     hc_plotOptions(bar = list(stacking = "normal"))
+   hchart("bar", x=sample,  y=count, group=status) \%>\%
+     hc_plotOptions(bar = list(stacking = "normal"))  \%>\%
+      hc_yAxis(reversedStacks = FALSE)
 }
 }
 \author{

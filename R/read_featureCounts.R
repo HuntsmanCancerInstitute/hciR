@@ -5,7 +5,7 @@
 #'
 #' @param path the path to featureCounts output files, the default
 #'        corresponds to the working directory.
-#' @param pattern regular expression for file name matching, deafult .counts and .summary
+#' @param pattern regular expression for file name matching, default .counts and .summary
 #' @param reshape reshape into wide format with samples in rows (count matrix)
 #' @param stats read stats tables, default counts
 #'
@@ -21,8 +21,9 @@
 #'  fc <- read_featureCounts(".", stats=TRUE, reshape=FALSE)
 #'  fc
 #'  filter(fc, count!=0) %>%
-#'    hchart("bar", x=sample ,  y=count, group=status) %>%
-#'      hc_plotOptions(bar = list(stacking = "normal"))
+#'    hchart("bar", x=sample,  y=count, group=status) %>%
+#'      hc_plotOptions(bar = list(stacking = "normal"))  %>%
+#'       hc_yAxis(reversedStacks = FALSE)
 #' }
 #' @export
 
