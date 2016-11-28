@@ -22,6 +22,15 @@ A highchart
 \description{
 Highchart version of sample PCA plot for transformed data
 }
+\examples{
+dds <- makeExampleDESeqDataSet(betaSD=1)
+rld <- rlog(dds)
+plotPCA(rld)
+hc_plotPCA(rld)
+colData(rld)$sample <- 1:12
+colData(rld)$gender <- sample(c("M", "F"), 12, TRUE)
+hc_plotPCA(rld, tooltip=c("sample", "gender"))
+}
 \author{
 Chris Stubben
 }
