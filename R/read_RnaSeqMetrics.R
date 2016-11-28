@@ -7,7 +7,7 @@
 #' @param pattern a regular expression, default ".txt$". Only file names which
 #'        match the regular expression will be loaded.
 #'
-#' @return A list with coverage and stats data.frames
+#' @return A list with coverage and stats tables
 #'
 #' @author Chris Stubben
 #'

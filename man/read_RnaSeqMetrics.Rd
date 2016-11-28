@@ -14,7 +14,7 @@ corresponds to the working directory.}
 match the regular expression will be loaded.}
 }
 \value{
-A list with coverage and stats data.frames
+A list with coverage and stats tables
 }
 \description{
 Reads CollectRnaSeqMetric output files and creates metrics and coverage tables.

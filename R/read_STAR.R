@@ -48,7 +48,7 @@ read_STAR <- function( path=".", pattern, reshape=FALSE){
             arrange(sample)
 
    ##  split unmapped reads into too many mismatches, too short and  other?
-   #  divide %unmapped  by total %unmapped  and muliply by Unmapped reads to get estimate
+   #  divide %unmapped too short  by total %unmapped  and muliply by Unmapped reads to get estimate
 
    if(reshape){
       n <- c(mapped,  "Unmapped reads", "Number of input reads" )
