@@ -27,7 +27,7 @@
 read_sample_files <- function(path=".", pattern="\\.counts$", delim="\t",  ...){
    outfiles <- list.files(path, pattern, recursive=TRUE, full.names=TRUE)
    if(length(outfiles) == 0) stop("No ", pattern, " files found in ", path, call.=FALSE)
-   samples <- sample_names(outfiles)
+   samples <- sample_extract(outfiles)
 
    out1 <- vector("list", length(outfiles))
    for(i in seq_along(outfiles)){

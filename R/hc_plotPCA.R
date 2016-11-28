@@ -38,7 +38,7 @@ hc_plotPCA <- function(object, intgroup="condition", tooltip, ntop = 500){
     }else{
        if(!all(tooltip %in% names(colData(object)))) stop("tooltip should match columns of colData(object)")
        ## if tooltip = ID, patient, gender  then tooltipJS =
-      ##  "'ID: ' + this.point.ID + '<br>patient: ' + this.point.patient + '<br>gender: ' + this.point.gender
+      ##  'ID: ' + this.point.ID + '<br>patient: ' + this.point.patient + '<br>gender: ' + this.point.gender
       tooltipJS <-  paste0("'", paste( tooltip, ": ' + this.point.", tooltip, sep="", collapse = " + '<br>"))
    }
    hchart(d, "scatter", x=PC1, y=PC2, group=INTGRP ) %>%
