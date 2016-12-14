@@ -8,6 +8,9 @@ read_biomart(dataset = "human", fragments = TRUE)
 }
 \arguments{
 \item{dataset}{ensembl dataset name from \code{listEnsembl}}
+
+\item{fragments}{drop fragments like GL456211.1, CHR_MG132_PATCH (any chromosome
+name with 3 or more characters), default TRUE}
 }
 \value{
 A tibble with id, biotype, description, chromosome, start, end, strand

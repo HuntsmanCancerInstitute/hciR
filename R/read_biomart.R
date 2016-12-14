@@ -3,6 +3,8 @@
 #' Read Ensembl annotations using \code{biomaRt} library
 #'
 #' @param dataset ensembl dataset name from \code{listEnsembl}
+#' @param fragments drop fragments like GL456211.1, CHR_MG132_PATCH (any chromosome
+#' name with 3 or more characters), default TRUE
 #'
 #' @return A tibble with id, biotype, description, chromosome, start, end, strand
 #'  gene name and transcript count

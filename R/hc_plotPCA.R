@@ -5,8 +5,9 @@
 #' @param object a DESeqTransform object
 #' @param intgroup a character vector of names in colData(x) for grouping, default 'condition'
 #' @param tooltip a character vector of names in colData(x) for tooltip display,
-#'       default displays the object column names'
+#'       default displays the object column names
 #' @param ntop number of top variable genes to use for principal components
+#' @param \dots additional options passed to \code{hc_chart}
 #'
 #' @return A highchart
 #'
@@ -22,9 +23,9 @@
 #' hc_plotPCA(rld, tooltip=c("sample", "gender"))
 #' @export
 
-hc_plotPCA <- function(object, intgroup="condition", tooltip, ntop = 500){
-   n  <- apply(assay(rld), 1, var)
-   x  <-  head(assay(rld)[ order(n, decreasing=TRUE),], ntop)
+hc_plotPCA <- function(object, intgroup="condition", tooltip, ntop = 500, ...){
+   n  <- apply(assay(object), 1, var)
+   x  <-  head(assay(object)[ order(n, decreasing=TRUE),], ntop)
    pca <- prcomp(t(x))
    percentVar <- round(pca$sdev^2/sum(pca$sdev^2) * 100, 1)
 
@@ -46,6 +47,6 @@ hc_plotPCA <- function(object, intgroup="condition", tooltip, ntop = 500){
      hc_xAxis(title = list(text = paste0("PC1: ", percentVar[1], "% variance")),
              gridLineWidth=1, tickLength=0, startOnTick="true", endOnTick="true") %>%
       hc_yAxis(title = list(text = paste0("PC2: ", percentVar[2], "% variance"))) %>%
-       hc_chart(zoomType = "xy")  %>%
+       hc_chart(zoomType = "xy", ...)  %>%
         hc_exporting(enabled=TRUE, filename = "pca")
 }

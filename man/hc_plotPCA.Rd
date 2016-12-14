@@ -12,7 +12,7 @@ hc_plotPCA(object, intgroup = "condition", tooltip, ntop = 500)
 \item{intgroup}{a character vector of names in colData(x) for grouping, default 'condition'}
 
 \item{tooltip}{a character vector of names in colData(x) for tooltip display,
-default displays the object column names'}
+default displays the object column names}
 
 \item{ntop}{number of top variable genes to use for principal components}
 }
