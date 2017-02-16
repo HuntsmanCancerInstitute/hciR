@@ -1,35 +1,44 @@
-#' Sort the columns of a count matrix by rows in sample data
+#' Sort columns of a count matrix by rows in sample data
 #'
-#' Creating a DESeqDataSet from a count matrix requires columns sorted by the rows in the sample dataset.
-#'  This reorders the columns in the count matrix to match sample data.
+#' \code{DESeqDataSetFromMatrix} requires count columns sorted by the rows in sample data and only checks
+#' if sample row names match count column names (and tibbles do not have row names).  This matches column
+#' names in a count table to the first column in sample data and reorders columns to match.
 #'
-#' @param count_matrix a count matrix
-#' @param sample_data a sample table
+#' @param count_tbl count matrix, data.frame or tibble
+#' @param sample_tbl sample tabl with a column containing the columns names in count matrix
 #' @param id position of column in sample data that matches column names in the
-#'   count matrix, default is the first column
+#'   count table, default is the first column
 #'
-#' @return A re-ordered count matrix
+#' @return A count matrix with columns re-ordered to match the sample table
 #'
 #' @author Chris Stubben
 #'
 #' @examples
 #' \dontrun{
-#' count_matrix <-  sort_counts(count_matrix, sample_data)
+#' count_tbl <-  sort_counts(counts, samples)
 #' }
 #' @export
 
-sort_counts <- function(count_matrix, sample_data, id=1){
+sort_counts <- function(count_tbl, sample_tbl, id=1){
+   orig_count_tbl <- count_tbl
+   if( class(count_tbl)[1] != "matrix") count_tbl <- as.matrix(count_tbl)
+
    # match first column in sample data by default
-   if( ncol(count_matrix) !=  nrow(sample_data) ){
-         stop("sample_data should have the same number of rows as columns in the count_matrix")
+   if( ncol(count_tbl) !=  nrow(sample_tbl) ){
+         stop("count_tbl should have same number of columns as sample_tbl rows")
    }
-   n <- match(sample_data[[id]], colnames(count_matrix ) )
-   if(any(is.na(n))) stop( "Column names in count_matrix do not match names in column ", id)
+   n <- match(sample_tbl[[id]], colnames(count_tbl ) )
+   if(any(is.na(n))) stop( "Column names in count_tbl do not match sample names in column ", id)
    if(all(diff(n)==1) ){
-       message("Count_matrix is already sorted by sample_data")
+       # message("counts are already sorted by samples")
+       c1 <- orig_count_tbl
    }else{
-      message("Reordering columns in count_matrix to match sample_data")
-      count_matrix <- count_matrix[, n]
-    }
-    count_matrix
+      message("Reordering columns in counts to match samples")
+      if( is.tbl( orig_count_tbl)){
+         c1 <- orig_count_tbl[, c(1, n+1) ]
+      }else{
+         c1 <- orig_count_tbl[, n ]
+      }
+   }
+   c1
 }

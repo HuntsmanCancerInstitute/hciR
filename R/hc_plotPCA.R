@@ -44,8 +44,8 @@ hc_plotPCA <- function(object, intgroup="condition", tooltip, ntop = 500, pc=c(1
       ##  'ID: ' + this.point.ID + '<br>patient: ' + this.point.patient + '<br>gender: ' + this.point.gender
       tooltipJS <-  paste0("'", paste( tooltip, ": ' + this.point.", tooltip, sep="", collapse = " + '<br>"))
    }
-   highchart() %>%
-   hc_add_series_df(d, type = "scatter", x=PC1, y=PC2, group=INTGRP) %>%
+   highchart() %>%   
+   hc_add_series(d , type = "scatter", mapping = hcaes( x= PC1, y= PC2, group= INTGRP) ) %>%
     hc_tooltip(formatter = JS( paste0("function(){ return (", tooltipJS, ")}"))) %>%
      hc_xAxis(title = list(text = paste0("PC",  pc[1], ": ", percentVar[ pc[1] ], "% variance")),
              gridLineWidth=1, tickLength=0, startOnTick="true", endOnTick="true") %>%

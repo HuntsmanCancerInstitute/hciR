@@ -2,28 +2,29 @@
 % Please edit documentation in R/sort_counts.R
 \name{sort_counts}
 \alias{sort_counts}
-\title{Sort the columns of a count matrix by rows in sample data}
+\title{Sort columns of a count matrix by rows in sample data}
 \usage{
-sort_counts(count_matrix, sample_data, id = 1)
+sort_counts(count_tbl, sample_tbl, id = 1)
 }
 \arguments{
-\item{count_matrix}{a count matrix}
+\item{count_tbl}{count matrix, data.frame or tibble}
 
-\item{sample_data}{a sample table}
+\item{sample_tbl}{sample tabl with a column containing the columns names in count matrix}
 
 \item{id}{position of column in sample data that matches column names in the
-count matrix, default is the first column}
+count table, default is the first column}
 }
 \value{
-A re-ordered count matrix
+A count matrix with columns re-ordered to match the sample table
 }
 \description{
-Creating a DESeqDataSet from a count matrix requires columns sorted by the rows in the sample dataset.
- This reorders the columns in the count matrix to match sample data.
+\code{DESeqDataSetFromMatrix} requires count columns sorted by the rows in sample data and only checks
+if sample row names match count column names (and tibbles do not have row names).  This matches column
+names in a count table to the first column in sample data and reorders columns to match.
 }
 \examples{
 \dontrun{
-count_matrix <-  sort_counts(count_matrix, sample_data)
+count_tbl <-  sort_counts(counts, samples)
 }
 }
 \author{

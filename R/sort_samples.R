@@ -10,9 +10,10 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#'  samples <- c("135X1", "135X2", "135X11")
-#'  sort(samples)
-#'  sort_samples(samples)
+#'  ids <- c("135X1", "135X21", "135X2", "135X10")
+#'  sort(ids)
+#'  sort_samples(ids)
+#'  order_samples(ids)
 #' @export
 
 sort_samples <- function(samples){

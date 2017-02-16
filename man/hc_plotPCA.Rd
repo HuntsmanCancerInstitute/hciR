@@ -4,7 +4,8 @@
 \alias{hc_plotPCA}
 \title{Highchart version of plotPCA in DESeq2}
 \usage{
-hc_plotPCA(object, intgroup = "condition", tooltip, ntop = 500)
+hc_plotPCA(object, intgroup = "condition", tooltip, ntop = 500, pc = c(1,
+  2), ...)
 }
 \arguments{
 \item{object}{a DESeqTransform object}
@@ -15,6 +16,10 @@ hc_plotPCA(object, intgroup = "condition", tooltip, ntop = 500)
 default displays the object column names}
 
 \item{ntop}{number of top variable genes to use for principal components}
+
+\item{pc}{a vector of components to plot, default 1st and 2nd}
+
+\item{\dots}{additional options passed to \code{hc_chart}}
 }
 \value{
 A highchart

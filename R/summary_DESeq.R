@@ -10,13 +10,18 @@
 #'
 #' @examples
 #' \dontrun{
-#' summary_DESeq(res1)
+#' summary_deseq(res1)
 #' }
 #' @export
 
 
-summary_DESeq <-  function(object){
-   alpha      <- metadata(object)$alpha
+summary_deseq <-  function(object){
+   if(class(object)[1] == "DESeqResults") {
+        alpha      <- metadata(object)$alpha
+        ## if using tibble from results_all or  annotate_results
+      }else{
+          alpha <- attr(object, "alpha")
+      }
    notallzero <- sum(object$baseMean > 0)
     outlier <- sum(object$baseMean > 0 & is.na(object$pvalue))
    # check if  "ihwResult" %in% names(metadata(object)) ??

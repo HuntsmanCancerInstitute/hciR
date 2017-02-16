@@ -4,20 +4,31 @@
 \alias{read_biomart}
 \title{Read biomart annotations}
 \usage{
-read_biomart(dataset = "human", fragments = TRUE)
+read_biomart(dataset = "human", attributes, fragments = FALSE, ...)
 }
 \arguments{
-\item{dataset}{ensembl dataset name from \code{listEnsembl}}
+\item{dataset}{The first letter of genus and full species name like btaurus, ecaballus, sscrofa from \code{listEnsembl}.
+A few common names are accepted for human, mouse, rat, fruitfly, yeast and zebrafish.}
+
+\item{attributes}{vector of column names to pass to \code{getBM}, default ensembl_gene_id,
+external_gene_name, gene_biotype, chromosome_name, start_position, end_position, strand,
+description, transcript_count, and entrezgene}
 
 \item{fragments}{drop fragments like GL456211.1, CHR_MG132_PATCH (any chromosome
-name with 3 or more characters), default TRUE}
+name with 3 or more characters), default FALSE}
+
+\item{\dots}{additional options passed to \code{getBM}}
 }
 \value{
-A tibble with id, biotype, description, chromosome, start, end, strand
- gene name and transcript count
+A tibble
 }
 \description{
 Read Ensembl annotations using \code{biomaRt} library
+}
+\note{
+Many attributes like entrezgene have a 0 to many relationship with ensembl_gene_id
+causing duplicate ensembl ids to be added.  The default returns a 10 column table where
+entrezgene is grouped into a comma-separated list so ensembl id is unique.
 }
 \examples{
 \dontrun{

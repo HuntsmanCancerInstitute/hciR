@@ -18,7 +18,35 @@
 #' table( mgi$Human == toupper(mgi$Mouse) )  # 85.7% are the same
 "mgi"
 
-#' KEGG pathway gene sets for mouse
+#'  Mouse gene annotations from Ensembl
+#'
+#' @format A tibble with 50143 rows and 10 columns: id, gene_name, biotype, chromosome,
+#' start, end, strand, description, transcript_count, entrez_gene
+#' @source \code{read_biomart("mouse")}
+#' @examples
+#' data(mmu)
+#' mmu
+#' attr(mmu, "downloaded")
+#' group_by(mmu, biotype) %>% summarize(n=n()) %>% arrange(desc(n))
+#' # most ensembl ids have 1 entrez id
+#' table(nchar(gsub("[^,]", "", mmu[["entrez_gene"]]))+1)
+"mmu"
+
+#'  Human gene annotations from Ensembl
+#'
+#' @format A tibble with 63305 rows and 10 columns: id, gene_name, biotype, chromosome,
+#' start, end, strand, description, transcript_count, entrez_gene
+#' @source \code{read_biomart("human")}
+#' @examples
+#' data(hsa)
+#' hsa
+#' attr(hsa, "downloaded")
+#' group_by(hsa, biotype) %>% summarize(n=n()) %>% arrange(desc(n))
+#' # most ensembl ids have 1 entrez id
+#' table(nchar(gsub("[^,]", "", hsa[["entrez_gene"]]))+1)
+"hsa"
+
+#' Mouse pathway gene sets from KEGG
 #'
 #' @format A named list with 287 pathways with Entrez ID vectors
 #' @note Signaling, metabolism and disease pathway indices are saved as attributes
@@ -31,7 +59,7 @@
 #' length(kegg_mmu[attr(kegg_mmu, "sigmet.idx")] )
 "kegg_mmu"
 
-#' KEGG pathway gene sets for human
+#' Human pathway gene sets from KEGG
 #'
 #' @format A named list with 291 pathways with Entrez ID vectors
 #' @note Signaling, metabolism and disease pathway indices are saved as attributes
@@ -40,3 +68,25 @@
 #' data(kegg)
 #' kegg_hsa[1:3]
 "kegg_hsa"
+
+
+#' DESeqDataSet object with Pasilla knock-downs
+#'
+#' @format A DESeqDataSet object
+#' @source \code{pasilla} package and Brooks et al. 2010. Conservation of an RNA regulatory map
+#' between Drosophila and mammals.
+#' @examples
+#' data(pasilla_dds)
+#' counts(pasilla_dds)[1:4, ]
+#' \dontrun{
+#' library("pasilla")
+#' count_tbl   <- read_tsv(system.file("extdata", "pasilla_gene_counts.tsv", package="pasilla") )
+#' samples <- read_csv(system.file("extdata", "pasilla_sample_annotation.csv", package="pasilla" ))
+#' # Need sample data column matching count column names
+#' samples$file <- gsub("fb$", "", samples$file )
+#' ## remove 2240 features with 0 reads and 721 with only 1 read
+#' count_tbl  <- filter_counts( count_tbl, sum=TRUE)
+#' pasilla_dds <- deseq_from_tibble(count_tbl, samples,  design = ~ condition)
+#' pasilla_dds <- DESeq(pasilla_dds)
+#' }
+"pasilla_dds"

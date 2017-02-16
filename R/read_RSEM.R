@@ -50,7 +50,7 @@ read_RSEM <- function(path = ".", pattern = "genes.results$", reshape = TRUE, st
       if(reshape){
           res1 <- dplyr::select( res1, sample, gene_id, expected_count) %>% tidyr::spread(sample, expected_count)
           #  add option to sort HCI samples as X1, X2, ..., X10, X11
-          res1  <-  res1[, c(1, sample_order(colnames(res1)[-1])+1) ]
+          res1  <-  res1[, c(1, order_samples(colnames(res1)[-1])+1) ]
        }
    }else{
       cntF <- list.files(path, "\\.cnt$", recursive=TRUE, full.names=TRUE)
@@ -102,7 +102,7 @@ read_RSEM <- function(path = ".", pattern = "genes.results$", reshape = TRUE, st
          res1 <-  dplyr::filter(res1, file=="count", row <= 3 ) %>%
                    dplyr::select(sample, stat, value) %>%
                     tidyr::spread(stat, value)
-          res1  <-  res1[ sample_order(res1$sample), ]
+          res1  <-  res1[ order_samples(res1$sample), ]
       }
   }
   res1

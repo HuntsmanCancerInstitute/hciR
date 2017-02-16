@@ -2,27 +2,40 @@
 % Please edit documentation in R/results_all.R
 \name{results_all}
 \alias{results_all}
-\title{Extract all results from a DESeq analysis}
+\title{Extract and annotate all results from a DESeq analysis}
 \usage{
-results_all(object, alpha = 0.05, ...)
+results_all(object, biomart, add, vs1 = "all", alpha = 0.05,
+  simplify = TRUE, ...)
 }
 \arguments{
 \item{object}{a DESeqDataSet}
 
+\item{biomart}{annotations from \code{read_biomart} with column 1 matching row names in results}
+
+\item{add}{a vector of biomart columns to add to result table, default gene_name, biotype and description}
+
+\item{vs1}{either compare all vs all (default) or a specific treatment vs all}
+
 \item{alpha}{the significance cutoff for the adjusted p-value cutoff (FDR)}
+
+\item{simplify}{return a tibble if only 1 contrast present}
 
 \item{\dots}{additional options passed to \code{results}}
 }
 \value{
-A list of DESeqResults objects for each contrast
+A list of tibbles for each contrast
 }
 \description{
-Extract all possible contracts and result tables from a DESeq analysis
+Extract all possible contrasts and annotate result tables from a DESeq object.
 Currently supports simple designs with a single variable.
 }
 \examples{
 \dontrun{
   res <- results_all(dds)
+# Set factor levels in the DESeq object to change contrast order
+#  since results_all uses combn on levels
+dds$trt <- factor(dds$trt, levels=c("heart", "lung", "control"))
+apply( combn(c("heart", "lung", "control"), 2), 2, paste, collapse= " vs. ")
 }
 }
 \author{

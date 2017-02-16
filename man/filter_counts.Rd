@@ -2,25 +2,32 @@
 % Please edit documentation in R/filter_counts.R
 \name{filter_counts}
 \alias{filter_counts}
-\title{Fitler count matrix}
+\title{Filter count matrix}
 \usage{
-filter_counts(count_matrix, min = 10)
+filter_counts(count_tbl, n = 1, sum = FALSE)
 }
 \arguments{
-\item{count_matrix}{a count matrix}
+\item{count_tbl}{a count matrix, data.frame or tibble}
 
-\item{min}{drop feature if all samples have less than or equal to the minimum number of mapped reads, default 10}
+\item{n}{low count cutoff, default 1}
+
+\item{sum}{Use total read counts to apply the cutoff.  The default is the maximum reads.}
 }
 \value{
 A count matrix
 }
 \description{
-Remove rows with zero counts and fewer than a minimum number of mapped reads per sample
+Remove features with zero counts and less than the low count cutoff.  The
+ default method is a maximum-based filter unless sum=TRUE
 }
 \examples{
-\dontrun{
-count_matrix <-  filter_counts(count_matrix,  n=1)
-}
+c1 <- matrix(c(0,0,0,2,12,0,0,1,1,0,0,1,1,1,0), ncol=3)
+c1
+filter_counts(c1)
+filter_counts(c1, sum=TRUE)
+ # tibble with id in column 1
+c2 <- tibble( id= letters[1:5], s1=c1[,1], s2 = c1[,2], s3= c1[,3])
+filter_counts(c2, n=10)
 }
 \author{
 Chris Stubben

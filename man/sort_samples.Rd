@@ -17,9 +17,10 @@ Sort character vectors by removing non-numeric characters.  This works for very 
  try \code{mixedsort} in \code{ggtools} for more complicated examples
 }
 \examples{
- samples <- c("135X1", "135X2", "135X11")
- sort(samples)
- sort_samples(samples)
+ ids <- c("135X1", "135X21", "135X2", "135X10")
+ sort(ids)
+ sort_samples(ids)
+ order_samples(ids)
 }
 \author{
 Chris Stubben
