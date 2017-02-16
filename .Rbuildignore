@@ -1,4 +1,4 @@
-Rmarkdown
-Rscripts
+^README.md
+^docs
 ^.*\.Rproj$
 ^\.Rproj\.user$
