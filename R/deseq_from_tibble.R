@@ -35,7 +35,7 @@ deseq_from_tibble <- function( count_tbl, sample_tbl,  ...){
 }
 
 
-## avoid printing in markdown files... Warning ...some variables in design formula are characters, converting to factors
+#' @describeIn deseq_from_tibble Avoid warings about factors
 factor_trts <- function(samples){
    for(i in 1:ncol(samples)){
       if(class(samples[[i]])=="character" ){

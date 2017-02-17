@@ -2,9 +2,12 @@
 % Please edit documentation in R/deseq_from_tibble.R
 \name{deseq_from_tibble}
 \alias{deseq_from_tibble}
+\alias{factor_trts}
 \title{Run DESeq from tibbles}
 \usage{
 deseq_from_tibble(count_tbl, sample_tbl, ...)
+
+factor_trts(samples)
 }
 \arguments{
 \item{count_tbl}{a count table with feature ids in row 1}
@@ -19,6 +22,10 @@ A DESeqDataSet object
 \description{
 Creates DESeqDataSet object using count and sample tibbles as input and run DESeq
 }
+\section{Functions}{
+\itemize{
+\item \code{factor_trts}: Avoid warings about factors
+}}
 \note{
 This function first runs \code{\link{sort_counts}} to check and
 reorder count_tbl columns by the first column in sample_tbl, and then \code{DESeqDataSetFromMatrix}
