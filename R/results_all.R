@@ -32,6 +32,7 @@ results_all <- function( object, biomart, add, vs1= "all", alpha = 0.05, simplif
    if(length(n) > 2) stop("The design has multiple variables and only simple designs are currently supported")
    trt <- n[2]
    n <- levels( object[[trt]] )
+   # add option to re-level ? 
 
    if(vs1 == "all"){
       contrast <- utils::combn(n, 2)

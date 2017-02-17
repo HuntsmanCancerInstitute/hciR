@@ -21,8 +21,12 @@
 
 write_deseq <- function(dds, result_all, rld, biomart, file = "DESeq.xlsx", ...){
 
-   ##  checks
-   if(!class(result_all) == "list") stop("result_all should be a list of DESeqResults")
+   ##  if results are a tibble (since simplify=TRUE by default)
+   if(!class(result_all) == "list"){
+         n <- attr(res, "contrast")
+         result_all <- list(result_all)
+         names(result_all) <- n
+      }
 
    ## 1. summary
    sum1 <-  dplyr::bind_rows(lapply(result_all, summary_deseq), .id= "contrast")
