@@ -18,13 +18,13 @@
 #' dds <- makeExampleDESeqDataSet(betaSD=1)
 #' rld <- rlog(dds)
 #' plotPCA(rld)
-#' hc_plotPCA(rld)
+#' plot_pca(rld)
 #' colData(rld)$sample <- 1:12
 #' colData(rld)$gender <- sample(c("M", "F"), 12, TRUE)
-#' hc_plotPCA(rld, tooltip=c("sample", "gender"))
+#' plot_pca(rld, tooltip=c("sample", "gender"))
 #' @export
 
-hc_plotPCA <- function(object, intgroup="condition", tooltip, ntop = 500, pc=c(1,2), ...){
+plot_pca <- function(object, intgroup="condition", tooltip, ntop = 500, pc=c(1,2), ...){
    if(length(pc)!=2) stop( "pc should be a vector of length 2")
    if(!all(intgroup %in% names(colData(object)))) stop("intgroup should match columns of colData(object)")
    n  <- apply(assay(object), 1, var)
@@ -44,7 +44,7 @@ hc_plotPCA <- function(object, intgroup="condition", tooltip, ntop = 500, pc=c(1
       ##  'ID: ' + this.point.ID + '<br>patient: ' + this.point.patient + '<br>gender: ' + this.point.gender
       tooltipJS <-  paste0("'", paste( tooltip, ": ' + this.point.", tooltip, sep="", collapse = " + '<br>"))
    }
-   highchart() %>%   
+   highchart() %>%
    hc_add_series(d , type = "scatter", mapping = hcaes( x= PC1, y= PC2, group= INTGRP) ) %>%
     hc_tooltip(formatter = JS( paste0("function(){ return (", tooltipJS, ")}"))) %>%
      hc_xAxis(title = list(text = paste0("PC",  pc[1], ": ", percentVar[ pc[1] ], "% variance")),

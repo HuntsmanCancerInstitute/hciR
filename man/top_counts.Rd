@@ -4,19 +4,15 @@
 \alias{top_counts}
 \title{Get a count matrix of top genes}
 \usage{
-top_counts(res, rld, top = 40, alpha = 0.05, basemean, log2FC, col_names,
-  trt, row_names = "gene_name", difference = TRUE, sort_fc = FALSE, ...)
+top_counts(res, rld, by = "id", col_names, row_names = "gene_name",
+  difference = TRUE, ...)
 }
 \arguments{
 \item{res}{an annotated DESeq2 results file}
 
 \item{rld}{rlog or other counts in DESeqTransform object}
 
-\item{top}{Number of top genes to display in matrix}
-
-\item{basemean}{basemean cutoff}
-
-\item{log2FC}{absolute value log2 fold change cutoff}
+\item{by}{join count rownames by this column number in results, default 1}
 
 \item{col_names}{a column name in colData(rld) to use as column names}
 
@@ -24,9 +20,7 @@ top_counts(res, rld, top = 40, alpha = 0.05, basemean, log2FC, col_names,
 
 \item{difference}{Subtract the row mean from counts to display the difference from the gene's average}
 
-\item{sort_fc}{Sort top genes by fold changes and get top n/2 up and down-regulated, default is to sort by adjusted p-value}
-
-\item{by}{join count rownames by this column number in results, default 1}
+\item{\dots}{additional options passed to \code{\link{top_genes}}}
 }
 \value{
 A tibble with colData attribute

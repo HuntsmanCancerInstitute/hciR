@@ -20,8 +20,7 @@
 #' }
 #' @export
 
-top_genes <- function(res, top=40, alpha = 0.05,  basemean, log2FC,
-   col_names, trt, row_names="gene_name", difference=TRUE, sort_fc=FALSE, ...){
+top_genes <- function(res, top=40, alpha = 0.05,  basemean, log2FC, sort_fc=FALSE, ...){
 
     ## TO DO  code for DataFrame -  fix for tibbles
      x <- subset(res, padj <= alpha )

@@ -24,6 +24,6 @@ annotate_results <- function(result, biomart, add, id = 1 ){
     if(missing(add)) add <- c("gene_name", "biotype", "description")
    if(all(is.na(n1) ))    stop("Rownames in results do not match column ", id, " in biomart table")
    if(any(is.na(n1) )) message(sum(is.na(n1)), " rows in results are missing from biomart table")
-   res1 <- data.frame( id= rownames(result), biomart[n1,  add], result)
+   res1 <- data.frame( id= rownames(result), biomart[n1,  add], result, stringsAsFactors=FALSE)
    tbl_df(res1)
 }
