@@ -5,15 +5,15 @@ Date: 2017-02-16
 Author: Chris Stubben
 Maintainer: Chris Stubben <chris.stubben@hci.utah.edu>
 Depends:
-    rmarkdown
+    rmarkdown,
+    dplyr,
+    tidyr,
+    readr,
+    tibble
 Imports:
     DESeq2,
     SummarizedExperiment,
     S4Vectors,
-    dplyr,
-    tidyr,
-    readr,
-    tibble,
     DT,
     d3heatmap,
     pheatmap,
