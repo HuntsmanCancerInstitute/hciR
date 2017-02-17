@@ -17,7 +17,7 @@
 
 summary_deseq <-  function(object){
    if(class(object)[1] == "DESeqResults") {
-        alpha      <- metadata(object)$alpha
+        alpha      <- S4Vectors::metadata(object)$alpha
         ## if using tibble from results_all or  annotate_results
       }else{
           alpha <- attr(object, "alpha")

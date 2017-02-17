@@ -16,9 +16,6 @@
 #' c1
 #' filter_counts(c1)
 #' filter_counts(c1, sum=TRUE)
-#'  # tibble with id in column 1
-#' c2 <- tibble( id= letters[1:5], s1=c1[,1], s2 = c1[,2], s3= c1[,3])
-#' filter_counts(c2, n=10)
 #' @export
 
 filter_counts <- function(count_tbl,  n=1,  sum=FALSE ){

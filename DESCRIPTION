@@ -4,10 +4,28 @@ Version: 1.0.1
 Date: 2017-02-16
 Author: Chris Stubben
 Maintainer: Chris Stubben <chris.stubben@hci.utah.edu>
+Depends:
+    rmarkdown
 Imports:
-    dplyr
+    DESeq2,
+    SummarizedExperiment,
+    S4Vectors,
+    dplyr,
+    tidyr,
+    readr,
+    tibble,
+    DT,
+    d3heatmap,
+    pheatmap,
+    RColorBrewer,
+    highcharter,
+    openxlsx,
+    biomaRt,
+    dendsort
 Suggests:
-    forcats
+    flexdashboard,
+    crosstalk,
+    d3scatter
 License: GPL-3
 Description: This package loads output from RNA-seq workflows and includes Rmarkdown files
     and Rscripts to create interactive graphics and reports.

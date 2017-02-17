@@ -5,7 +5,7 @@
 #'
 #' @param x a tbl_df with identifiers in column 1 (assigned as rownames) and
 #'  numbers in remaining columns
-#' @param additional options for \code{as.matrix}
+#' @param \dots additional options for \code{as.matrix}
 #' @return A matrix
 #' @author Chris Stubben
 #'

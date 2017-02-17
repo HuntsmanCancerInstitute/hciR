@@ -26,11 +26,11 @@
 
 top_counts <- function(res, rld, by="id",  col_names, row_names="gene_name", difference=TRUE, ...){
     if(!class(rld) == "DESeqTransform") stop("rld shoud be a DESeqTransform")
-    rldx <- assay(rld)
-    colx <- data.frame( colData(rld) , drop=FALSE)
+    rldx <- SummarizedExperiment::assay(rld)
+    colx <- data.frame( SummarizedExperiment::colData(rld) , drop=FALSE)
     ## rename columns in heatmap
     if(!missing(col_names)){
-         n <- as.character( colData(rld)[[col_names]] )
+         n <- as.character( SummarizedExperiment::colData(rld)[[col_names]] )
          if(is.null(n)) stop("No column matching ", col_names, " in colData(rld)")
          colnames(rldx) <- n
          rownames(colx) <- n
@@ -51,7 +51,7 @@ top_counts <- function(res, rld, by="id",  col_names, row_names="gene_name", dif
         x[["gene_name"]][n] <- x[["id"]][n]
      }
 
-     mat <- bind_cols( tibble(id=x[[ row_names ]]), as_tibble(mat) )
+     mat <- dplyr::bind_cols( tibble::tibble(id=x[[ row_names ]]), tibble::as_tibble(mat) )
     attr(mat, "colData") <- colx
     mat
 }

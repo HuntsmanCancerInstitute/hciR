@@ -88,5 +88,17 @@
 #' count_tbl  <- filter_counts( count_tbl, sum=TRUE)
 #' pasilla_dds <- deseq_from_tibble(count_tbl, samples,  design = ~ condition)
 #' pasilla_dds <- DESeq(pasilla_dds)
+#' pasilla_rld <- rlog(pasilla_dds)
 #' }
 "pasilla_dds"
+
+#' Regularized log transform object with Pasilla knock-downs
+#'
+#' @format A DESeqTransform object
+#' @source \code{pasilla} package and Brooks et al. 2010. Conservation of an RNA regulatory map
+#' between Drosophila and mammals.
+#' @seealso \code{\link{pasilla_dds}} to generate these rlogs
+#' @examples
+#' data(pasilla_rld)
+#' assay(pasilla_rld)[1:4,]
+"pasilla_rld"

@@ -1,6 +1,6 @@
-#' Create DESeqDataSet object from tibbles
+#' Run DESeq from tibbles
 #'
-#' Creates DESeqDataSet object using count and sample tibbles as input.
+#' Creates DESeqDataSet object using count and sample tibbles as input and run DESeq
 
 #' @param count_tbl a count table with feature ids in row 1
 #' @param sample_tbl a sample table with names matching count table column names in row 1
@@ -9,7 +9,8 @@
 #' @return A DESeqDataSet object
 #'
 #' @note This function first runs \code{\link{sort_counts}} to check and
-#' reorder count_tbl columns by the first column in sample_tbl and then runs \code{DESeqDataSetFromMatrix}.
+#' reorder count_tbl columns by the first column in sample_tbl, and then \code{DESeqDataSetFromMatrix}
+#' and \code{DESeq}
 #'
 #' @author Chris Stubben
 #'
@@ -28,12 +29,13 @@ deseq_from_tibble <- function( count_tbl, sample_tbl,  ...){
    mode(counts) <- "integer"
    ## convert to factor ??
    samples <- factor_trts(sample_tbl )
-   dds <- DESeqDataSetFromMatrix(counts, samples, ...)
+   dds <- DESeq2::DESeqDataSetFromMatrix(counts, samples, ...)
+   dds <- DESeq2::DESeq(dds)
    dds
 }
 
 
-## avoid printing   Warning ...some variables in design formula are characters, converting to factors
+## avoid printing in markdown files... Warning ...some variables in design formula are characters, converting to factors
 factor_trts <- function(samples){
    for(i in 1:ncol(samples)){
       if(class(samples[[i]])=="character" ){

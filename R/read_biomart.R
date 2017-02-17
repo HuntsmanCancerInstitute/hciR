@@ -3,7 +3,7 @@
 #' Read Ensembl annotations using \code{biomaRt} library
 #'
 #' @param dataset The first letter of genus and full species name like btaurus, ecaballus, sscrofa from \code{listEnsembl}.
-#' A few common names are accepted for human, mouse, rat, fruitfly, yeast and zebrafish.  
+#' A few common names are accepted for human, mouse, rat, fruitfly, yeast and zebrafish.
 #' @param attributes vector of column names to pass to \code{getBM}, default ensembl_gene_id,
 #'  external_gene_name, gene_biotype, chromosome_name, start_position, end_position, strand,
 #'  description, transcript_count, and entrezgene
@@ -43,7 +43,8 @@ read_biomart <- function( dataset="human" , attributes, fragments = FALSE, ...){
       n <-   length(unique(bm$id))
      message("Downloaded ", nrow(bm), " results, grouping into ", n, " rows with a unique Ensembl ID" )
       ## group by first 9 columns and paste entrezgene into comma-separated list so ensembl id is unique
-      bm <- group_by_( bm , .dots= colnames(bm)[-ncol(bm)]) %>% summarize( entrez_gene = paste(entrezgene, collapse=","))
+      bm <- dplyr::group_by_( bm , .dots= colnames(bm)[-ncol(bm)]) %>%
+             dplyr::summarize( entrez_gene = paste(entrezgene, collapse=","))
       # drop fragments GL456211.1, CHR_MG132_PATCH
       if(fragments){
            bm <- subset(bm , nchar(chromosome) < 3)
@@ -55,7 +56,7 @@ read_biomart <- function( dataset="human" , attributes, fragments = FALSE, ...){
    }
    # drop source from description  [Source:MGI Symbol;Acc:MGI:102478]
    bm$description <- gsub(" \\[.*\\]$", "" , bm$description)
-   bm <- dplyr::tbl_df(bm)
+   bm <- tibble::as_tibble(bm)
    attr(bm, "downloaded") <- Sys.Date()
    bm
 }

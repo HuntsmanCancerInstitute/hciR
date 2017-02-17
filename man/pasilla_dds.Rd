@@ -28,6 +28,7 @@ samples$file <- gsub("fb$", "", samples$file )
 count_tbl  <- filter_counts( count_tbl, sum=TRUE)
 pasilla_dds <- deseq_from_tibble(count_tbl, samples,  design = ~ condition)
 pasilla_dds <- DESeq(pasilla_dds)
+pasilla_rld <- rlog(pasilla_dds)
 }
 }
 \keyword{datasets}

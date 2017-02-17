@@ -4,8 +4,7 @@
 \alias{top_genes}
 \title{Get top genes}
 \usage{
-top_genes(res, top = 40, alpha = 0.05, basemean, log2FC, sort_fc = FALSE,
-  ...)
+top_genes(res, top = 40, alpha = 0.05, basemean, log2FC, sort_fc = FALSE)
 }
 \arguments{
 \item{res}{an annotated DESeq2 results file}

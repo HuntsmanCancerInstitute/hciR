@@ -10,7 +10,7 @@
 \item{x}{a tbl_df with identifiers in column 1 (assigned as rownames) and
 numbers in remaining columns}
 
-\item{additional}{options for \code{as.matrix}}
+\item{\dots}{additional options for \code{as.matrix}}
 }
 \value{
 A matrix

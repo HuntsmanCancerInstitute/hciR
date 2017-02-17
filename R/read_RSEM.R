@@ -59,15 +59,15 @@ read_RSEM <- function(path = ".", pattern = "genes.results$", reshape = TRUE, st
       out1 <- vector("list", length(cntF))
       for(i in seq_along(cntF)){
          message("Reading count and model files in ", gsub("/[^/]+$", "", cntF[i]))
-         x1 <- read.table(file = cntF[i], nrow=3 , fill=TRUE)
+         x1 <- utils::read.table(file = cntF[i], nrow=3 , fill=TRUE)
          x1 <- as.matrix(x1)  # to select rows without unlisting
          ## Reads per alignment starting in row 4
-         x2 <- read.table(file = cntF[i], skip=3, sep="\t")
+         x2 <- utils::read.table(file = cntF[i], skip=3, sep="\t")
          cnt <- dplyr::bind_rows(
-           tibble(row=1, stat=c("Unaligned", "Aligned",  "Filtered", "Total" ), n=1:4,  value=x1[1,1:4] ),
-           tibble(row=2, stat=c("Unique",    "Multiple", "Uncertain" ),         n=1:3,  value=x1[2,1:3] ),
-           tibble(row=3, stat=c("Hits"),                                        n=1,    value=x1[3,1] ),
-           tibble(row=1:nrow(x2)+3, stat="Reads per alignment",                 n=x2[,1], value=x2[,2] )
+           tibble::tibble(row=1, stat=c("Unaligned", "Aligned",  "Filtered", "Total" ), n=1:4,  value=x1[1,1:4] ),
+           tibble::tibble(row=2, stat=c("Unique",    "Multiple", "Uncertain" ),         n=1:3,  value=x1[2,1:3] ),
+           tibble::tibble(row=3, stat=c("Hits"),                                        n=1,    value=x1[3,1] ),
+           tibble::tibble(row=1:nrow(x2)+3, stat="Reads per alignment",                 n=x2[,1], value=x2[,2] )
                         )
          # add sample and file ending
          cnt <- tibble::add_column(cnt, sample=samples[i], file = "count", .before=1)
@@ -78,19 +78,19 @@ read_RSEM <- function(path = ".", pattern = "genes.results$", reshape = TRUE, st
          ## Check if has_optional_length_dist =0 and then adjust coordinates for RSPD (add 1 or 2?)
          if(x3[8] == "0"){
             message("  Missing Fragment length distribution")
-            rld <- tibble(row=6, stat= "Read length", n=(vec1[1] + 1):vec1[2],  value=as.numeric(strsplit(x3[6], " ")[[1]]) )
-            fld <- tibble()
+            rld <- tibble::tibble(row=6, stat= "Read length", n=(vec1[1] + 1):vec1[2],  value=as.numeric(strsplit(x3[6], " ")[[1]]) )
+            fld <- tibble::tibble()
             x3 <- c("add extra element for rspd parsing", x3)
          }else{
-            fld <- tibble(row=6, stat= "Fragment length", n=(vec1[1] + 1):vec1[2], value=as.numeric(strsplit(x3[6], " ")[[1]]) )
-            rld <- tibble(row=9, stat= "Read length",     n=(vec2[1] + 1):vec2[2], value=as.numeric(strsplit(x3[9], " ")[[1]]) )
+            fld <- tibble::tibble(row=6, stat= "Fragment length", n=(vec1[1] + 1):vec1[2], value=as.numeric(strsplit(x3[6], " ")[[1]]) )
+            rld <- tibble::tibble(row=9, stat= "Read length",     n=(vec2[1] + 1):vec2[2], value=as.numeric(strsplit(x3[9], " ")[[1]]) )
          }
          ## Read start position is off by default.
          if(x3[11] == 0 & x3[12] == ""){
             message("  Missing Read Start position, add --estimate-rspd to rsem-calculate-expression")
-            rspd <- tibble()
+            rspd <- tibble::tibble()
          }else{
-            rspd <- tibble(row=13, stat= "Read start position",  n=1:x3[12], value=as.numeric(strsplit(x3[13], " ")[[1]]) )
+            rspd <- tibble::tibble(row=13, stat= "Read start position",  n=1:x3[12], value=as.numeric(strsplit(x3[13], " ")[[1]]) )
          }
          # TO DO get Quality scores
          model <- dplyr::bind_rows(fld, rld, rspd)

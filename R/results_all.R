@@ -27,14 +27,14 @@
 
 results_all <- function( object, biomart, add, vs1= "all", alpha = 0.05, simplify=TRUE,  ...){
    message("Using adjusted p-value < ", alpha)
-   n <- as.character(design(object))
+   n <- as.character( DESeq2::design(object))
    ## [1] "~"   "condition"
    if(length(n) > 2) stop("The design has multiple variables and only simple designs are currently supported")
    trt <- n[2]
    n <- levels( object[[trt]] )
 
    if(vs1 == "all"){
-      contrast <- combn(n, 2)
+      contrast <- utils::combn(n, 2)
     }else{
        if(!vs1 %in% n) stop("No level in ", trt, " named ", vs1)
        contrast <- rbind( vs1, n[n!=vs1])
@@ -47,7 +47,7 @@ results_all <- function( object, biomart, add, vs1= "all", alpha = 0.05, simplif
    vs1 <- sprintf(paste0("%-", max(nchar(vs))+2, "s"), paste0(vs, ":") )
 
    for(i in seq_along( vs )){
-       res1 <- results(object, contrast = c( trt, contrast[1,i], contrast[2,i] ), alpha = alpha, ...)
+       res1 <- DESeq2::results(object, contrast = c( trt, contrast[1,i], contrast[2,i] ), alpha = alpha, ...)
        x <- summary_deseq(res1)
        message(i, ". ", vs1[i], x[1,2], " up and ", x[2,2], " down regulated" )
        if(!missing(biomart)){

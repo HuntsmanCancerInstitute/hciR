@@ -19,7 +19,7 @@
 
 as_tibble_gage <- function(gage_results){
    lapply(gage_results, function(x1){
-      tbl_df(data.frame(
+      tibble::as_tibble(data.frame(
          id  = gsub("([^ ]+) .*", "\\1", rownames(x1)),
          name= gsub("[^ ]+ (.*)", "\\1", rownames(x1)),
          x1, stringsAsFactors=FALSE))

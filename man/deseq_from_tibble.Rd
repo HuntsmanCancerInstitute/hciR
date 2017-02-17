@@ -2,7 +2,7 @@
 % Please edit documentation in R/deseq_from_tibble.R
 \name{deseq_from_tibble}
 \alias{deseq_from_tibble}
-\title{Create DESeqDataSet object from tibbles}
+\title{Run DESeq from tibbles}
 \usage{
 deseq_from_tibble(count_tbl, sample_tbl, ...)
 }
@@ -17,11 +17,12 @@ deseq_from_tibble(count_tbl, sample_tbl, ...)
 A DESeqDataSet object
 }
 \description{
-Creates DESeqDataSet object using count and sample tibbles as input.
+Creates DESeqDataSet object using count and sample tibbles as input and run DESeq
 }
 \note{
 This function first runs \code{\link{sort_counts}} to check and
-reorder count_tbl columns by the first column in sample_tbl and then runs \code{DESeqDataSetFromMatrix}.
+reorder count_tbl columns by the first column in sample_tbl, and then \code{DESeqDataSetFromMatrix}
+and \code{DESeq}
 }
 \examples{
 \dontrun{

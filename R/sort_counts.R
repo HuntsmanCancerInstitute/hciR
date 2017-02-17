@@ -34,7 +34,7 @@ sort_counts <- function(count_tbl, sample_tbl, id=1){
        c1 <- orig_count_tbl
    }else{
       message("Reordering columns in counts to match samples")
-      if( is.tbl( orig_count_tbl)){
+      if( dplyr::is.tbl( orig_count_tbl)){
          c1 <- orig_count_tbl[, c(1, n+1) ]
       }else{
          c1 <- orig_count_tbl[, n ]

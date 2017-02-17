@@ -26,30 +26,32 @@
 
 plot_pca <- function(object, intgroup="condition", tooltip, ntop = 500, pc=c(1,2), ...){
    if(length(pc)!=2) stop( "pc should be a vector of length 2")
-   if(!all(intgroup %in% names(colData(object)))) stop("intgroup should match columns of colData(object)")
-   n  <- apply(assay(object), 1, var)
-   x  <-  head(assay(object)[ order(n, decreasing=TRUE),], ntop)
-   pca <- prcomp(t(x))
+   if(!all(intgroup %in% names( SummarizedExperiment::colData(object)))) stop("intgroup should match columns of colData(object)")
+   n  <- apply( SummarizedExperiment::assay(object), 1, var)
+   x  <-  utils::head( SummarizedExperiment::assay(object)[ order(n, decreasing=TRUE),], ntop)
+   pca <- stats::prcomp(t(x))
    percentVar <- round(pca$sdev^2/sum(pca$sdev^2) * 100, 1)
 
-   group <-  apply( as.data.frame(colData(object)[, intgroup, drop=FALSE]), 1, paste, collapse=": ")
-   d <- data.frame(PC1=pca$x[, pc[1] ], PC2=pca$x[, pc[2] ], INTGRP=group, COLNAMES = colnames(object), colData(object) )
+   group <-  apply( as.data.frame(SummarizedExperiment::colData(object)[, intgroup, drop=FALSE]), 1, paste, collapse=": ")
+
+   d <- data.frame( PC1 = pca$x[, pc[1] ], PC2 = pca$x[, pc[2] ], INTGRP = group,
+         COLNAMES = colnames(object), SummarizedExperiment::colData(object) )
 
    # if tooltip is missing use column names
    if(missing(tooltip)){
       tooltipJS <- "this.point.COLNAMES"
     }else{
-       if(!all(tooltip %in% names(colData(object)))) stop("tooltip should match columns of colData(object)")
+       if(!all(tooltip %in% names(SummarizedExperiment::colData(object)))) stop("tooltip should match columns of colData(object)")
        ## if tooltip = ID, patient, gender  then tooltipJS =
       ##  'ID: ' + this.point.ID + '<br>patient: ' + this.point.patient + '<br>gender: ' + this.point.gender
       tooltipJS <-  paste0("'", paste( tooltip, ": ' + this.point.", tooltip, sep="", collapse = " + '<br>"))
    }
-   highchart() %>%
-   hc_add_series(d , type = "scatter", mapping = hcaes( x= PC1, y= PC2, group= INTGRP) ) %>%
-    hc_tooltip(formatter = JS( paste0("function(){ return (", tooltipJS, ")}"))) %>%
-     hc_xAxis(title = list(text = paste0("PC",  pc[1], ": ", percentVar[ pc[1] ], "% variance")),
+   highcharter::highchart() %>%
+   highcharter::hc_add_series(d , type = "scatter", mapping = hcaes( x= PC1, y= PC2, group= INTGRP) ) %>%
+    highcharter::hc_tooltip(formatter = JS( paste0("function(){ return (", tooltipJS, ")}"))) %>%
+     highcharter::hc_xAxis(title = list(text = paste0("PC",  pc[1], ": ", percentVar[ pc[1] ], "% variance")),
              gridLineWidth=1, tickLength=0, startOnTick="true", endOnTick="true") %>%
-      hc_yAxis(title = list(text = paste0("PC", pc[2], ": ", percentVar[ pc[2] ], "% variance"))) %>%
-       hc_chart(zoomType = "xy", ...)  %>%
-        hc_exporting(enabled=TRUE, filename = "pca")
+      highcharter::hc_yAxis(title = list(text = paste0("PC", pc[2], ": ", percentVar[ pc[2] ], "% variance"))) %>%
+       highcharter::hc_chart(zoomType = "xy", ...)  %>%
+        highcharter::hc_exporting(enabled=TRUE, filename = "pca")
 }

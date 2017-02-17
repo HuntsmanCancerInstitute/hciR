@@ -1,0 +1,165 @@
+---
+title: "DESeq analysis"
+output: html_document
+params:
+   counts: counts
+   samples: samples
+   annotations: hsa
+   condtion: trt
+   all_vs: all
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, comment="# ", collapse=TRUE)
+
+library(hciR)
+
+```
+
+This guide follows the [Bioconductor RNA-Seq workflow] to find differentially expressed
+genes using [DESeq2] and the [hciR] package on Github to simplify the [R] code.
+
+### Load samples and counts
+
+Load the samples with columns from the Sample Sheet on the Experimental Design tab in GenomEx .
+
+```{r load_sampless, message=FALSE}
+samples <- read_tsv(param$samples)
+samples
+```
+<br>
+
+Next, load the combined `featureCount` output files and spread into a matrix with 49671 rows and 10 samples.
+
+```{r load_counts, message=FALSE}
+count_tbl <- read_tsv("counts.txt", col_names = c("sample", "id", "count"))
+count_tbl <-  spread(count_tbl, sample, count)
+count_tbl
+```
+
+Reorder columns in the count matrix to match the sample table (required by DESeq) and remove 28186 features
+with zero counts and 11825 features with fewer than 10 reads in any sample to create a final count matrix with 9660 rows.
+
+```{r filter_counts}
+count_tbl <- sort_counts(count_tbl, samples)
+counts <- filter_counts(count_tbl, n=10)
+```
+
+### Run DESeq
+
+Combine the samples and counts to create a `DESeqDataSet` object and run `DESeq`.
+
+
+```{r DESeqobject, eval=FALSE}
+dds <- DESeqDataSetFromMatrix(countData = counts,
+                                colData = samples,
+                                 design = ~Trt)
+dds <- DESeq(dds)
+rld1 <-  rlog(dds)
+```
+
+
+### PCA plot
+
+Plot the first two principal components using the rlog values from the top 500 variable genes.
+
+```{r pcaplot}
+hc_plotPCA(rld1, "Trt", width=700)
+```
+
+
+Cluster all the rlog values using the R function `dist` to calculate the Euclidean distance between samples.
+Like the PCA plot, sample 13917X9 is an outlier.
+
+```{r d3dist}
+d3heatmap_dist(rld1)
+```
+
+### Drop outliers
+
+Drop sample 13917X9 and re-run `DESeq`.
+
+```{r dropX9}
+dds <- DESeqDataSetFromMatrix(countData = counts[, colnames(counts)!="13917X9"] ,
+                                colData = samples[samples$ID!="13917X9",],
+                                 design = ~Trt)
+dds <- DESeq(dds)
+rld <-  rlog(dds)
+```
+
+### DESeq results
+
+Get the DESeq results using a 5% false discovery rate (FDR).
+
+```{r DESeq}
+res <- results_all(dds,  alpha= 0.05)
+```
+
+### Gene annotations
+
+Load the mouse annotations from Ensembl.
+
+```{r biomaRt}
+data(mmu)
+```
+
+
+### Browse results
+
+Combine the annotations and top 3000 genes sorted by the adjusted p-value
+and create a [flex dashboard] in [DESeq_flex.html].  The [MA-plot] and [volcano plot] are linked,
+so you can click and drag to create a box to highlight points and then view matching rows in the table.
+You can also drag the box around the plot to easily highlight other points and rows.
+In addition, you can search for genes in the table using the search box, but need to click on the row in order to
+highlight the points in the plots.  The sliders can also be used to limit the results.
+
+
+### Save results
+
+Save the DESeq results to a single Excel file in [DESeq.xlsx].  The `write_DESeq` function will also
+add gene annotations to the result table and output raw counts, rlog values and normalized counts.
+
+```{r write, eval=FALSE}
+write_DESeq( dds, res, rld, mmu)
+```
+
+### Plot heatmaps
+
+Select the top 40 genes sorted by p-value and cluster the rlog differences,
+so values in the heatmap represent the amount a gene deviates in a specific sample from the gene’s average across all samples.
+This heatmap was created using [d3heatmap], so you can click and drag to select rows and zoom
+into specific regions.   A static version using the [pheatmap] package is available in [top40_heatmap.pdf], although with slightly different
+re-ordering of the dendrogram nodes.
+
+
+<br>
+
+```{r res1, echo=FALSE, fig.height=5}
+# pheatmap_top(res[[1]], rld, mmu, top=40, border=NA, fontsize_row=8)
+## OR interactive d3heatmap?
+d3heatmap_top(res[[1]], rld, mmu, top=40, show_grid=FALSE, xaxis_font_size = 12)
+```
+<br>
+
+This final heatmap displays the top 200 significant genes (zoom in to better view labels if needed).
+
+```{r res3, echo=FALSE, fig.height=8}
+d3heatmap_top(res[[1]], rld, mmu, top=200, show_grid=FALSE, xaxis_font_size = 12)
+```
+
+<br>
+
+
+[R]: https://www.r-project.org
+[Bioconductor RNA-Seq workflow]: http://www.bioconductor.org/help/workflows/rnaseqGene
+[DESeq2]: http://www.bioconductor.org/packages/release/bioc/html/DESeq2.html
+[featureCounts]: http://bioinf.wehi.edu.au/featureCounts/
+[hciR]: https://github.com/HuntsmanCancerInstitute/hciR
+[d3heatmap]: http://www.htmlwidgets.org/showcase_d3heatmap.html
+[pheatmap]: https://cran.r-project.org/web/packages/pheatmap/index.html
+[flex dashboard]: http://rmarkdown.rstudio.com/flexdashboard/
+[MA-plot]: https://en.wikipedia.org/wiki/MA_plot
+[volcano plot]: https://en.wikipedia.org/wiki/Volcano_plot_(statistics)
+[DESeq_flex.html]: `r analysis_dir`/DESeq_flex.html
+[DESeq.xlsx]: `r analysis_dir`/DESeq.xlsx
+[top40_heatmap.pdf]: `r analysis_dir`/top40_heatmap.pdf

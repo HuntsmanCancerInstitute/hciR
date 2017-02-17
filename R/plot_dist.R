@@ -24,9 +24,9 @@
 
  plot_dist <-   function( rld, intgroup, output="pheatmap", palette="RdYlBu", diagNA = TRUE, font_size=12, ...){
      if(class(rld)[1] == "DESeqTransform"){
-        d1 <-   dist(t( assay(rld) ))
+        d1 <-   stats::dist(t( SummarizedExperiment::assay(rld) ))
      }else{
-        d1 <- dist(t(rld))
+        d1 <- stats::dist(t(rld))
      }
      sample_dist <- as.matrix(d1)
      ## coloring the diagonal often skews the color scale
@@ -34,29 +34,29 @@
      ## clrs
      clrs <- palette
 
-     if(length(palette)==1){
+     if(length(palette) == 1){
         # reverse divergent color palette
         if(palette %in% c("BrBG","PiYG","PRGn","PuOr","RdBu","RdGy","RdYlBu","RdYlGn","Spectral")){
-           clrs <- rev( colorRampPalette( brewer.pal(11, palette))(255) )
+           clrs <- rev( grDevices::colorRampPalette( RColorBrewer::brewer.pal(11, palette))(255) )
         }else{
-           clrs <- colorRampPalette( brewer.pal(9, palette))(255)
+           clrs <- grDevices::colorRampPalette( RColorBrewer::brewer.pal(9, palette))(255)
         }
      }
      if(output == "pheatmap"){
         ##  dendsort to reorder branches
-        callback <- function(hc, ...){dendsort(hc)}
+        callback <- function(hc, ...){dendsort::dendsort(hc)}
          df <- NA
         if(!missing(intgroup)){
-              df <- as.data.frame(colData(rld)[, intgroup, drop=FALSE])
+              df <- as.data.frame( SummarizedExperiment::colData(rld)[, intgroup, drop=FALSE])
               df[,1] <- paste0(df[,1], "  ")  # hack to fix right margin
         }
-        pheatmap(sample_dist, color=clrs, clustering_callback = callback,
+        pheatmap::pheatmap(sample_dist, color=clrs, clustering_callback = callback,
                  clustering_distance_rows=d1,
                  clustering_distance_cols=d1, annotation_col=df, ...)
      }else{
           ##  dendsort to reorder branches
-        dend <- dendsort( as.dendrogram( hclust(d1) ) , isReverse=TRUE)
-        d3heatmap(sample_dist, Rowv=dend, Colv=dend, colors = clrs,
+        dend <- dendsort::dendsort( stats::as.dendrogram( stats::hclust(d1) ) , isReverse=TRUE)
+        d3heatmap::d3heatmap(sample_dist, Rowv=dend, Colv=dend, colors = clrs,
             xaxis_font_size = font_size, yaxis_font_size = font_size, ...)
      }
 }

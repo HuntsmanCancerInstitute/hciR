@@ -25,7 +25,7 @@ write_deseq <- function(dds, result_all, rld, biomart, file = "DESeq.xlsx", ...)
    if(!class(result_all) == "list") stop("result_all should be a list of DESeqResults")
 
    ## 1. summary
-   sum1 <-  bind_rows(lapply(result_all, summary_deseq), .id= "contrast")
+   sum1 <-  dplyr::bind_rows(lapply(result_all, summary_deseq), .id= "contrast")
    # write.xlsx does not like tibbles, so use as.data.frame
    sum1 <- as.data.frame( sum1)
    # write.xlsx requires a named list for writing mulitple worksheets
@@ -37,20 +37,20 @@ write_deseq <- function(dds, result_all, rld, biomart, file = "DESeq.xlsx", ...)
    names(res1)  <- gsub( "\\.? ", "_", names(res1))
 
    # sample data in colData ... drop replaceable
-   samp1 <- as.data.frame(colData(dds))
+   samp1 <- as.data.frame(SummarizedExperiment::colData(dds))
    samp1$replaceable <- NULL
 
    DESeq_tables <-  c(
      sum1,
      res1,
    list(
-     "raw_counts" = counts(dds),
-     "normalized" = counts(dds, normalized=TRUE),
-     "rlog"       = assay(rld),
+     "raw_counts" = DESeq2::counts(dds),
+     "normalized" = DESeq2::counts(dds, normalized=TRUE),
+     "rlog"       = SummarizedExperiment::assay(rld),
      "samples"    = samp1,
      "Ensembl"    = as.data.frame(biomart))
   )
    message("Saving ", length(DESeq_tables), " worksheets to ", file)
  #DESeq_tables
-   write.xlsx(DESeq_tables, file = file, rowNames=c(FALSE, rep(FALSE, length(res1)),TRUE,TRUE,TRUE, FALSE,FALSE))
+   openxlsx::write.xlsx(DESeq_tables, file = file, rowNames=c(FALSE, rep(FALSE, length(res1)),TRUE,TRUE,TRUE, FALSE,FALSE))
 }

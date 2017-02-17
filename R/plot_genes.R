@@ -29,9 +29,9 @@
    if(length(palette)==1){
        # reverse divergent color palette
        if(palette %in% c("BrBG","PiYG","PRGn","PuOr","RdBu","RdGy","RdYlBu","RdYlGn","Spectral")){
-          clrs <- rev( colorRampPalette( brewer.pal(11, palette))(255) )
+          clrs <- rev( grDevices::colorRampPalette( RColorBrewer::brewer.pal(11, palette))(255) )
        }else{
-          clrs <- colorRampPalette( brewer.pal(9, palette))(255)
+          clrs <- grDevices::colorRampPalette( RColorBrewer::brewer.pal(9, palette))(255)
        }
    }
    df <- NA
@@ -48,17 +48,17 @@
    if(output == "pheatmap"){
       ## use  dendsort to reorder branches
       if(dendsort){
-         callback <- function(hc, ...){ dendsort(hc)  }
-         pheatmap(x, clrs, clustering_callback = callback, annotation_col=df, breaks=brks, border=border,  ...)
+         callback <- function(hc, ...){ dendsort::dendsort(hc)  }
+         pheatmap::pheatmap(x, clrs, clustering_callback = callback, annotation_col=df, breaks=brks, border=border,  ...)
       }else{
-         pheatmap(x, clrs, annotation_col=df, breaks=brks, border=border,  ...)
+         pheatmap::pheatmap(x, clrs, annotation_col=df, breaks=brks, border=border,  ...)
       }
    }else{
       if(dendsort){
           ##  need to flip rows to match pheatmap??
-          d3heatmap(x, reorderfun= function(d,w) dendsort(d) , colors = clrs, ...)
+          d3heatmap::d3heatmap(x, reorderfun= function(d,w) dendsort::dendsort(d) , colors = clrs, ...)
       }else{
-         d3heatmap(x, colors = clrs, ...)
+         d3heatmap::d3heatmap(x, colors = clrs, ...)
       }
    }
 }

@@ -20,7 +20,7 @@
 #' }
 #' @export
 
-top_genes <- function(res, top=40, alpha = 0.05,  basemean, log2FC, sort_fc=FALSE, ...){
+top_genes <- function(res, top=40, alpha = 0.05,  basemean, log2FC, sort_fc=FALSE){
 
     ## TO DO  code for DataFrame -  fix for tibbles
      x <- subset(res, padj <= alpha )
@@ -30,7 +30,7 @@ top_genes <- function(res, top=40, alpha = 0.05,  basemean, log2FC, sort_fc=FALS
     if(sort_fc){
       x1 <- x[order(x$log2FoldChange, decreasing=TRUE), ]
       x2 <- x[order(x$log2FoldChange), ]
-      x <- rbind( head(x1, top/2),  head(x2, top/2))
+      x <- rbind( head(x1, top/2),  utils::head(x2, top/2))
    }else{
       # sort by p-adjusted
       x <- x[order(x$padj), ]
