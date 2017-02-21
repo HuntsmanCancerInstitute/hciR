@@ -5,7 +5,7 @@
 #' @param rld a matrix or DESeqTransform with assay slot
 #' @param intgroup one or more column names in colData(rld) for pheatmap \code{annotation_col}
 #' @param output  pheatmap or d3heatmap
-#' @param palette a color palette name or vector of colors
+#' @param palette a color palette name or vector of colors, diverging color palettes are reversed
 #' @param diagNA set the diagonal to NA, default TRUE
 #' @param font_size x and yaxis font size for d3heatmap
 #' @param \dots Additional options like colors passed to \code{d3heatmap} or \code{pheatmap}
@@ -15,8 +15,7 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#' data(pasilla_dds)
-#' rld <- rlog(pasilla_dds)
+#' data(pasilla)
 #' plot_dist(rld, c("condition", "type") )
 #' plot_dist(rld, palette="Blues", diagNA=FALSE)
 #' plot_dist(rld, output = "d3")
@@ -24,7 +23,7 @@
 
  plot_dist <-   function( rld, intgroup, output="pheatmap", palette="RdYlBu", diagNA = TRUE, font_size=12, ...){
      if(class(rld)[1] == "DESeqTransform"){
-        d1 <-   stats::dist(t( SummarizedExperiment::assay(rld) ))
+        d1 <- stats::dist(t( SummarizedExperiment::assay(rld) ))
      }else{
         d1 <- stats::dist(t(rld))
      }

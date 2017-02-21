@@ -9,18 +9,20 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#' \dontrun{
-#' summary_deseq(res1)
-#' }
+#' data(pasilla)
+#' summary_deseq(res)
 #' @export
 
 
 summary_deseq <-  function(object){
    if(class(object)[1] == "DESeqResults") {
         alpha      <- S4Vectors::metadata(object)$alpha
+        ## displayed in print.DESeqResults?
+        contrast <- ""
         ## if using tibble from results_all or  annotate_results
       }else{
           alpha <- attr(object, "alpha")
+          contrast <- attr(object, "contrast")
       }
    notallzero <- sum(object$baseMean > 0)
     outlier <- sum(object$baseMean > 0 & is.na(object$pvalue))
@@ -33,5 +35,6 @@ summary_deseq <-  function(object){
                     count = c( up, down, outlier, filt),
                  percent = round(c( up, down, outlier, filt) /notallzero *  100, 2)
                   )
+   message(contrast)
   x1
 }

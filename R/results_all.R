@@ -17,7 +17,9 @@
 #'
 #' @examples
 #' \dontrun{
-#'   res <- results_all(dds)
+#' data(pasilla)
+#' res <- results_all(dds, fly)
+#' res
 #' # Set factor levels in the DESeq object to change contrast order
 #' #  since results_all uses combn on levels
 #' dds$trt <- factor(dds$trt, levels=c("heart", "lung", "control"))
@@ -32,7 +34,7 @@ results_all <- function( object, biomart, add, vs1= "all", alpha = 0.05, simplif
    if(length(n) > 2) stop("The design has multiple variables and only simple designs are currently supported")
    trt <- n[2]
    n <- levels( object[[trt]] )
-   # add option to re-level ? 
+   # add option to re-level ?
 
    if(vs1 == "all"){
       contrast <- utils::combn(n, 2)

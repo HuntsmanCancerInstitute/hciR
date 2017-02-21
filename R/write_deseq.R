@@ -15,6 +15,7 @@
 #'
 #' @examples
 #' \dontrun{
+#' data(pasilla)
 #'  write_deseq(dds, res, rld, hg)
 #' }
 #' @export
@@ -22,7 +23,7 @@
 write_deseq <- function(dds, result_all, rld, biomart, file = "DESeq.xlsx", ...){
 
    ##  if results are a tibble (since simplify=TRUE by default)
-   if(!class(result_all) == "list"){
+   if(!class(result_all)[1] == "list"){
          n <- attr(res, "contrast")
          result_all <- list(result_all)
          names(result_all) <- n

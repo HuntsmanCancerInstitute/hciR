@@ -14,10 +14,8 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#' \dontrun{
+#' data(pasilla)
 #'  top_genes(res)
-#'  top_genes(res[[1]], sort_fc=TRUE)
-#' }
 #' @export
 
 top_genes <- function(res, top=40, alpha = 0.05,  basemean, log2FC, sort_fc=FALSE){

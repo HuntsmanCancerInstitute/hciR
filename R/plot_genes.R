@@ -5,26 +5,26 @@
 #' @param x a tibble from \code{\link{top_counts}}
 #' @param intgroup one or more column names for pheatmap \code{annotation_col} bar
 #' @param output  pheatmap or d3heatmap
-#' @param palette a color palette name or vector of colors
+#' @param palette a color palette name or vector of colors, diverging color palettes are reversed
 #' @param dendsort reorder branches using \code{dendsort} package
 #' @param midpoint0 center color scale midpoint at zero
 #' @param border pheatmap border color, default none
-#' @param \dots additional options passed to \code{pheatmap}
+#' @param \dots additional options passed to \code{pheatmap} or \code{d3heatmap}
 #'
-#' @return A pheatmap
+#' @return A pheatmap or d3heatmap
 #'
 #' @author Chris Stubben
 #'
 #' @examples
-#' \dontrun{
-#'  x <- top_counts( res, rld)
+#' data(pasilla)
+#'  x <- top_counts(res, rld)
 #' plot_genes(x)
-#' plot_genes(x, "Trt", palette="RdBu" )
-#' plot_genes( top_counts(res, rld, sort_fc=TRUE) )
-#' }
+#' plot_genes(x, "condition", palette="RdBu")
+#' plot_genes(top_counts(res, rld, sort_fc=TRUE) )
+#' plot_genes(top_counts( res, rld, top=200), output = "d3")
 #' @export
 
- plot_genes <-   function( x, intgroup, output="pheatmap", palette="RdYlBu", dendsort=TRUE, midpoint0 = TRUE, border=NA,  ...){
+ plot_genes <-  function( x, intgroup, output="pheatmap", palette="RdYlBu", dendsort=TRUE, midpoint0 = TRUE, border=NA,  ...){
    clrs <- palette
    if(length(palette)==1){
        # reverse divergent color palette

@@ -15,13 +15,9 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#' dds <- makeExampleDESeqDataSet(betaSD=1)
-#' rld <- rlog(dds)
-#' plotPCA(rld)
-#' plot_pca(rld)
-#' colData(rld)$sample <- 1:12
-#' colData(rld)$gender <- sample(c("M", "F"), 12, TRUE)
-#' plot_pca(rld, tooltip=c("sample", "gender"))
+#' data(pasilla)
+#' plot_pca(rld, "condition", tooltip=c("file", "type"))
+#' plot_pca(rld , c("condition", "type"))
 #' @export
 
 plot_pca <- function(object, intgroup="condition", tooltip, ntop = 500, pc=c(1,2), ...){

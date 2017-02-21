@@ -1,6 +1,6 @@
 #' Annotate DESeq2 results
 #'
-#' Add BioMart annotations to a DESeq2 result table.
+#' Add BioMart annotations to a DESeq2 result table
 #'
 #' @param result a DESeqResults object with Ensembl IDs as row names
 #' @param biomart annotations from \code{read_biomart} with id column matching row names in results
@@ -13,7 +13,7 @@
 #'
 #' @examples
 #' \dontrun{
-#'  annotate_results(res1, hsa)
+#'  annotate_results(res, hsa)
 #' }
 #' @export
 

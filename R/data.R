@@ -70,14 +70,14 @@
 "kegg_hsa"
 
 
-#' DESeqDataSet object with Pasilla knock-downs
+#' DESeq objects with Pasilla knock-downs
 #'
-#' @format A DESeqDataSet object
+#' @format DESeqDataSet object (dds), DESeqTransform (rld) and DESeqResults (res) for pasilla
 #' @source \code{pasilla} package and Brooks et al. 2010. Conservation of an RNA regulatory map
 #' between Drosophila and mammals.
 #' @examples
-#' data(pasilla_dds)
-#' counts(pasilla_dds)[1:4, ]
+#' data(pasilla)
+#' counts(dds)[1:4, ]
 #' \dontrun{
 #' library("pasilla")
 #' count_tbl   <- read_tsv(system.file("extdata", "pasilla_gene_counts.tsv", package="pasilla") )
@@ -86,19 +86,9 @@
 #' samples$file <- gsub("fb$", "", samples$file )
 #' ## remove 2240 features with 0 reads and 721 with only 1 read
 #' count_tbl  <- filter_counts( count_tbl, sum=TRUE)
-#' pasilla_dds <- deseq_from_tibble(count_tbl, samples,  design = ~ condition)
-#' pasilla_dds <- DESeq(pasilla_dds)
-#' pasilla_rld <- rlog(pasilla_dds)
+#' dds <- deseq_from_tibble(count_tbl, samples,  design = ~ condition)
+#' rld <- rlog_dds(dds)
+#' fly <- read_biomart("fly")
+#' res <- results_all(dds, fly)
 #' }
-"pasilla_dds"
-
-#' Regularized log transform object with Pasilla knock-downs
-#'
-#' @format A DESeqTransform object
-#' @source \code{pasilla} package and Brooks et al. 2010. Conservation of an RNA regulatory map
-#' between Drosophila and mammals.
-#' @seealso \code{\link{pasilla_dds}} to generate these rlogs
-#' @examples
-#' data(pasilla_rld)
-#' assay(pasilla_rld)[1:4,]
-"pasilla_rld"
+"pasilla"
