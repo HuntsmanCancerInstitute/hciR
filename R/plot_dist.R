@@ -5,7 +5,7 @@
 #' @param rld a matrix or DESeqTransform with assay slot
 #' @param intgroup one or more column names in colData(rld) for pheatmap \code{annotation_col}
 #' @param output  pheatmap or d3heatmap
-#' @param palette a color palette name or vector of colors, diverging color palettes are reversed
+#' @param palette a color palette name or vector of colors
 #' @param diagNA set the diagonal to NA, default TRUE
 #' @param font_size x and yaxis font size for d3heatmap
 #' @param \dots Additional options like colors passed to \code{d3heatmap} or \code{pheatmap}
@@ -34,12 +34,9 @@
      clrs <- palette
 
      if(length(palette) == 1){
-        # reverse divergent color palette
-        if(palette %in% c("BrBG","PiYG","PRGn","PuOr","RdBu","RdGy","RdYlBu","RdYlGn","Spectral")){
-           clrs <- rev( grDevices::colorRampPalette( RColorBrewer::brewer.pal(11, palette))(255) )
-        }else{
-           clrs <- grDevices::colorRampPalette( RColorBrewer::brewer.pal(9, palette))(255)
-        }
+        ncols <- 9
+        if(palette %in% c("BrBG","PiYG","PRGn","PuOr","RdBu","RdGy","RdYlBu","RdYlGn","Spectral")) ncols <-11
+        clrs <- grDevices::colorRampPalette( RColorBrewer::brewer.pal( ncols, palette))(255)
      }
      if(output == "pheatmap"){
         ##  dendsort to reorder branches

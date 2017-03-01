@@ -21,7 +21,7 @@ library(hciR)
 
 res <-  params$results
 
-x <-  res[order(res$pvalue), ]
+x <-  res[order(res$padj), ]
 ## slow if too many genes
 x <- head(x, params$top)
 x <- dplyr::select(x,  id, gene_name, biotype, description, baseMean, log2FoldChange, padj )
@@ -29,6 +29,7 @@ x <- dplyr::select(x,  id, gene_name, biotype, description, baseMean, log2FoldCh
 x$baseMean <-  round(x$baseMean,1)
 x$log2FoldChange <-  round(x$log2FoldChange,3)
 x$padj <- signif(x$padj, 4)
+
 
 # add hyperlinks
 x$id <-  paste0('<a href="http://www.ensembl.org/id/', x$id, '" target="_blank">', x$id,  '</a>')
@@ -41,7 +42,7 @@ Inputs {.sidebar}
 ```{r sliders}
 filter_slider("mean", "log10 Base mean", sd, ~round(log10(baseMean), 1) , step = 0.1 )
 filter_slider("fc", "log2 Fold change absolute value ", sd, ~ round(abs(log2FoldChange),1), step = 0.1)
-filter_slider("padj", "-log10 Adjusted p-value", sd, ~ round(-log10(padj) ), step = 1)
+filter_slider("padj", "-log10 Adjusted p-value", sd, ~ round(-log10(padj) ), step = 0.1)
 ```
 
 Row 1

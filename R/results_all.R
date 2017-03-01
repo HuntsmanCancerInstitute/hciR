@@ -31,7 +31,10 @@ results_all <- function( object, biomart, add, vs1= "all", alpha = 0.05, simplif
    message("Using adjusted p-value < ", alpha)
    n <- as.character( DESeq2::design(object))
    ## [1] "~"   "condition"
-   if(length(n) > 2) stop("The design has multiple variables and only simple designs are currently supported")
+   if(grepl(" + ", n[2], fixed=TRUE)){
+      message("The design has multiple variables and only the first variable will be used")
+      n[2] <- gsub(" \\+.*", "", n[2])
+   }
    trt <- n[2]
    n <- levels( object[[trt]] )
    # add option to re-level ?
@@ -57,7 +60,7 @@ results_all <- function( object, biomart, add, vs1= "all", alpha = 0.05, simplif
           if(missing(add)) add <- c("gene_name", "biotype", "description")
            # suppress messages  like 70 rows in results are missing from biomart table and print once
              res1 <- suppressMessages( annotate_results( res1, biomart, add) )
-             attr(res1, "contrast") <- vs
+             attr(res1, "contrast") <- vs[i]
             attr(res1, "alpha") <- alpha
        }
        res[[i]] <- res1

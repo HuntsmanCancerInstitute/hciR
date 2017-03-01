@@ -43,7 +43,7 @@ plot_pca <- function(object, intgroup="condition", tooltip, ntop = 500, pc=c(1,2
       tooltipJS <-  paste0("'", paste( tooltip, ": ' + this.point.", tooltip, sep="", collapse = " + '<br>"))
    }
    highcharter::highchart() %>%
-   highcharter::hc_add_series(d , type = "scatter", mapping = hcaes( x= PC1, y= PC2, group= INTGRP) ) %>%
+   highcharter::hc_add_series(d , type = "scatter", mapping = highcharter::hcaes( x= PC1, y= PC2, group= INTGRP) ) %>%
     highcharter::hc_tooltip(formatter = JS( paste0("function(){ return (", tooltipJS, ")}"))) %>%
      highcharter::hc_xAxis(title = list(text = paste0("PC",  pc[1], ": ", percentVar[ pc[1] ], "% variance")),
              gridLineWidth=1, tickLength=0, startOnTick="true", endOnTick="true") %>%
