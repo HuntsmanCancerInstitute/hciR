@@ -7,7 +7,7 @@ Github pages for saving rendered Markdown files in [inst/Rmd]
 
 
 [inst/Rmd]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/inst/Rmd
-[DESeq.html]: https://huntsmancancerinstitute.github.io/hciR/pasilla_flex.html
-[pasilla_flex.html]: https://huntsmancancerinstitute.github.io/hciR/pasilla_DESeq.html
+[pasilla_flex.html]: https://huntsmancancerinstitute.github.io/hciR/pasilla_flex.html
+[pasilla_DESeq.html]: https://huntsmancancerinstitute.github.io/hciR/pasilla_DESeq.html
 [Flex dashboard]: http://rmarkdown.rstudio.com/flexdashboard/
 [Crosstalk]: https://rstudio.github.io/crosstalk/
