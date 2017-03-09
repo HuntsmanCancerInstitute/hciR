@@ -7,10 +7,10 @@ Maintainer: Chris Stubben <chris.stubben@hci.utah.edu>
 Depends:
      R (>= 2.10),
      dplyr,
+     readr,
+     rmarkdown
 Imports:
-    rmarkdown,
     tidyr,
-    readr,
     tibble,
     DESeq2,
     SummarizedExperiment,

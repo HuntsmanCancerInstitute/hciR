@@ -60,9 +60,9 @@ results_all <- function( object, biomart, add, vs1= "all", alpha = 0.05, simplif
        if(!missing(biomart)){
           if(missing(add)) add <- c("gene_name", "biotype", "chromosome", "description")
            # suppress messages  like 70 rows in results are missing from biomart table and print once
-             res1 <- suppressMessages( annotate_results( res1, biomart, add) )
-             attr(res1, "contrast") <- vs[i]
-            attr(res1, "alpha") <- alpha
+           res1 <- suppressMessages( annotate_results( res1, biomart, add) )
+           attr(res1, "contrast") <- vs[i]
+           attr(res1, "alpha") <- alpha
        }
        res[[i]] <- res1
    }

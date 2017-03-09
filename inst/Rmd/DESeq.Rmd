@@ -6,17 +6,27 @@ output: html_document
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(warning=FALSE, comment="# ", collapse=TRUE)
 library(hciR)
+library(DT)
 ```
 
 This guide follows the [Bioconductor RNA-Seq workflow] to find differentially expressed
-genes using [DESeq2].  Load the [hciR] package on Github to work with [tibbles] and simplify the [R] code.
+genes using [DESeq2].  Load the [hciR] package on Github to run the [R] code.
+
+You can render this HTML report by finding the path to the [DESeq.Rmd] file in `inst/Rmd`.
+
+```{r render, eval=FALSE}
+library(hciR)
+rmd <- system.file("Rmd", "DESeq.Rmd", package="hciR")
+render(rmd,  output_dir=".")
+```
+
 
 ### Load samples and counts
 
 Load the [pasilla] counts and samples and fix the file name to match column names in the count matrix.
 
-```{r load_samples, message=FALSE}
-library(hciR)
+```{r load_samples, message=FALSE, echo=2:6}
+options(width=120)
 setwd( system.file("extdata", package="pasilla") )
 counts  <- read_tsv("pasilla_gene_counts.tsv" )
 samples <- read_csv("pasilla_sample_annotation.csv")
@@ -36,12 +46,10 @@ counts
 
 Combine the counts and samples to create a `DESeqDataSet` object and calculate the regularized log transform (rlog) for sample visualizations.
 
-
 ```{r DESeqobject}
 dds <- deseq_from_tibble(counts, samples,  design = ~ condition)
 rld <- r_log(dds)
 ```
-
 
 ### PCA plot
 
@@ -61,9 +69,8 @@ plot_dist(rld , c("condition", "type"))
 
 Load fruitfly annotations from Ensembl.
 
-```{r biomaRt, eval=FALSE}
+```{r biomaRt}
 fly <- read_biomart("fly")
-# Downloaded 19639 results, grouping into 17559 rows with a unique Ensembl ID
 ```
 
 ### Result tables
@@ -87,7 +94,7 @@ other points and rows. In addition, you can search for genes in the table using
 the search box, but need to click on the row in order to highlight the points in
 the plots.  The sliders can also be used to limit the results.
 
-```{r flex_dash, eval=FALSE}
+```{r flex_dash, message=FALSE, eval=FALSE}
 rmd <- system.file("Rmd", "DESeq_flex.Rmd", package="hciR")
 render(rmd, output_file="pasilla_flex.html",  output_dir=".",
          params=list( results= res, title = "Pasilla treated vs. untreated", top= 1000 ))
@@ -128,7 +135,6 @@ plot_genes( top_counts( res, rld, top=400), output="d3", xaxis_font_size=12)
 
 [highchart]: http://jkunst.com/highcharter/index.html
 [pasilla]: http://bioconductor.org/packages/release/data/experiment/html/pasilla.html
-[tibbles]: http://r4ds.had.co.nz/
 [R for Data Science]: http://r4ds.had.co.nz/
 [R]: https://www.r-project.org
 [Bioconductor RNA-Seq workflow]: http://www.bioconductor.org/help/workflows/rnaseqGene
@@ -142,3 +148,4 @@ plot_genes( top_counts( res, rld, top=400), output="d3", xaxis_font_size=12)
 [volcano plot]: https://en.wikipedia.org/wiki/Volcano_plot_(statistics)
 [pasilla_flex.html]: https://huntsmancancerinstitute.github.io/hciR/pasilla_flex.html
 [DESeq.xlsx]: https://huntsmancancerinstitute.github.io/hciR/DESeq.xlsx
+[DESeq.Rmd]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/inst/Rmd/DESeq.Rmd
