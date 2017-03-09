@@ -1,17 +1,9 @@
-# KEGG pathway gene sets  for mouse and human
+# KEGG pathway gene sets  for human
 library(gage)
 
-ks.mmu <- kegg.gsets(species = "mmu", id.type = "kegg")
-## list of  1 list and 4 vectors
-names(ks.mmu)
-#[1] "kg.sets"    "sigmet.idx" "sig.idx"    "met.idx"    "dise.idx"
-
-# add index vectors as attributes 
-kegg_mmu <- ks.mmu$kg.sets
-for(i in 2:5) attr( kegg_mmu, names(ks.mmu)[i]) <- ks.mmu[[i]]
-
-#Human
-
-ks.hsa <- kegg.gsets(species = "hsa", id.type = "kegg")
-kegg_hsa <- ks.hsa$kg.sets
-for(i in 2:5) attr( kegg_hsa, names(ks.hsa)[i]) <- ks.hsa[[i]]
+x <- kegg.gsets(species = "hsa")
+n <- sapply(x$kg.sets, length)
+y <- names(x$kg.sets)
+kegg_hsa <- tibble( id = rep(1:length(y), n),  entry = rep(substr(y, 1,8), n),
+  pathway = rep(substring(y, 10),n) , entrez = unlist(x$kg.sets) )
+for(i in 2:5) attr(kegg_hsa, names(x1)[i]) <- x1[[i]]
