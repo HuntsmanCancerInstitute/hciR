@@ -55,7 +55,7 @@ results_all <- function( object, biomart, add, vs1= "all", alpha = 0.05, simplif
 
    for(i in seq_along( vs )){
        res1 <- DESeq2::results(object, contrast = c( trt, contrast[1,i], contrast[2,i] ), alpha = alpha, ...)
-       x <- summary_deseq(res1)
+       x <- suppressMessages( summary_deseq(res1) )
        message(i, ". ", vs1[i], x[1,2], " up and ", x[2,2], " down regulated" )
        if(!missing(biomart)){
           if(missing(add)) add <- c("gene_name", "biotype", "chromosome", "description")

@@ -241,7 +241,6 @@ rld &lt;- r_log(dds)</code></pre>
 <p>Get the DESeq results using a 5% false discovery rate (FDR). This function will compare alll treatment combinations, which only includes one in this study.</p>
 <pre class="r"><code>res &lt;- results_all(dds, fly, alpha= 0.05)
 #  Using adjusted p-value &lt; 0.05
-#  
 #  1. treated vs. untreated: 412 up and 438 down regulated
 #  Note: 723 rows in results are missing from biomart table
 datatable(top_genes(res)[, c(1:2, 4:7, 11)], options=list(pageLength=5) ) %&gt;%
