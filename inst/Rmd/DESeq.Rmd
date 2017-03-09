@@ -17,7 +17,7 @@ You can render this HTML report by finding the path to the [DESeq.Rmd] file in `
 ```{r render, eval=FALSE}
 library(hciR)
 rmd <- system.file("Rmd", "DESeq.Rmd", package="hciR")
-render(rmd,  output_dir=".")
+render(rmd, "pasilla_DESeq.html", output_dir=".")
 ```
 
 

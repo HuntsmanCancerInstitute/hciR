@@ -168,7 +168,7 @@ $(document).ready(function () {
 <p>You can render this HTML report by finding the path to the <a href="https://github.com/HuntsmanCancerInstitute/hciR/blob/master/inst/Rmd/DESeq.Rmd">DESeq.Rmd</a> file in <code>inst/Rmd</code>.</p>
 <pre class="r"><code>library(hciR)
 rmd &lt;- system.file(&quot;Rmd&quot;, &quot;DESeq.Rmd&quot;, package=&quot;hciR&quot;)
-render(rmd,  output_dir=&quot;.&quot;)</code></pre>
+render(rmd, "pasilla_DESeq.html", output_dir=&quot;.&quot;)</code></pre>
 <div id="load-samples-and-counts" class="section level3">
 <h3>Load samples and counts</h3>
 <p>Load the <a href="http://bioconductor.org/packages/release/data/experiment/html/pasilla.html">pasilla</a> counts and samples and fix the file name to match column names in the count matrix.</p>
