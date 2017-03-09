@@ -90,7 +90,7 @@ res <- results_all(dds, hsa)
 
 ### Comparing targeting siRNAs vs scrambled
 
-Combined the siRNA trts and compare to scrambled at at 1% FDR.
+Combine the siRNA treatments and compare to scrambled at at 1% FDR.
 
 ```{r DESeq_v2}
 dds2 <- deseq_from_tibble(counts, samples, design = ~type)

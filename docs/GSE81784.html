@@ -229,7 +229,7 @@ res &lt;- results_all(dds, hsa)
 </div>
 <div id="comparing-targeting-sirnas-vs-scrambled" class="section level3">
 <h3>Comparing targeting siRNAs vs scrambled</h3>
-<p>Combined the siRNA trts and compare to scrambled at at 1% FDR.</p>
+<p>Combine the siRNA treatments and compare to scrambled at at 1% FDR.</p>
 <pre class="r"><code>dds2 &lt;- deseq_from_tibble(counts, samples, design = ~type)
 #  estimating size factors
 #  estimating dispersions
