@@ -10,7 +10,7 @@ install_github("HuntsmanCancerInstitute/hciR")
 A few [R Markdown] files are in the [inst/Rmd] directory and rendered output in the [docs] directory,
 which are best viewed from the Github pages.
 
-1. [pasilla_DESeq.html] - Basic RNA-seq workflow to load pasilla counts and samples, run DESeq2, plot PCA and heatmaps.
+1. [pasilla_DESeq.html] - Load pasilla count matrix and samples, run DESeq2, plot PCA and heatmaps.
 2. [pasilla_flex.html] - Browse linked MA plot, volcano plot, and result table in a [Flex dashboard] using [Crosstalk].
 3. [GSE81784.html] - Load `featureCounts` and run DESeq2 for GSE81784 at HCI.
 
