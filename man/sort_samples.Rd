@@ -27,7 +27,6 @@ Sort character vectors by removing non-numeric characters.  This works for very 
  ids <- c("135X1", "135X21", "135X2", "135X10")
  sort(ids)
  sort_samples(ids)
- order_samples(ids)
 }
 \author{
 Chris Stubben

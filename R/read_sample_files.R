@@ -8,7 +8,7 @@
 #' @param \dots additional options such as col_names passed to \code{read_delim}.
 #'
 #' @note Sample names are parsed from file names without extensions.  If the file name is not unique,
-#'    the parent directory is used.
+#'    the parent directory is used.   Requires tibble > version 1.2 to avoid error in add_column
 #'
 #' @return A list with coverage and stats data.frames
 #'
@@ -33,6 +33,7 @@ read_sample_files <- function(path=".", pattern="\\.counts$", delim="\t",  ...){
    for(i in seq_along(outfiles)){
        message("Reading ", outfiles[i])
        x <- suppressMessages( readr::read_delim(outfiles[i], delim=delim, ...) )
+       ## requires tibble > 1.2 (to add single name into column)
        out1[[i]] <- tibble::add_column (x, sample= samples[i], .before=1)
    }
    dplyr::bind_rows(out1)

@@ -27,7 +27,7 @@ Write DESeq result files, raw counts, rlog values, normalized counts.
 }
 \examples{
 \dontrun{
- write_deseq(dds, res, rld, hg)
+ write_deseq(dds, res, rld, hsa)
 }
 }
 \author{

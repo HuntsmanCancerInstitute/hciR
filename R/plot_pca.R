@@ -16,14 +16,14 @@
 #'
 #' @examples
 #' data(pasilla)
-#' plot_pca(rld, "condition", tooltip=c("file", "type"))
-#' plot_pca(rld , c("condition", "type"))
+#' plot_pca(pasilla$rlog, "condition", tooltip=c("file", "type"))
+#' plot_pca(pasilla$rlog, c("condition", "type"))
 #' @export
 
 plot_pca <- function(object, intgroup="condition", tooltip, ntop = 500, pc=c(1,2), ...){
    if(length(pc)!=2) stop( "pc should be a vector of length 2")
    if(!all(intgroup %in% names( SummarizedExperiment::colData(object)))) stop("intgroup should match columns of colData(object)")
-   n  <- apply( SummarizedExperiment::assay(object), 1, var)
+   n  <- apply( SummarizedExperiment::assay(object), 1, stats::var)
    x  <-  utils::head( SummarizedExperiment::assay(object)[ order(n, decreasing=TRUE),], ntop)
    pca <- stats::prcomp(t(x))
    percentVar <- round(pca$sdev^2/sum(pca$sdev^2) * 100, 1)
@@ -44,7 +44,7 @@ plot_pca <- function(object, intgroup="condition", tooltip, ntop = 500, pc=c(1,2
    }
    highcharter::highchart() %>%
    highcharter::hc_add_series(d , type = "scatter", mapping = highcharter::hcaes( x= PC1, y= PC2, group= INTGRP) ) %>%
-    highcharter::hc_tooltip(formatter = JS( paste0("function(){ return (", tooltipJS, ")}"))) %>%
+    highcharter::hc_tooltip(formatter = htmlwidgets::JS( paste0("function(){ return (", tooltipJS, ")}"))) %>%
      highcharter::hc_xAxis(title = list(text = paste0("PC",  pc[1], ": ", percentVar[ pc[1] ], "% variance")),
              gridLineWidth=1, tickLength=0, startOnTick="true", endOnTick="true") %>%
       highcharter::hc_yAxis(title = list(text = paste0("PC", pc[2], ": ", percentVar[ pc[2] ], "% variance"))) %>%

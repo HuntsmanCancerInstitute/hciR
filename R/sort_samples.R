@@ -13,7 +13,6 @@
 #'  ids <- c("135X1", "135X21", "135X2", "135X10")
 #'  sort(ids)
 #'  sort_samples(ids)
-#'  order_samples(ids)
 #' @export
 
 sort_samples <- function(samples){

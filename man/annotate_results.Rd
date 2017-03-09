@@ -19,11 +19,11 @@ annotate_results(result, biomart, add, id = 1)
 A tibble
 }
 \description{
-Add BioMart annotations to a DESeq2 result table.
+Add BioMart annotations to a DESeq2 result table
 }
 \examples{
 \dontrun{
- annotate_results(res1, hsa)
+ annotate_results(res, hsa)
 }
 }
 \author{

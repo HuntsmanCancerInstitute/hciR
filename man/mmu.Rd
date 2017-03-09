@@ -4,8 +4,7 @@
 \name{mmu}
 \alias{mmu}
 \title{Mouse gene annotations from Ensembl}
-\format{A tibble with 50143 rows and 10 columns: id, gene_name, biotype, chromosome,
-start, end, strand, description, transcript_count, entrez_gene}
+\format{A tibble with 50,143 rows and 10 columns}
 \source{
 \code{read_biomart("mouse")}
 }
@@ -18,10 +17,7 @@ Mouse gene annotations from Ensembl
 \examples{
 data(mmu)
 mmu
-attr(mmu, "downloaded")
 group_by(mmu, biotype) \%>\% summarize(n=n()) \%>\% arrange(desc(n))
-# most ensembl ids have 1 entrez id
-table(nchar(gsub("[^,]", "", mmu[["entrez_gene"]]))+1)
 }
 \keyword{datasets}
 

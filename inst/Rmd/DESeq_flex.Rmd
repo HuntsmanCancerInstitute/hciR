@@ -19,9 +19,9 @@ library(d3scatter)
 library(DT)
 library(hciR)
 
-res <-  params$results
+x <-  params$results
 
-x <-  res[order(res$padj), ]
+x <-  x[order(x$padj), ]
 ## slow if too many genes
 x <- head(x, params$top)
 x <- dplyr::select(x,  id, gene_name, biotype, description, baseMean, log2FoldChange, padj )
@@ -59,8 +59,9 @@ d3scatter(sd, x = ~ log10(baseMean), y = ~log2FoldChange, color= "blue",
 ### Volcano plot
 
 ```{r volcano}
+x_limits <- max( abs(res$log2FoldChange), na.rm=TRUE) * c( -1.04, 1.04) 
 d3scatter(sd, x = ~log2FoldChange, y = ~ -log10(padj), color= "blue",
-    x_label = "log2 Fold change", y_label = "-log10 p-value")
+    x_label = "log2 Fold change", y_label = "-log10 p-value", x_lim= x_limits )
 
 ```
 

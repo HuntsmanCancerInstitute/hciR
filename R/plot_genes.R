@@ -17,11 +17,11 @@
 #'
 #' @examples
 #' data(pasilla)
-#'  x <- top_counts(res, rld)
+#'  x <- top_counts(pasilla$results, pasilla$rlog)
 #' plot_genes(x)
 #' plot_genes(x, "condition", palette="RdBu")
-#' plot_genes(top_counts(res, rld, sort_fc=TRUE) )
-#' plot_genes(top_counts( res, rld, top=200), output = "d3")
+#' plot_genes(top_counts(pasilla$results, pasilla$rlog, sort_fc=TRUE) )
+#' plot_genes(top_counts(pasilla$results, pasilla$rlog, top=200), output = "d3")
 #' @export
 
  plot_genes <-  function( x, intgroup, output="pheatmap", palette="RdYlBu", dendsort=TRUE, midpoint0 = TRUE, border=NA,  ...){
@@ -40,6 +40,8 @@
        df[,1] <- paste0(df[,1], "   ")  # hack to fix right margin
    }
    x <- as.matrix(x)
+   # subtract the row mean
+   x <- x - rowMeans(x)
    brks <- NA
    if(midpoint0){
           n <- max(abs(range(x)))

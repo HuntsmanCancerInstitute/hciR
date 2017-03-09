@@ -14,6 +14,8 @@ factor_trts(samples)
 
 \item{sample_tbl}{a sample table with names matching count table column names in row 1}
 
+\item{samples}{a sample table}
+
 \item{\dots}{additional options like design formula passed to \code{DESeqDataSetFromMatrix}}
 }
 \value{
@@ -24,7 +26,7 @@ Creates DESeqDataSet object using count and sample tibbles as input and run DESe
 }
 \section{Functions}{
 \itemize{
-\item \code{factor_trts}: Avoid warings about factors
+\item \code{factor_trts}: Avoid warnings about factors
 }}
 \note{
 This function first runs \code{\link{sort_counts}} to check and

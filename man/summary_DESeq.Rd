@@ -16,9 +16,8 @@ A data.frame
 Summarize DESeq2 results into a \code{data.frame}
 }
 \examples{
-\dontrun{
-summary_deseq(res1)
-}
+data(pasilla)
+summary_deseq(pasilla$results)
 }
 \author{
 Chris Stubben

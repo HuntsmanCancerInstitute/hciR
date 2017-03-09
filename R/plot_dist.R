@@ -7,6 +7,7 @@
 #' @param output  pheatmap or d3heatmap
 #' @param palette a color palette name or vector of colors
 #' @param diagNA set the diagonal to NA, default TRUE
+#' @param border pheatmap border color, default none
 #' @param font_size x and yaxis font size for d3heatmap
 #' @param \dots Additional options like colors passed to \code{d3heatmap} or \code{pheatmap}
 #'
@@ -16,12 +17,12 @@
 #'
 #' @examples
 #' data(pasilla)
-#' plot_dist(rld, c("condition", "type") )
-#' plot_dist(rld, palette="Blues", diagNA=FALSE)
-#' plot_dist(rld, output = "d3")
+#' plot_dist(pasilla$rlog, c("condition", "type") )
+#' plot_dist(pasilla$rlog, palette="Blues", diagNA=FALSE)
+#' plot_dist(pasilla$rlog, output = "d3")
 #' @export
 
- plot_dist <-   function( rld, intgroup, output="pheatmap", palette="RdYlBu", diagNA = TRUE, font_size=12, ...){
+ plot_dist <-   function( rld, intgroup, output="pheatmap", palette="RdYlBu", diagNA = TRUE, border=NA, font_size=12, ...){
      if(class(rld)[1] == "DESeqTransform"){
         d1 <- stats::dist(t( SummarizedExperiment::assay(rld) ))
      }else{
@@ -48,7 +49,8 @@
         }
         pheatmap::pheatmap(sample_dist, color=clrs, clustering_callback = callback,
                  clustering_distance_rows=d1,
-                 clustering_distance_cols=d1, annotation_col=df, ...)
+                 clustering_distance_cols=d1, annotation_col=df, border=border,
+                 fontsize_row = font_size, fontsize_col=font_size,  ...)
      }else{
           ##  dendsort to reorder branches
         dend <- dendsort::dendsort( stats::as.dendrogram( stats::hclust(d1) ) , isReverse=TRUE)

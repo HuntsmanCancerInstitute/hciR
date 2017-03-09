@@ -5,7 +5,7 @@
 #'
 #' @param object a DESeqDataSet
 #' @param biomart annotations from \code{read_biomart} with column 1 matching row names in results
-#' @param add a vector of biomart columns to add to result table, default gene_name, biotype and description
+#' @param add a vector of biomart columns to add to result table, default gene_name, biotype, chromosome and description
 #' @param vs1 either compare all vs all (default) or a specific treatment vs all
 #' @param alpha the significance cutoff for the adjusted p-value cutoff (FDR)
 #' @param simplify return a tibble if only 1 contrast present
@@ -18,7 +18,8 @@
 #' @examples
 #' \dontrun{
 #' data(pasilla)
-#' res <- results_all(dds, fly)
+#' data(fly)
+#' res <- results_all(pasilla$dds, fly)
 #' res
 #' # Set factor levels in the DESeq object to change contrast order
 #' #  since results_all uses combn on levels
@@ -57,7 +58,7 @@ results_all <- function( object, biomart, add, vs1= "all", alpha = 0.05, simplif
        x <- summary_deseq(res1)
        message(i, ". ", vs1[i], x[1,2], " up and ", x[2,2], " down regulated" )
        if(!missing(biomart)){
-          if(missing(add)) add <- c("gene_name", "biotype", "description")
+          if(missing(add)) add <- c("gene_name", "biotype", "chromosome", "description")
            # suppress messages  like 70 rows in results are missing from biomart table and print once
              res1 <- suppressMessages( annotate_results( res1, biomart, add) )
              attr(res1, "contrast") <- vs[i]

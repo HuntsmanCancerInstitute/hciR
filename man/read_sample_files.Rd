@@ -24,7 +24,7 @@ Read output files and parse the file name to add sample IDs in the first column
 }
 \note{
 Sample names are parsed from file names without extensions.  If the file name is not unique,
-   the parent directory is used.
+   the parent directory is used.   Requires tibble > version 1.2 to avoid error in add_column
 }
 \examples{
 \dontrun{

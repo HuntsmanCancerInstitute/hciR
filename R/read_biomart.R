@@ -56,7 +56,8 @@ read_biomart <- function( dataset="human" , attributes, fragments = FALSE, ...){
    }
    # drop source from description  [Source:MGI Symbol;Acc:MGI:102478]
    bm$description <- gsub(" \\[.*\\]$", "" , bm$description)
-   bm <- tibble::as_tibble(bm)
+   # drop the grouped_df class
+   bm <- tibble::as_data_frame(bm)
    attr(bm, "downloaded") <- Sys.Date()
    bm
 }

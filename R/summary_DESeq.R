@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' data(pasilla)
-#' summary_deseq(res)
+#' summary_deseq(pasilla$results)
 #' @export
 
 

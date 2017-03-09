@@ -15,8 +15,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' data(pasilla)
-#'  write_deseq(dds, res, rld, hg)
+#'  write_deseq(dds, res, rld, hsa)
 #' }
 #' @export
 

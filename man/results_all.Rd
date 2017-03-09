@@ -12,7 +12,7 @@ results_all(object, biomart, add, vs1 = "all", alpha = 0.05,
 
 \item{biomart}{annotations from \code{read_biomart} with column 1 matching row names in results}
 
-\item{add}{a vector of biomart columns to add to result table, default gene_name, biotype and description}
+\item{add}{a vector of biomart columns to add to result table, default gene_name, biotype, chromosome and description}
 
 \item{vs1}{either compare all vs all (default) or a specific treatment vs all}
 
@@ -31,7 +31,10 @@ Currently supports simple designs with a single variable.
 }
 \examples{
 \dontrun{
-  res <- results_all(dds)
+data(pasilla)
+data(fly)
+res <- results_all(pasilla$dds, fly)
+res
 # Set factor levels in the DESeq object to change contrast order
 #  since results_all uses combn on levels
 dds$trt <- factor(dds$trt, levels=c("heart", "lung", "control"))

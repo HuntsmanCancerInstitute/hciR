@@ -7,7 +7,7 @@
 #' @param by join count rownames by this column number in results, default 1
 #' @param col_names a column name in colData(rld) to use as column names
 #' @param row_names a column name in results to use as row names, default gene_name
-#' @param difference Subtract the row mean from counts to display the difference from the gene's average
+
 #' @param \dots additional options passed to \code{\link{top_genes}}
 #'
 #' @return A tibble with colData attribute
@@ -24,7 +24,7 @@
 #' }
 #' @export
 
-top_counts <- function(res, rld, by="id",  col_names, row_names="gene_name", difference=TRUE, ...){
+top_counts <- function(res, rld, by="id",  col_names, row_names="gene_name", ...){
     if(!class(rld) == "DESeqTransform") stop("rld shoud be a DESeqTransform")
     rldx <- SummarizedExperiment::assay(rld)
     colx <- data.frame( SummarizedExperiment::colData(rld) , drop=FALSE)
@@ -43,8 +43,6 @@ top_counts <- function(res, rld, by="id",  col_names, row_names="gene_name", dif
      if(all(is.na(n))) stop("Column ", by, " in results and rownames in counts do not match")
      if(any(is.na(n))) stop(sum(is.na(n)) , " result rows not in count matrix" )
      mat <- rldx[n, ]
-     # subtract the row mean
-     if(difference) mat <- mat - rowMeans(mat)
      ## gene name by default as id  - use id if missing
      if(row_names == "gene_name"){
         n <- is.na( x[["gene_name"]])

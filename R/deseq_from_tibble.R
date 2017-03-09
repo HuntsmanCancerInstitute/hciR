@@ -34,8 +34,8 @@ deseq_from_tibble <- function( count_tbl, sample_tbl,  ...){
    dds
 }
 
-
-#' @describeIn deseq_from_tibble Avoid warings about factors
+#' @describeIn deseq_from_tibble Avoid warnings about factors
+#' @param samples a sample table
 factor_trts <- function(samples){
    for(i in 1:ncol(samples)){
       if(class(samples[[i]])=="character" ){

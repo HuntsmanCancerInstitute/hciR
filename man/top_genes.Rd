@@ -26,10 +26,8 @@ A tibble of top genes
 Return top genes in DESeq results
 }
 \examples{
-\dontrun{
- top_genes(res)
- top_genes(res[[1]], sort_fc=TRUE)
-}
+data(pasilla)
+ top_genes(pasilla$results)
 }
 \author{
 Chris Stubben

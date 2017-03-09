@@ -4,7 +4,7 @@
 \name{hsa}
 \alias{hsa}
 \title{Human gene annotations from Ensembl}
-\format{A tibble with 63305 rows and 10 columns: id, gene_name, biotype, chromosome,
+\format{A tibble with 63,305 rows and 10 columns: id, gene_name, biotype, chromosome,
 start, end, strand, description, transcript_count, entrez_gene}
 \source{
 \code{read_biomart("human")}

@@ -14,7 +14,7 @@ plot_genes(x, intgroup, output = "pheatmap", palette = "RdYlBu",
 
 \item{output}{pheatmap or d3heatmap}
 
-\item{palette}{a color palette name or vector of colors}
+\item{palette}{a color palette name or vector of colors, diverging color palettes are reversed}
 
 \item{dendsort}{reorder branches using \code{dendsort} package}
 
@@ -22,21 +22,21 @@ plot_genes(x, intgroup, output = "pheatmap", palette = "RdYlBu",
 
 \item{border}{pheatmap border color, default none}
 
-\item{\dots}{additional options passed to \code{pheatmap}}
+\item{\dots}{additional options passed to \code{pheatmap} or \code{d3heatmap}}
 }
 \value{
-A pheatmap
+A pheatmap or d3heatmap
 }
 \description{
 Plot heatmap of top genes with annoation bars, reordered branches, and color scale midpoint at zero.
 }
 \examples{
-\dontrun{
- x <- top_counts( res, rld)
+data(pasilla)
+ x <- top_counts(pasilla$results, pasilla$rlog)
 plot_genes(x)
-plot_genes(x, "Trt", palette="RdBu" )
-plot_genes( top_counts(res, rld, sort_fc=TRUE) )
-}
+plot_genes(x, "condition", palette="RdBu")
+plot_genes(top_counts(pasilla$results, pasilla$rlog, sort_fc=TRUE) )
+plot_genes(top_counts(pasilla$results, pasilla$rlog, top=200), output = "d3")
 }
 \author{
 Chris Stubben

@@ -5,7 +5,7 @@
 \title{Plot heatmap of sample distances}
 \usage{
 plot_dist(rld, intgroup, output = "pheatmap", palette = "RdYlBu",
-  diagNA = TRUE, font_size = 12, ...)
+  diagNA = TRUE, border = NA, font_size = 12, ...)
 }
 \arguments{
 \item{rld}{a matrix or DESeqTransform with assay slot}
@@ -18,6 +18,8 @@ plot_dist(rld, intgroup, output = "pheatmap", palette = "RdYlBu",
 
 \item{diagNA}{set the diagonal to NA, default TRUE}
 
+\item{border}{pheatmap border color, default none}
+
 \item{font_size}{x and yaxis font size for d3heatmap}
 
 \item{\dots}{Additional options like colors passed to \code{d3heatmap} or \code{pheatmap}}
@@ -29,11 +31,10 @@ A pheatmap or d3heatmap
 Plot sample distances using rlog or other counts.
 }
 \examples{
-data(pasilla_dds)
-rld <- rlog(pasilla_dds)
-plot_dist(rld, c("condition", "type") )
-plot_dist(rld, palette="Blues", diagNA=FALSE)
-plot_dist(rld, output = "d3")
+data(pasilla)
+plot_dist(pasilla$rlog, c("condition", "type") )
+plot_dist(pasilla$rlog, palette="Blues", diagNA=FALSE)
+plot_dist(pasilla$rlog, output = "d3")
 }
 \author{
 Chris Stubben
