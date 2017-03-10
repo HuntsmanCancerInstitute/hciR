@@ -1,6 +1,6 @@
 #' Regularized log transformation
 #'
-#' This is a wrapper for \code{rlog} and mainly avoids loading the DESeq2 package.
+#' This is a wrapper for \code{rlog} and avoids loading the DESeq2 package for basic workflows.
 #'
 #' @param dds a DESeqDataSet
 #' @param \dots additional options passed to \code{rlog}

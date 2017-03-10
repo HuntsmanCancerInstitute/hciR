@@ -62,7 +62,7 @@ plot_pca(rld, "trt", tooltip=c("id", "name"), width=700)
 Cluster all the rlog values using the R function `dist` to calculate the Euclidean distance and plot sample distances.
 
 
-```{r dist, echo=FALSE, fig.width=8, fig.height=6}
+```{r dist, fig.width=8, fig.height=6}
 plot_dist(rld, "trt", border=NA)
 ```
 
