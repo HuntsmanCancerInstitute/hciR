@@ -22,9 +22,9 @@
 
 deseq_from_tibble <- function( count_tbl, sample_tbl,  ...){
    count_tbl <- sort_counts(count_tbl, sample_tbl)
-   ## use as.matrix.tbl to convert to matrix
-   counts <- as.matrix(count_tbl)
-   ## round for RSEM
+   ## use as_matrix to convert to matrix
+   counts <- as_matrix(count_tbl)
+   ## round for RSEM?
    counts <- round( counts, 0)
    mode(counts) <- "integer"
    ## convert to factor ??

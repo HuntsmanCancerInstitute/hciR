@@ -39,7 +39,8 @@
        df <- attr(x, "colData")[, intgroup, drop=FALSE]
        df[,1] <- paste0(df[,1], "   ")  # hack to fix right margin
    }
-   x <- as.matrix(x)
+   ## convert tibble to matrix
+   x <- as_matrix(x)
    # subtract the row mean
    x <- x - rowMeans(x)
    brks <- NA

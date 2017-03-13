@@ -20,7 +20,7 @@
 
 filter_counts <- function(count_tbl,  n=1,  sum=FALSE ){
    orig_count_tbl <- count_tbl
-   if( class(count_tbl)[1] != "matrix") count_tbl <- as.matrix(count_tbl)
+   if( class(count_tbl)[1] != "matrix") count_tbl <- as_matrix(count_tbl)
 
    n1 <- rowSums(count_tbl) == 0
    message( "Removed ", sum(n1), " features with 0 reads")
