@@ -24,7 +24,7 @@
 #' plot_genes(top_counts(pasilla$results, pasilla$rlog, top=200), output = "d3")
 #' @export
 
- plot_genes <-  function( x, intgroup, output="pheatmap", palette="RdYlBu", dendsort=TRUE, midpoint0 = TRUE, border=NA,  ...){
+ plot_genes <-  function( x, intgroup, output="pheatmap", palette="RdBu", dendsort=TRUE, midpoint0 = TRUE, border=NA,  ...){
    clrs <- palette
    if(length(palette)==1){
        # reverse divergent color palette
@@ -57,6 +57,7 @@
          pheatmap::pheatmap(x, clrs, annotation_col=df, breaks=brks, border=border,  ...)
       }
    }else{
+      ## Breaks for d3heatmap ?  or scale = "row"
       if(dendsort){
           ##  need to flip rows to match pheatmap??
           d3heatmap::d3heatmap(x, reorderfun= function(d,w) dendsort::dendsort(d) , colors = clrs, ...)

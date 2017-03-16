@@ -7,7 +7,8 @@
 top_counts(res, rld, by = "id", col_names, row_names = "gene_name", ...)
 }
 \arguments{
-\item{res}{an annotated DESeq2 results file}
+\item{res}{either an annotated DESeq2 results file (and \code{top_genes} will be called to subset)
+or a tibble that has already be subsetted}
 
 \item{rld}{rlog or other counts in DESeqTransform object}
 
@@ -23,7 +24,7 @@ top_counts(res, rld, by = "id", col_names, row_names = "gene_name", ...)
 A tibble with colData attribute
 }
 \description{
-Join top genes in DESeq results to rlog or other counts, mainly for plotting gene heatmaps.
+Join DESeq results to rlog or other counts, mainly for plotting gene heatmaps.
 }
 \examples{
 \dontrun{

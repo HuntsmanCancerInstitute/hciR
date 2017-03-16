@@ -4,7 +4,7 @@
 \alias{plot_genes}
 \title{Plot heatmap of top genes}
 \usage{
-plot_genes(x, intgroup, output = "pheatmap", palette = "RdYlBu",
+plot_genes(x, intgroup, output = "pheatmap", palette = "RdBu",
   dendsort = TRUE, midpoint0 = TRUE, border = NA, ...)
 }
 \arguments{

@@ -4,8 +4,8 @@
 \alias{plot_dist}
 \title{Plot heatmap of sample distances}
 \usage{
-plot_dist(rld, intgroup, output = "pheatmap", palette = "RdYlBu",
-  diagNA = TRUE, border = NA, font_size = 12, ...)
+plot_dist(rld, intgroup, output = "pheatmap", palette = "RdBu",
+  diagNA = TRUE, border = NA, fontsize = 10, ...)
 }
 \arguments{
 \item{rld}{a matrix or DESeqTransform with assay slot}
@@ -20,7 +20,7 @@ plot_dist(rld, intgroup, output = "pheatmap", palette = "RdYlBu",
 
 \item{border}{pheatmap border color, default none}
 
-\item{font_size}{x and yaxis font size for d3heatmap}
+\item{fontsize}{x and yaxis font size}
 
 \item{\dots}{Additional options like colors passed to \code{d3heatmap} or \code{pheatmap}}
 }
