@@ -4,7 +4,7 @@
 \alias{plot_dist}
 \title{Plot heatmap of sample distances}
 \usage{
-plot_dist(rld, intgroup, output = "pheatmap", palette = "RdBu",
+plot_dist(rld, intgroup, output = "pheatmap", palette = "RdYlBu",
   diagNA = TRUE, border = NA, fontsize = 10, ...)
 }
 \arguments{

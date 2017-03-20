@@ -22,7 +22,7 @@
 #' plot_dist(pasilla$rlog, output = "d3")
 #' @export
 
- plot_dist <-   function( rld, intgroup, output="pheatmap", palette="RdBu", diagNA = TRUE, border=NA, fontsize=10, ...){
+ plot_dist <-   function( rld, intgroup, output="pheatmap", palette="RdYlBu", diagNA = TRUE, border=NA, fontsize=10, ...){
      if(class(rld)[1] == "DESeqTransform"){
         d1 <- stats::dist(t( SummarizedExperiment::assay(rld) ))
      }else{
