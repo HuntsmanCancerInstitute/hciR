@@ -39,7 +39,6 @@ top_counts <- function(res, rld, by="id",  col_names, row_names="gene_name", ...
     if( "contrast" %in% names(attributes(res ) )){
        x <- top_genes(res, ...)
     } else{
-
       x <- res
     }
      ## match column 1 in results to count rownames

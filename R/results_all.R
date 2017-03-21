@@ -5,11 +5,18 @@
 #'
 #' @param object a DESeqDataSet
 #' @param biomart annotations from \code{read_biomart} with column 1 matching row names in results
-#' @param add a vector of biomart columns to add to result table, default gene_name, biotype, chromosome and description
+#' @param add a vector of biomart columns to add to result table, default gene_name, biotype, chromosome, start and description
 #' @param vs1 either compare all vs all (default) or a specific treatment vs all
 #' @param alpha the significance cutoff for the adjusted p-value cutoff (FDR)
 #' @param simplify return a tibble if only 1 contrast present
 #' @param \dots additional options passed to \code{results}
+#'
+#' @note If you combine factors of interest into a single group  (following section 3.3 in the DESeq2 vignette)
+#'  you can set vs1 = "combined1", "combined2", or "combined" to limit the comparisons.
+#'  For example, if you combine 3 cell types and 2 time points, then the default
+#' returns 18 contrasts,  "combined1" returns 3 contrasts comparing time within cell types, combined2 returns 6 contrasts
+#' comparing cell types at the same time point or "combined" to return both (9 total).
+#' Factors should be separated by spaces in the combined treatment group for parsing.
 #'
 #' @return A list of tibbles for each contrast
 #'
@@ -33,20 +40,32 @@ results_all <- function( object, biomart, add, vs1= "all", alpha = 0.05, simplif
    n <- as.character( DESeq2::design(object))
    ## [1] "~"   "condition"
    if(grepl(" + ", n[2], fixed=TRUE)){
-      message("The design has multiple variables and only the first variable will be used")
+      # message("The design has multiple variables and only the first variable will be used")
       n[2] <- gsub(" \\+.*", "", n[2])
    }
    trt <- n[2]
    n <- levels( object[[trt]] )
    # add option to re-level ?
+   contrast <- utils::combn(n, 2)
 
-   if(vs1 == "all"){
-      contrast <- utils::combn(n, 2)
-    }else{
-       if(!vs1 %in% n) stop("No level in ", trt, " named ", vs1)
+   if( vs1 == "combined1"){
+      ## if two columns are combined into a single trt group, compare first group
+      n1 <- apply(contrast, 2, function(x) length(unique( gsub(" [^ ]+", "", x)))==1)
+      contrast <- contrast[, n1]
+   }else if( vs1 == "combined2"){
+      ## or second group
+      n2 <- apply(contrast, 2, function(x) length(unique( gsub("[^ ]+ ", "", x)))==1)
+      contrast <- contrast[, n2]
+   }else if( vs1 == "combined"){
+      ## or both groups
+      n1 <- apply(contrast, 2, function(x) length(unique( gsub(" [^ ]+", "", x)))==1)
+      n2 <- apply(contrast, 2, function(x) length(unique( gsub("[^ ]+ ", "", x)))==1)
+      contrast <- contrast[, n1 | n2]
+    }else if( vs1 %in% n){
        contrast <- rbind( vs1, n[n!=vs1])
     }
       vs <- apply(contrast, 2, paste, collapse = " vs. ")
+if(length(vs)==0) stop("No contrasts found")
       res <- vector("list", length(vs))
       names(res) <- vs
 
@@ -58,7 +77,7 @@ results_all <- function( object, biomart, add, vs1= "all", alpha = 0.05, simplif
        x <- suppressMessages( summary_deseq(res1) )
        message(i, ". ", vs1[i], x[1,2], " up and ", x[2,2], " down regulated" )
        if(!missing(biomart)){
-          if(missing(add)) add <- c("gene_name", "biotype", "chromosome", "description")
+          if(missing(add)) add <- c("gene_name", "biotype", "chromosome", "start", "description")
            # suppress messages  like 70 rows in results are missing from biomart table and print once
            res1 <- suppressMessages( annotate_results( res1, biomart, add) )
            attr(res1, "contrast") <- vs[i]
