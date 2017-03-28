@@ -7,20 +7,24 @@ library(devtools)
 install_github("HuntsmanCancerInstitute/hciR")
 ```
 
-The package includes functions to read output files from [featureCounts] and [RSEM],
-display sample visualization using interactive [highcharts] (see [plot_pca] for the highcharts version of `plotPCA` in [DESeq2]),
-run all possible contrasts and add [Biomart] annotations to results tables, create heatmaps using [d3heatmap]
-or [pheatmap] and other RNA-seq workflow tasks.   The package is intended to work with the [tidyverse] and
-imports but does not load [DESeq2] and other [Bioconductor] packages.
+This package includes functions to read output files from [featureCounts] and
+[RSEM], display sample visualization using interactive [highcharts] (see
+[plot_pca] for the highcharts version of `plotPCA` in [DESeq2]), run all
+possible contrasts and add [Biomart] annotations to results, create heatmaps
+using [d3heatmap] or [pheatmap] and other [RNA-seq workflow] tasks.   The
+package is intended to work with the [tidyverse] and imports but does not load
+[DESeq2] and other [Bioconductor] packages.
 
-A few [R Markdown] sample files are in the [inst/Rmd] directory and rendered output in the [docs] directory,
-which are best viewed from the Github pages.
+A few [R Markdown] sample files are in the [inst/Rmd] directory and rendered
+output in the [docs] directory, which are best viewed from the Github pages.
 
 1. [pasilla_DESeq.html] - Load pasilla count matrix and samples, run DESeq2, plot PCA and heatmaps.
 2. [pasilla_flex.html] - Browse linked MA plot, volcano plot, and result table in a [Flex dashboard] using [Crosstalk].
 3. [GSE81784.html] - Load `featureCounts` and run DESeq2 for GSE81784 at HCI.
 
 
+
+[RNA-seq workflow]: http://www.bioconductor.org/help/workflows/rnaseqGene/
 [featureCounts]: http://bioinf.wehi.edu.au/featureCounts/
 [RSEM]: http://deweylab.github.io/RSEM/
 [Biomart]: http://uswest.ensembl.org/biomart/martview
