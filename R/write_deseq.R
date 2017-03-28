@@ -23,7 +23,7 @@ write_deseq <- function(dds, result_all, rld, biomart, file = "DESeq.xlsx", ...)
 
    ##  if results are a tibble (since simplify=TRUE by default)
    if(!class(result_all)[1] == "list"){
-         n <- attr(res, "contrast")
+         n <- attr(result_all, "contrast")
          result_all <- list(result_all)
          names(result_all) <- n
       }
@@ -39,6 +39,8 @@ write_deseq <- function(dds, result_all, rld, biomart, file = "DESeq.xlsx", ...)
 
    ## write.xlsx replaces space with .
    names(res1)  <- gsub( "\\.? ", "_", names(res1))
+  ## forward slash will cause Excel errors
+  names(res1)  <- gsub( "/", "", names(res1))
 
    # sample data in colData ... drop replaceable
    samp1 <- as.data.frame(SummarizedExperiment::colData(dds))
@@ -55,6 +57,6 @@ write_deseq <- function(dds, result_all, rld, biomart, file = "DESeq.xlsx", ...)
      "Ensembl"    = as.data.frame(biomart))
   )
    message("Saving ", length(DESeq_tables), " worksheets to ", file)
- #DESeq_tables
-   openxlsx::write.xlsx(DESeq_tables, file = file, rowNames=c(FALSE, rep(FALSE, length(res1)),TRUE,TRUE,TRUE, FALSE,FALSE))
+  # DESeq_tables
+   openxlsx::write.xlsx(DESeq_tables, file = file, rowNames= sapply(DESeq_tables, is.matrix) )
 }
