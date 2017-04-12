@@ -5,7 +5,7 @@
 #'
 #' @param object a DESeqDataSet
 #' @param biomart annotations from \code{read_biomart} with column 1 matching row names in results
-#' @param vs1 either compare all vs all (default) or a specific treatment vs all
+#' @param vs either compare all vs all (default) or all vs a specific treatment, or see note.
 #' @param alpha the significance cutoff for the adjusted p-value cutoff (FDR)
 #' @param add_columns a vector of biomart columns to add to result table, default
 #'        gene_name, biotype, chromosome, start and description
@@ -14,7 +14,7 @@
 #' @param \dots additional options passed to \code{results}
 #'
 #' @note If you combine factors of interest into a single group following section 3.3 in the DESeq2 vignette,
-#'  you can set vs1 = "combined1", "combined2", or "combined" to limit the comparisons.
+#'  you can set vs = "combined1", "combined2", or "combined" to limit the comparisons.
 #'  For example, if you combine 3 cell types and 2 time points, then the default
 #' returns 18 contrasts,  "combined1" returns 3 contrasts comparing time within cell types, combined2 returns 6 contrasts
 #' comparing cell types at the same time point or "combined" to return both (9 total).
@@ -37,7 +37,7 @@
 #' }
 #' @export
 
-results_all <- function( object, biomart,  vs1= "all", alpha = 0.05, add_columns, other_columns , simplify=TRUE,  ...){
+results_all <- function( object, biomart,  vs= "all", alpha = 0.05, add_columns, other_columns , simplify=TRUE,  ...){
    message("Using adjusted p-value < ", alpha)
    n <- as.character( DESeq2::design(object))
    ## [1] "~"   "condition"
@@ -50,21 +50,21 @@ results_all <- function( object, biomart,  vs1= "all", alpha = 0.05, add_columns
    # add option to re-level ?
    contrast <- utils::combn(n, 2)
 
-   if( vs1 == "combined1"){
+   if( vs == "combined1"){
       ## if two columns are combined into a single trt group, compare first group
       n1 <- apply(contrast, 2, function(x) length(unique( gsub(" [^ ]+", "", x)))==1)
       contrast <- contrast[, n1]
-   }else if( vs1 == "combined2"){
+   }else if( vs == "combined2"){
       ## or second group
       n2 <- apply(contrast, 2, function(x) length(unique( gsub("[^ ]+ ", "", x)))==1)
       contrast <- contrast[, n2]
-   }else if( vs1 == "combined"){
+   }else if( vs == "combined"){
       ## or both groups
       n1 <- apply(contrast, 2, function(x) length(unique( gsub(" [^ ]+", "", x)))==1)
       n2 <- apply(contrast, 2, function(x) length(unique( gsub("[^ ]+ ", "", x)))==1)
       contrast <- contrast[, n1 | n2]
-    }else if( vs1 %in% n){
-       contrast <- rbind( vs1, n[n!=vs1])
+    }else if( vs %in% n){
+       contrast <- rbind(n[n!=vs], vs)
     }
       vs <- apply(contrast, 2, paste, collapse = " vs. ")
 if(length(vs)==0) stop("No contrasts found")
@@ -72,7 +72,7 @@ if(length(vs)==0) stop("No contrasts found")
       names(res) <- vs
 
    ## padded for message
-   vs1 <- sprintf(paste0("%-", max(nchar(vs))+2, "s"), paste0(vs, ":") )
+   vs <- sprintf(paste0("%-", max(nchar(vs))+2, "s"), paste0(vs, ":") )
 
    if(missing(add_columns)) add_columns <- c("gene_name", "biotype", "chromosome", "start", "description")
    # add one extra to defaults...
@@ -81,7 +81,7 @@ if(length(vs)==0) stop("No contrasts found")
    for(i in seq_along( vs )){
        res1 <- DESeq2::results(object, contrast = c( trt, contrast[1,i], contrast[2,i] ), alpha = alpha, ...)
        x <- suppressMessages( summary_deseq(res1) )
-       message(i, ". ", vs1[i], x[1,2], " up and ", x[2,2], " down regulated" )
+       message(i, ". ", vs[i], x[1,2], " up and ", x[2,2], " down regulated" )
        if(!missing(biomart)){
            # suppress messages  like 70 rows in results are missing from biomart table and print once
            res1 <- suppressMessages( annotate_results( res1, biomart, add_columns) )

@@ -4,19 +4,22 @@
 \alias{results_all}
 \title{Extract and annotate all results from a DESeq analysis}
 \usage{
-results_all(object, biomart, add, vs1 = "all", alpha = 0.05,
-  simplify = TRUE, ...)
+results_all(object, biomart, vs = "all", alpha = 0.05, add_columns,
+  other_columns, simplify = TRUE, ...)
 }
 \arguments{
 \item{object}{a DESeqDataSet}
 
 \item{biomart}{annotations from \code{read_biomart} with column 1 matching row names in results}
 
-\item{add}{a vector of biomart columns to add to result table, default gene_name, biotype, chromosome and description}
-
-\item{vs1}{either compare all vs all (default) or a specific treatment vs all}
+\item{vs}{either compare all vs all (default) or all vs a specific treatment, or see note.}
 
 \item{alpha}{the significance cutoff for the adjusted p-value cutoff (FDR)}
+
+\item{add_columns}{a vector of biomart columns to add to result table, default
+gene_name, biotype, chromosome, start and description}
+
+\item{other_columns}{a vector of additional columns in biomart table}
 
 \item{simplify}{return a tibble if only 1 contrast present}
 
@@ -28,6 +31,14 @@ A list of tibbles for each contrast
 \description{
 Extract all possible contrasts and annotate result tables from a DESeq object.
 Currently supports simple designs with a single variable.
+}
+\note{
+If you combine factors of interest into a single group following section 3.3 in the DESeq2 vignette,
+ you can set vs = "combined1", "combined2", or "combined" to limit the comparisons.
+ For example, if you combine 3 cell types and 2 time points, then the default
+returns 18 contrasts,  "combined1" returns 3 contrasts comparing time within cell types, combined2 returns 6 contrasts
+comparing cell types at the same time point or "combined" to return both (9 total).
+Factors should be separated by spaces in the combined treatment group for parsing.
 }
 \examples{
 \dontrun{

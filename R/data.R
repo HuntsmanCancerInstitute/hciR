@@ -34,12 +34,15 @@
 
 #' Mouse gene annotations from Ensembl
 #'
-#' @format A tibble with 50,143 rows and 10 columns
+#' @format A tibble with 50,143 rows and 11 columns
 #' @source \code{read_biomart("mouse")}
+#' @note Human homologs added from \code{\link{mgi}}
 #' @examples
 #' data(mmu)
 #' mmu
-#' group_by(mmu, biotype) %>% summarize(n=n()) %>% arrange(desc(n))
+#' group_by(mmu, biotype) %>% 
+#'  summarize(n=n(), human_homologs = sum(!is.na(human_homolog))) %>%
+#'   arrange(desc(n))
 "mmu"
 
 #' Fruitfly gene annotations from Ensembl
