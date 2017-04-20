@@ -1,0 +1,176 @@
+---
+title: "STAR alignments for `r params$run`"
+output:
+  html_document:
+    highlight: pygments
+params:
+    run: NA
+    analysis: NA
+    genome: NA
+    length: 50
+---
+
+```{r setup, include=FALSE}
+## Parameterized Markdown file for RNA-seq pipeline at HCI
+knitr::opts_chunk$set(warning=FALSE, comment="", collapse=TRUE)
+
+usage <- 'render("README.Rmd", params=list(run="14011R", analysis="A4124", genome="mouse"))'
+if(params$analysis == "NA") stop("An analysis ID is needed for GNomEx file links.  Usage: ", usage)
+if(params$run == "NA")      stop("A run ID is needed for the report title.  Usage: ", usage)
+if(params$genome == "NA")   stop("A genome name is needed.  Usage: ", usage)
+
+## GNomEx file links
+analysis_dir <- paste0( "DownloadAnalysisSingleFileServlet.gx?idAnalysis=",
+                      substring(params$analysis, 2),
+                     "&view=Y&fileName=/Repository/AnalysisData/2017/", params$analysis)
+
+## Parts of fasta and gtf file names
+release <- 87
+ftp <- paste0( "ftp://ftp.ensembl.org/pub/release-", release, "/")
+if(params$genome =="mouse"){
+    assembly <- "GRCm38"
+    name <- "Mus_musculus"
+}else if(params$genome == "human"){
+   assembly <- "GRCh38"
+   name <- "Homo_sapiens"
+}else if(params$genome == "fly"){
+   assembly <- "BDGP6"
+   name <- "Drosophila_melanogaster"
+}else if(params$genome == "rat"){
+   assembly <- "Rnor_6.0"
+   name <- "Rattus_norvegicus"
+}else{
+   stop("Genome should be human, mouse, rat, or fly.  Usage: ", usage)
+}
+## priamry_assembly.fa used for mouse and human, toplevel.fa for others..
+dna <- "toplevel"
+if( params$genome %in% c("mouse", "human")) dna <- "primary_assembly"
+## final fasta and GTF file names
+fasta <- paste( name, assembly, "dna", dna, "fa", sep="." )
+gtf <- paste(name, assembly, release, "gtf", sep="." )
+## Sample ID
+sampleid <- paste0(gsub("R.*", "", params$run), "X1")
+```
+
+
+This guide describes the steps used to run [STAR] alignments on the FASTQ files in GNomEx.
+
+###1. Create reference
+
+Download the `r params$genome` FASTA and GTF file from the [Ensembl] release
+`r params$release` and run [STAR] with the `genomeGenerate` option to create the
+reference database.  The `sjdbGTFfile` option extracts splice junctions from the
+GTF file with a maximum possible overhang of `r params$length - 1` bases (for `r params$length`
+bp reads).
+
+```{r star_ref, echo=FALSE}
+cat(paste0("wget ", ftp, "fasta/",  tolower(name), "/dna/", fasta, ".gz" ))
+cat(paste0("wget ", ftp, "gtf/",  tolower(name), "/", fasta, ".gz"  ))
+cat("gunzip *.gz")
+
+cat(paste0("STAR --runMode genomeGenerate \
+     --genomeDir star", params$length , " \
+     --runThreadN 16 \
+     --genomeFastaFiles ", fasta, " \
+     --sjdbGTFfile ", gtf, " \
+     --sjdbOverhang ", params$length - 1 ))
+```
+
+###2. Run alignments
+
+Create a [cmd.txt] file to run alignments on the [CHPC] clusters following the
+[Pysano] reference manual.  This file includes [shell] commands to parse sample
+names from each FASTQ file and then read and write to different output files
+with that prefix. For a single sample without all the variable substitution, the
+STAR command is displayed below.  In this example, STAR reads the `r sampleid` FASTQ
+file, trims the adapter sequence, aligns to the reference genome in two pass mode,
+and outputs a BAM file sorted by coordinates and unstranded bedGraph file.
+
+```{r star_run, echo=FALSE}
+cat(paste0("STAR --genomeDir star", params$length , " \
+     --runThreadN 16 \
+     --readFilesIn ", sampleid, ".fq \
+     --clip3pAdapterSeq AGATCGGAAGAGCACACGTCTGAACTCCAGTCA \
+     --twopassMode Basic \
+     --outSAMtype BAM SortedByCoordinate \
+     --outWigType bedGraph \
+     --outWigStrand Unstranded \
+"))
+```
+
+###3. Count features
+
+[FeatureCounts] summarizes aligned reads overlapping features in the GTF file.
+The default is to ignore multi-mapping reads or reads overlapping two or more
+features, but these counts can be added using `-M --fraction` and `--largestOverlap`
+to count multi-mappers by fractions and assign reads to the
+feature with the largest overlap.
+
+```{r counts, echo=FALSE}
+cat(paste0("featureCounts -T 16 -s 2 -a ", gtf, " -o ", sampleid, ".counts ", sampleid, ".bam"))
+```
+
+The [cmd.txt] file also includes quality control checks using [FastQC],
+[samtools idxstats] and [CollectRnaSeqMetrics]. [Pysano] will transfer the FASTQ
+files and scripts in [cmd.txt] to the clusters at [CHPC], execute the jobs and
+transfer the results back to the `Alignments` directory on GNomEx.
+
+###4. Check statistics
+
+[MultiQC] searches the Alignments directory for analysis logs and compiles a
+[HTML report] that includes interactive summary tables and plots for all five commands
+in the `cmd.txt` file
+
+```{r multiqc, echo=FALSE}
+cat("multiqc Alignments")
+```
+
+The General Statistics table at the top of the report includes summaries from FastQC like
+total sequences (M Seqs), STAR (M Aligned), featureCounts (M Assigned) and
+collectRNASeqMetrics (% rRNA and mRNA).   The remaining sections summarize outputs from each program.
+
+###5.  View alignments
+
+Load a BAM file into a genome browser like [IGV] by clicking the URL link icon
+next to the BAM file name in GNomEx.   Copy and paste the link into IGV by
+selecting "File, Load from URL".   Search for a gene or zoom into a
+specific region to check alignments. If reads do not align with annotations, make sure
+the correct reference assembly is selected (hg38, mm10, rn6, etc.).  Also, for stranded
+Illumina single read sequencing runs, the reads in the BAM file will align in the
+opposite direction of the feature,  so the `-s 2` option in `featureCounts` was used to count
+reversely stranded reads.
+
+To compare many samples, it's easier to load the bigWig files in GNomEx. The
+STAR aligner normalizes coverage files by default, so the units are reads per
+million mapped reads (RPM). In addition, separate coverage files are created for
+unique reads and multi-mapping reads (\*.unique.bw and \*.multiple.bw).
+
+[IGV] displays a normalized coverage plot and RPM values at each
+position on the genome.  If needed, multiply the RPM by the number of
+unique alignments from STAR in the [MultiQC] file to get the total reads at that
+base (for example, 24.45863 RPM * 21873674 uniquely aligned reads/1000000 = 535
+total reads).   Finally, select multiple tracks and right click to set
+the same minimun and maximum values to display in the y-axis range by selecting
+Group Autoscale.
+
+###6. Differential Expression
+
+See the [DESeq report] for further details on the differential expression analysis.
+
+<br>
+
+
+[STAR]: https://github.com/alexdobin/STAR
+[Ensembl]: http://uswest.ensembl.org/info/data/ftp/index.html
+[IGV]: http://software.broadinstitute.org/software/igv/
+[featureCounts]: http://bioinf.wehi.edu.au/featureCounts/
+[FastQC]: http://www.bioinformatics.babraham.ac.uk/projects/fastqc/
+[Pysano]: http://healthcare.utah.edu/huntsmancancerinstitute/research/shared-resources/center-managed/bioinformatics/pysano
+[CHPC]: https://www.chpc.utah.edu/
+[shell]: http://tldp.org/LDP/abs/html/index.html
+[CollectRnaSeqMetrics]: https://broadinstitute.github.io/picard/command-line-overview.html#CollectRnaSeqMetrics
+[samtools idxstats]: http://www.htslib.org/
+[MultiQC]: http://multiqc.info/
+[cmd.txt]: `r analysis_dir`/cmd.txt
+[HTML report]: `r analysis_dir`/multiqc_report.html
+[DESeq report]: `r analysis_dir`/DESeq.html

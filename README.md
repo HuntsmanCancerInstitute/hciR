@@ -7,14 +7,6 @@ library(devtools)
 install_github("HuntsmanCancerInstitute/hciR")
 ```
 
-This package includes functions to read output files from [featureCounts] and
-[RSEM], display sample visualization using interactive [highcharts] (see
-[plot_pca] for the highcharts version of `plotPCA` in [DESeq2]), run all
-possible contrasts and add [Biomart] annotations to results, create heatmaps
-using [d3heatmap] or [pheatmap] and other [RNA-seq workflow] tasks.   The
-package is intended to work with the [tidyverse] and imports but does not load
-[DESeq2] and other [Bioconductor] packages.
-
 A few [R Markdown] sample files are in the [inst/Rmd] directory and rendered
 output in the [docs] directory, which are best viewed from the Github pages.
 
@@ -22,17 +14,10 @@ output in the [docs] directory, which are best viewed from the Github pages.
 2. [pasilla_flex.html] - Browse linked MA plot, volcano plot, and result table in a [Flex dashboard] using [Crosstalk].
 3. [GSE81784.html] - Load `featureCounts` and run DESeq2 for GSE81784 at HCI.
 
+The package includes functions for [RNA-seq workflows] and is intended to work with
+the [tidyverse].  It imports but does not load [DESeq2] and other [Bioconductor] packages.
 
-
-[RNA-seq workflow]: http://www.bioconductor.org/help/workflows/rnaseqGene/
-[featureCounts]: http://bioinf.wehi.edu.au/featureCounts/
-[RSEM]: http://deweylab.github.io/RSEM/
-[Biomart]: http://uswest.ensembl.org/biomart/martview
-[d3heatmap]: http://www.htmlwidgets.org/showcase_d3heatmap.html
-[pheatmap]: https://cran.r-project.org/web/packages/pheatmap/index.html
-[highcharts]: http://jkunst.com/highcharter/
-[plot_pca]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/R/plot_pca.R
-
+[RNA-seq workflows]: http://www.bioconductor.org/help/workflows/rnaseqGene/
 [DESeq2]: https://bioconductor.org/packages/release/bioc/html/DESeq2.html
 [Bioconductor]: https://bioconductor.org/
 [inst/Rmd]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/inst/Rmd

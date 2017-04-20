@@ -72,7 +72,7 @@ if(length(vs)==0) stop("No contrasts found")
       names(res) <- vs
 
    ## padded for message
-   vs <- sprintf(paste0("%-", max(nchar(vs))+2, "s"), paste0(vs, ":") )
+   vs1 <- sprintf(paste0("%-", max(nchar(vs))+2, "s"), paste0(vs, ":") )
 
    if(missing(add_columns)) add_columns <- c("gene_name", "biotype", "chromosome", "start", "description")
    # add one extra to defaults...
@@ -81,7 +81,7 @@ if(length(vs)==0) stop("No contrasts found")
    for(i in seq_along( vs )){
        res1 <- DESeq2::results(object, contrast = c( trt, contrast[1,i], contrast[2,i] ), alpha = alpha, ...)
        x <- suppressMessages( summary_deseq(res1) )
-       message(i, ". ", vs[i], x[1,2], " up and ", x[2,2], " down regulated" )
+       message(i, ". ", vs1[i], x[1,2], " up and ", x[2,2], " down regulated" )
        if(!missing(biomart)){
            # suppress messages  like 70 rows in results are missing from biomart table and print once
            res1 <- suppressMessages( annotate_results( res1, biomart, add_columns) )
