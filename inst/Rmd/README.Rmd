@@ -164,6 +164,6 @@ See the [DESeq report] for further details on the differential expression analys
 [CollectRnaSeqMetrics]: https://broadinstitute.github.io/picard/command-line-overview.html#CollectRnaSeqMetrics
 [samtools idxstats]: http://www.htslib.org/
 [MultiQC]: http://multiqc.info/
-[cmd.txt]: `r analysis_dir`/cmd.txt
+[cmd.txt]: `r paste0(analysis_dir, "/", sampleid)`/cmd.txt
 [HTML report]: `r analysis_dir`/multiqc_report.html
 [DESeq report]: `r analysis_dir`/DESeq.html
