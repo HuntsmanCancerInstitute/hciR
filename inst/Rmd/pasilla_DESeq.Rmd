@@ -1,0 +1,151 @@
+---
+title: "DESeq analysis of Pasilla knock-downs"
+output: html_document
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, comment="# ", collapse=TRUE)
+library(hciR)
+library(DT)
+```
+
+This guide follows the [Bioconductor RNA-Seq workflow] to find differentially expressed
+genes using [DESeq2].  Load the [hciR] package on Github to run the [R] code.
+
+You can render this HTML report by finding the path to the [pasilla_DESeq.Rmd] file in `inst/Rmd`.
+
+```{r render, eval=FALSE}
+library(hciR)
+rmd <- system.file("Rmd", "pasilla_DESeq.Rmd", package="hciR")
+render(rmd, output_dir=".")
+```
+
+
+### Load samples and counts
+
+Load the [pasilla] counts and samples and fix the file name to match column names in the count matrix.
+
+```{r load_samples, message=FALSE, echo=2:6}
+options(width=120)
+setwd( system.file("extdata", package="pasilla") )
+counts  <- read_tsv("pasilla_gene_counts.tsv" )
+samples <- read_csv("pasilla_sample_annotation.csv")
+samples$file <- gsub("fb$", "", samples$file )
+samples
+```
+
+Remove 2240 features with zero counts and 1323 with one or fewer reads in any sample.
+
+```{r filter_counts, echo=2:3}
+options(width=120)
+counts <- filter_counts(counts)
+counts
+```
+
+### Run DESeq
+
+Combine the counts and samples to create a `DESeqDataSet` object and calculate the regularized log transform (rlog) for sample visualizations.
+
+```{r DESeqobject}
+dds <- deseq_from_tibble(counts, samples,  design = ~ condition)
+rld <- r_log(dds)
+```
+
+### PCA plot
+
+Plot the first two principal components using the rlog values from the top 500 variable genes.  You can hover over points to view sample names and type or zoom into groups of points in this interactive [highchart].
+
+```{r pcaplot}
+plot_pca(rld, "condition", tooltip=c("file", "type") , width=700)
+```
+
+Cluster all the rlog values using the R function `dist` to calculate the Euclidean distance between samples.
+
+```{r dist}
+plot_dist(rld , c("condition", "type"))
+```
+
+### Gene annotations
+
+Load fruitfly annotations from Ensembl.
+
+```{r biomaRt}
+fly <- read_biomart("fly")
+```
+
+### Result tables
+
+Get the DESeq results using a 5% false discovery rate (FDR).   This function will compare
+alll treatment combinations, which only includes one in this study.
+
+```{r DESeq_results}
+res <- results_all(dds, fly, alpha= 0.05)
+datatable(top_genes(res)[, c(1:2, 4:7, 11)], options=list(pageLength=5) ) %>%
+  formatRound(5:6, 2) %>% formatSignif(7,2)
+```
+
+### Browse results
+
+Create a [flex dashboard] using the top 1000 genes sorted by p-value in
+[pasilla_flex.html].   The [MA-plot] and [volcano plot] are linked, so you can
+click and drag to create a box to highlight points and then view matching rows
+in the table. You can also drag the box around the plot to easily highlight
+other points and rows. In addition, you can search for genes in the table using
+the search box, but need to click on the row in order to highlight the points in
+the plots.  The sliders can also be used to limit the results.
+
+```{r flex_dash, message=FALSE, eval=FALSE}
+rmd <- system.file("Rmd", "DESeq_flex.Rmd", package="hciR")
+render(rmd, output_file="pasilla_flex.html",  output_dir=".",
+         params=list( results= res, title = "Pasilla treated vs. untreated", top= 1000 ))
+```
+
+### Save results
+
+Save the DESeq results to a single Excel file in [DESeq.xlsx].  The `write_deseq` function will also
+output raw counts, rlog values, normalized counts, samples and fly annotations.
+
+```{r write, eval=FALSE}
+write_deseq( dds, res, rld, fly)
+```
+
+### Plot heatmaps
+
+Select the top 40 genes sorted by p-value and cluster the rlog differences,
+so values in the heatmap represent the amount a gene deviates in a specific sample
+from the gene’s average across all samples.
+
+<br>
+
+```{r plot1, fig.width=8, fig.height=7}
+plot_genes( top_counts( res, rld), c("condition", "type") )
+```
+<br>
+
+Plot the top 400 genes using an interactive [d3heatmap].  Click and drag over a
+region in the plot to zoom and better view gene labels.
+
+```{r plotd3, fig.width=8, fig.height=9}
+plot_genes( top_counts( res, rld, top=400), output="d3", xaxis_font_size=12)
+```
+
+<br>
+<br>
+
+
+[highchart]: http://jkunst.com/highcharter/index.html
+[pasilla]: http://bioconductor.org/packages/release/data/experiment/html/pasilla.html
+[R for Data Science]: http://r4ds.had.co.nz/
+[R]: https://www.r-project.org
+[Bioconductor RNA-Seq workflow]: http://www.bioconductor.org/help/workflows/rnaseqGene
+[DESeq2]: http://www.bioconductor.org/packages/release/bioc/html/DESeq2.html
+[hciR]: https://github.com/HuntsmanCancerInstitute/hciR
+[pheatmap]: https://cran.r-project.org/web/packages/pheatmap/index.html
+[d3heatmap]: http://www.htmlwidgets.org/showcase_d3heatmap.html
+
+[flex dashboard]: http://rmarkdown.rstudio.com/flexdashboard/
+[MA-plot]: https://en.wikipedia.org/wiki/MA_plot
+[volcano plot]: https://en.wikipedia.org/wiki/Volcano_plot_(statistics)
+[pasilla_flex.html]: https://huntsmancancerinstitute.github.io/hciR/pasilla_flex.html
+[DESeq.xlsx]: https://huntsmancancerinstitute.github.io/hciR/DESeq.xlsx
+[DESeq.Rmd]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/inst/Rmd/DESeq.Rmd
