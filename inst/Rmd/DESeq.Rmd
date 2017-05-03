@@ -38,7 +38,7 @@ Load samples with ids matching count column names and treatment column for contr
 
 ```{r load_samples, message=FALSE, echo=2:3}
 options(width=110)
-samples <- read_tsv( params$samples )
+samples <- read_tsv(params$samples)
 samples
 ```
 
