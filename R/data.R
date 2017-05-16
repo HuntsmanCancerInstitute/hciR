@@ -40,7 +40,7 @@
 #' @examples
 #' data(mmu)
 #' mmu
-#' group_by(mmu, biotype) %>% 
+#' group_by(mmu, biotype) %>%
 #'  summarize(n=n(), human_homologs = sum(!is.na(human_homolog))) %>%
 #'   arrange(desc(n))
 "mmu"
@@ -67,6 +67,19 @@
 #' filter(kegg_hsa, id %in% attr(kegg_hsa, "dise.idx")) %>%
 #'   group_by(pathway) %>% summarize(n = n()) %>% arrange(desc(n))
 "kegg_hsa"
+
+#' Mouse pathway gene sets from KEGG
+#'
+#' @format A tibble with 26,255 rows and 288 pathways
+#' @note Signaling, metabolism and disease pathway indices are saved as attributes
+#' @source \code{kegg.gsets} in \code{gage} package
+#' @examples
+#' data(kegg_mmu)
+#' kegg_mmu
+#' names(attributes(kegg_mmu))
+#' filter(kegg_mmu, id %in% attr(kegg_mmu, "dise.idx")) %>%
+#'   group_by(pathway) %>% summarize(n = n()) %>% arrange(desc(n))
+"kegg_mmu"
 
 #' DESeq objects and results for Pasilla knock-downs
 #'
