@@ -106,16 +106,16 @@ cat(paste0("featureCounts -T 16 -s 2 -a ", gtf, " -o ", sampleid, ".counts ", sa
 The [cmd.txt] file also includes quality control checks using [FastQC],
 [samtools idxstats] and [CollectRnaSeqMetrics]. [Pysano] will transfer the FASTQ
 files and scripts in [cmd.txt] to the clusters at [CHPC], execute the jobs and
-transfer the results back to the `Alignments` directory on GNomEx.
+transfer the results back to the `STARalign` directory on GNomEx.
 
 ###4. Check statistics
 
-[MultiQC] searches the Alignments directory for analysis logs and compiles a
+[MultiQC] searches the `STARalign` directory for analysis logs and compiles a
 [HTML report] that includes interactive summary tables and plots for all five commands
 in the `cmd.txt` file.
 
 ```{r multiqc, echo=FALSE}
-cat("multiqc Alignments")
+cat("multiqc STARalign")
 ```
 
 The General Statistics table at the top of the report includes summaries from FastQC like

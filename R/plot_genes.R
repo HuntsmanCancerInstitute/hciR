@@ -37,7 +37,7 @@
    df <- NA
    if(!missing( intgroup)){
        df <- attr(x, "colData")[, intgroup, drop=FALSE]
-       df[,1] <- paste0(df[,1], "   ")  # hack to fix right margin
+       for(i in 1:ncol(df))  df[,i] <- paste0(df[,i], "    ")  # hack to fix right margin
    }
    ## convert tibble to matrix
    x <- as_matrix(x)

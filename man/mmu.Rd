@@ -20,7 +20,7 @@ Human homologs added from \code{\link{mgi}}
 \examples{
 data(mmu)
 mmu
-group_by(mmu, biotype) \%>\% 
+group_by(mmu, biotype) \%>\%
  summarize(n=n(), human_homologs = sum(!is.na(human_homolog))) \%>\%
   arrange(desc(n))
 }
