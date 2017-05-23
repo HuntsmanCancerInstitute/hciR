@@ -13,12 +13,14 @@ opts <-  list(
          help="Analysis ID for GNomEx file links"),
    make_option(c("-d", "--database"), default="human",
       help="Reference database, either human, mouse, fly or rat, default human"),
+   make_option(c("-o", "--output"), default="Alignments",
+         help="STAR alignment output directory name"),
     make_option(c("-l", "--length"), default=50,
        help="Read length, default 50")
 )
 
 parser <- OptionParser(option_list=opts, description = "
-Creates a README.html file for the  STAR RNA-seq workflow at HCI using defaults
+Creates a README.html file for the STAR RNA-seq workflow at HCI using defaults
 from the cmd.txt file in setup_jobs.R.
 ")
  opt <- parse_args(parser)
@@ -33,6 +35,6 @@ if( "NA"  %in% c(opt$run, opt$analysis  )){
 if( !opt$database %in% c("human", "mouse", "fly", "rat")) stop("Database name should be human, mouse, rat, or fly")
 
 render("README.Rmd", quiet=TRUE, params=list( run = opt$run, analysis = opt$analysis,
-    database = opt$database, length = opt$length ) )
+    database = opt$database, output = opt$output, length = opt$length ) )
 
 message("Added README.html")
