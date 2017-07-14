@@ -5,7 +5,7 @@
 \title{Read RSEM output files}
 \usage{
 read_RSEM(path = ".", pattern = "genes.results$", reshape = TRUE,
-  stats = FALSE)
+  value = "expected_count", stats = FALSE)
 }
 \arguments{
 \item{path}{the path to RSEM output files, the default corresponds to the working directory.}
@@ -13,6 +13,8 @@ read_RSEM(path = ".", pattern = "genes.results$", reshape = TRUE,
 \item{pattern}{regular expression for count file name matching, deafult .genes.results}
 
 \item{reshape}{reshape into wide format with samples in rows (a count matrix).}
+
+\item{value}{a string with the RSEM column name to populate cell values, default expected_count}
 
 \item{stats}{read stat files, default counts}
 }
@@ -24,7 +26,7 @@ Reads RSEM counts or stats files and optionally reshape into wide format.
 }
 \note{
 The cnt and model files in the stats directory vary depending on RSEM options
-and the parser may fail.   Reshape uses only expected counts or alignment stats
+and the parser may fail.
 }
 \examples{
 \dontrun{

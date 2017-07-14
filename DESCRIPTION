@@ -1,7 +1,7 @@
 Package: hciR
 Title: RNA-seq workflows at HCI
-Version: 1.0.2
-Date: 2017-03-08
+Version: 1.0.3
+Date: 2017-07-12
 Author: Chris Stubben
 Maintainer: Chris Stubben <chris.stubben@hci.utah.edu>
 Depends:
@@ -31,4 +31,5 @@ Suggests:
 License: GPL-3
 Description: This package loads output from RNA-seq workflows and includes Rmarkdown files
     and Rscripts to create interactive graphics and reports.
+biocViews: Software
 RoxygenNote: 5.0.1

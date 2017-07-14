@@ -5,7 +5,8 @@
 #'
 #' @param object a DESeqDataSet
 #' @param biomart annotations from \code{read_biomart} with column 1 matching row names in results
-#' @param vs either compare all vs all (default) or all vs a specific treatment, or see note.
+#' @param vs either compare all vs. all (default) or a specific treatment vs. all, or see note.
+#' @param vs2 position of specific treatment in contrast vector, set FALSE for specific treatment vs all
 #' @param alpha the significance cutoff for the adjusted p-value cutoff (FDR)
 #' @param add_columns a vector of biomart columns to add to result table, default
 #'        gene_name, biotype, chromosome, start and description
@@ -37,7 +38,7 @@
 #' }
 #' @export
 
-results_all <- function( object, biomart,  vs= "all", alpha = 0.05, add_columns, other_columns , simplify=TRUE,  ...){
+results_all <- function( object, biomart,  vs= "all", vs2= TRUE, alpha = 0.05, add_columns, other_columns , simplify=TRUE,  ...){
    message("Using adjusted p-value < ", alpha)
    n <- as.character( DESeq2::design(object))
    ## [1] "~"   "condition"
@@ -64,7 +65,11 @@ results_all <- function( object, biomart,  vs= "all", alpha = 0.05, add_columns,
       n2 <- apply(contrast, 2, function(x) length(unique( gsub("[^ ]+ ", "", x)))==1)
       contrast <- contrast[, n1 | n2]
     }else if( vs %in% n){
-       contrast <- rbind(n[n!=vs], vs)
+      if(vs2){
+         contrast <- rbind( n[n!=vs], vs)
+         }else{
+         contrast <- rbind( vs, n[n!=vs])
+      }
     }
       vs <- apply(contrast, 2, paste, collapse = " vs. ")
 if(length(vs)==0) stop("No contrasts found")

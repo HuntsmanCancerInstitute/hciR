@@ -4,15 +4,17 @@
 \alias{results_all}
 \title{Extract and annotate all results from a DESeq analysis}
 \usage{
-results_all(object, biomart, vs = "all", alpha = 0.05, add_columns,
-  other_columns, simplify = TRUE, ...)
+results_all(object, biomart, vs = "all", vs2 = TRUE, alpha = 0.05,
+  add_columns, other_columns, simplify = TRUE, ...)
 }
 \arguments{
 \item{object}{a DESeqDataSet}
 
 \item{biomart}{annotations from \code{read_biomart} with column 1 matching row names in results}
 
-\item{vs}{either compare all vs all (default) or all vs a specific treatment, or see note.}
+\item{vs}{either compare all vs. all (default) or a specific treatment vs. all, or see note.}
+
+\item{vs2}{position of specific treatment in contrast vector, set FALSE for specific treatment vs all}
 
 \item{alpha}{the significance cutoff for the adjusted p-value cutoff (FDR)}
 

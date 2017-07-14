@@ -24,7 +24,7 @@
 #' plot_genes(top_counts(pasilla$results, pasilla$rlog, top=200), output = "d3")
 #' @export
 
- plot_genes <-  function( x, intgroup, output="pheatmap", palette="RdBu", dendsort=TRUE, midpoint0 = TRUE, border=NA,  ...){
+ plot_genes <-  function( x, intgroup, output="pheatmap", palette="RdBu", dendsort=TRUE, midpoint0 = TRUE, max_scale = NA, border=NA,  ...){
    clrs <- palette
    if(length(palette)==1){
        # reverse divergent color palette
@@ -45,7 +45,8 @@
    x <- x - rowMeans(x)
    brks <- NA
    if(midpoint0){
-          n <- max(abs(range(x)))
+          n <- max_scale
+          if(is.na(n)) n <- max(abs(range(x)))
           brks <- seq(-n, n, length=255)
    }
    if(output == "pheatmap"){

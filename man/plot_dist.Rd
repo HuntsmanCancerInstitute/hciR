@@ -5,7 +5,7 @@
 \title{Plot heatmap of sample distances}
 \usage{
 plot_dist(rld, intgroup, output = "pheatmap", palette = "RdYlBu",
-  diagNA = TRUE, border = NA, fontsize = 10, ...)
+  reverse_pal = FALSE, diagNA = TRUE, border = NA, fontsize = 10, ...)
 }
 \arguments{
 \item{rld}{a matrix or DESeqTransform with assay slot}
@@ -15,6 +15,8 @@ plot_dist(rld, intgroup, output = "pheatmap", palette = "RdYlBu",
 \item{output}{pheatmap or d3heatmap}
 
 \item{palette}{a color palette name or vector of colors}
+
+\item{reverse_pal}{reverse the color palette}
 
 \item{diagNA}{set the diagonal to NA, default TRUE}
 

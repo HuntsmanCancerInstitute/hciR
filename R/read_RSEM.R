@@ -5,10 +5,11 @@
 #' @param path the path to RSEM output files, the default corresponds to the working directory.
 #' @param pattern regular expression for count file name matching, deafult .genes.results
 #' @param reshape reshape into wide format with samples in rows (a count matrix).
+#' @param value a string with the RSEM column name to populate cell values, default expected_count
 #' @param stats read stat files, default counts
 #'
 #' @note The cnt and model files in the stats directory vary depending on RSEM options
-#' and the parser may fail.   Reshape uses only expected counts or alignment stats
+#' and the parser may fail.
 #'
 #' @return A tibble in long or wide format if reshape=TRUE
 #'
@@ -44,12 +45,13 @@
 #' }
 #' @export
 
-read_RSEM <- function(path = ".", pattern = "genes.results$", reshape = TRUE, stats = FALSE){
+read_RSEM <- function(path = ".", pattern = "genes.results$", reshape = TRUE, value="expected_count", stats = FALSE){
    if(!stats){
       res1 <- read_sample_files(path, pattern)
       if(reshape){
-          res1 <- dplyr::select( res1, sample, gene_id, expected_count) %>% tidyr::spread(sample, expected_count)
-          #  add option to sort HCI samples as X1, X2, ..., X10, X11
+          if(!value %in% c("expected_count", "TPM", "FPKM")) stop("value not found")
+         res1 <- dplyr::select_( x, "sample", "gene_id", value) %>% tidyr::spread_("sample", value)
+           #  sort HCI samples as X1, X2, ..., X10, X11
           res1  <-  res1[, c(1, order_samples(colnames(res1)[-1])+1) ]
        }
    }else{

@@ -6,6 +6,7 @@
 #' @param intgroup one or more column names in colData(rld) for pheatmap \code{annotation_col}
 #' @param output  pheatmap or d3heatmap
 #' @param palette a color palette name or vector of colors
+#' @param reverse_pal reverse the color palette
 #' @param diagNA set the diagonal to NA, default TRUE
 #' @param border pheatmap border color, default none
 #' @param fontsize x and yaxis font size
@@ -22,7 +23,7 @@
 #' plot_dist(pasilla$rlog, output = "d3")
 #' @export
 
- plot_dist <-   function( rld, intgroup, output="pheatmap", palette="RdYlBu", diagNA = TRUE, border=NA, fontsize=10, ...){
+ plot_dist <-   function( rld, intgroup, output="pheatmap", palette="RdYlBu", reverse_pal = FALSE, diagNA = TRUE, border=NA, fontsize=10, ...){
      if(class(rld)[1] == "DESeqTransform"){
         d1 <- stats::dist(t( SummarizedExperiment::assay(rld) ))
      }else{
@@ -39,6 +40,7 @@
         if(palette %in% c("BrBG","PiYG","PRGn","PuOr","RdBu","RdGy","RdYlBu","RdYlGn","Spectral")) ncols <-11
         clrs <- grDevices::colorRampPalette( RColorBrewer::brewer.pal( ncols, palette))(255)
      }
+   if(reverse_pal) clrs <- rev(clrs)
      if(output == "pheatmap"){
         ##  dendsort to reorder branches
         callback <- function(hc, ...){dendsort::dendsort(hc)}

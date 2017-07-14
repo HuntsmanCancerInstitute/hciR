@@ -44,7 +44,9 @@ write_deseq <- function(dds, result_all, rld, biomart, file = "DESeq.xlsx", ...)
 
    # sample data in colData ... drop replaceable
    samp1 <- as.data.frame(SummarizedExperiment::colData(dds))
-   samp1$replaceable <- NULL
+   # treatments is a list is TCGA biolinks
+    samp1 <- samp1[, colnames(samp1) != "treatments"]
+    samp1$replaceable <- NULL
 
    DESeq_tables <-  c(
      sum1,

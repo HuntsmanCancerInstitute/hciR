@@ -144,6 +144,7 @@ if( opt$run == "NA" ){
      }
    }
   if(!repo_found) stop("No match to ", opt$run, " in /Repository/MicroarrayData")
+
   fastq <- list.files(paste0(repo, "/Fastq"), pattern = "txt.gz$")
   if(length(fastq) == 0) stop("No Fastq files found in ", opt$run)
   fastq_full <- list.files(paste0(repo, "/Fastq"), pattern = "txt.gz$", full.names =TRUE)
@@ -152,7 +153,9 @@ if( opt$run == "NA" ){
    for(i in seq_along(fastq)){
      if( !dir.exists(ids[i])) dir.create(ids[i])
      file.symlink( fastq_full[i], ids[i])
-     file.link( "cmd.txt", paste0(ids[i], "/cmd.txt"))
+     cmd_txt <- paste0(ids[i], "/cmd.txt")
+     ## avoid error for paired end
+     if(!file.exits(cmd_txt))  file.link( "cmd.txt", cmd_txt)
    }
    message("Linked ",  length(fastq), " Fastq files in ", repo)
 }
