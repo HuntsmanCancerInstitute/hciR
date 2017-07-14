@@ -50,7 +50,7 @@ read_RSEM <- function(path = ".", pattern = "genes.results$", reshape = TRUE, va
       res1 <- read_sample_files(path, pattern)
       if(reshape){
           if(!value %in% c("expected_count", "TPM", "FPKM")) stop("value not found")
-         res1 <- dplyr::select_( x, "sample", "gene_id", value) %>% tidyr::spread_("sample", value)
+         res1 <- dplyr::select_(res1, "sample", "gene_id", value) %>% tidyr::spread_("sample", value)
            #  sort HCI samples as X1, X2, ..., X10, X11
           res1  <-  res1[, c(1, order_samples(colnames(res1)[-1])+1) ]
        }
