@@ -47,7 +47,9 @@
          df <- NA
         if(!missing(intgroup)){
               df <- as.data.frame( SummarizedExperiment::colData(rld)[, intgroup, drop=FALSE])
-              for(i in ncol(df)) df[,i] <- paste0(df[,i], "  ")  # hack to fix right margin of plot
+              for(i in ncol(df)){
+                   if(class(df[,i]) != "numeric") df[,i] <- paste0(df[,i], "  ")  # hack to fix right margin of plot
+            }
         }
         pheatmap::pheatmap(sample_dist, color=clrs, clustering_callback = callback,
                  clustering_distance_rows=d1,

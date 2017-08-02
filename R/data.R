@@ -1,3 +1,16 @@
+#' Canonical pathways in the MSigDB curated gene sets.
+#'
+#' Nine canonical pathways from the MSigDB C2 curated gene sets.  See \code{\link{read_msigdb}} to load file.
+#'
+#' @format A list with 9 pathways with 1329 gene sets
+#'
+#' @source \url{http://software.broadinstitute.org/gsea/msigdb/collections.jsp}
+#' @examples
+#' data(msig)
+#' sapply(msig, length)
+#' msig$KEGG[1:3]
+"msig"
+
 #' Human and Mouse Homologs
 #'
 #' Human and Mouse Homology with phenotype annotations from MGI

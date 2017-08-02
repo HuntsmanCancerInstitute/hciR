@@ -18,7 +18,7 @@ knitr::opts_chunk$set(warning=FALSE, comment="", collapse=TRUE)
 analysis_dir <- paste0( "DownloadAnalysisSingleFileServlet.gx?idAnalysis=",
                       substring(params$analysis, 2),
                      "&view=Y&fileName=/Repository/AnalysisData/2017/", params$analysis)
-## Parts of fasta and gtf file names
+## Parts of fasta and gtf file names - add as option?
 release <- 87
 ftp <- paste0( "ftp://ftp.ensembl.org/pub/release-", release, "/")
 if(params$database =="mouse"){
@@ -52,7 +52,7 @@ This guide describes the steps used to run [STAR] alignments on the FASTQ files 
 ###1. Create reference
 
 Download the `r params$database` FASTA and GTF file from the [Ensembl] release
-`r params$release` and run [STAR] with the `databaseGenerate` option to create the
+`r release` and run [STAR] with the `databaseGenerate` option to create the
 reference database.  The `sjdbGTFfile` option extracts splice junctions from the
 GTF file with a maximum possible overhang of `r params$length - 1` bases (for `r params$length`
 bp reads).
@@ -137,7 +137,7 @@ reversely stranded reads.
 To compare many samples, it's easier to load the bigWig files in GNomEx. The
 STAR aligner normalizes coverage files by default, so the units are reads per
 million mapped reads (RPM). In addition, separate coverage files are created for
-unique reads and multi-mapping reads (\*.unique.bw and \*.multiple.bw).
+unique reads (\*.unique.bw) and unique plus multi-mapping reads (\*.multiple.bw).
 
 [IGV] displays a normalized coverage plot and RPM values at each
 position on the database.  If needed, multiply the RPM by the number of

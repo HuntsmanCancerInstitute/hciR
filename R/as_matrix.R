@@ -15,8 +15,8 @@
 #' @export
 
 
-as_matrix <- function(x, ...){
-   if(!tibble::is_tibble(x) ) stop("x must be a tibble")   
+as_matrix <- function(x){
+   if(!tibble::is_tibble(x) ) stop("x must be a tibble")
   y <- as.matrix.data.frame(x[,-1])
   rownames(y) <- x[[1]]
   y

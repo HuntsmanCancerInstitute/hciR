@@ -20,6 +20,8 @@ plot_genes(x, intgroup, output = "pheatmap", palette = "RdBu",
 
 \item{midpoint0}{center color scale midpoint at zero}
 
+\item{max_scale}{min and max value for color scale, default is max(abs(range(x)))}
+
 \item{border}{pheatmap border color, default none}
 
 \item{\dots}{additional options passed to \code{pheatmap} or \code{d3heatmap}}

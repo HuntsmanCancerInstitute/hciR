@@ -8,6 +8,7 @@
 #' @param palette a color palette name or vector of colors, diverging color palettes are reversed
 #' @param dendsort reorder branches using \code{dendsort} package
 #' @param midpoint0 center color scale midpoint at zero
+#' @param max_scale min and max value for color scale, default is max(abs(range(x)))
 #' @param border pheatmap border color, default none
 #' @param \dots additional options passed to \code{pheatmap} or \code{d3heatmap}
 #'

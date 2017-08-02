@@ -36,11 +36,10 @@ Currently supports simple designs with a single variable.
 }
 \note{
 If you combine factors of interest into a single group following section 3.3 in the DESeq2 vignette,
- you can set vs = "combined1", "combined2", or "combined" to limit the comparisons.
- For example, if you combine 3 cell types and 2 time points, then the default
-returns 18 contrasts,  "combined1" returns 3 contrasts comparing time within cell types, combined2 returns 6 contrasts
-comparing cell types at the same time point or "combined" to return both (9 total).
-Factors should be separated by spaces in the combined treatment group for parsing.
+ you can set vs = "combined" to limit the comparisons.
+ For example, if you combine 3 cell types and 2 treatment, then the default
+returns 18 contrasts while "combined" returns 3 contrasts comparing treatment within cell types (first group).
+Factors should be separated by space, dash or underscore in the combined treatment group for parsing.
 }
 \examples{
 \dontrun{

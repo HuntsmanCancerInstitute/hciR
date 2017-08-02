@@ -15,11 +15,10 @@
 #' @param \dots additional options passed to \code{results}
 #'
 #' @note If you combine factors of interest into a single group following section 3.3 in the DESeq2 vignette,
-#'  you can set vs = "combined1", "combined2", or "combined" to limit the comparisons.
-#'  For example, if you combine 3 cell types and 2 time points, then the default
-#' returns 18 contrasts,  "combined1" returns 3 contrasts comparing time within cell types, combined2 returns 6 contrasts
-#' comparing cell types at the same time point or "combined" to return both (9 total).
-#' Factors should be separated by spaces in the combined treatment group for parsing.
+#'  you can set vs = "combined" to limit the comparisons.
+#'  For example, if you combine 3 cell types and 2 treatment, then the default
+#' returns 18 contrasts while "combined" returns 3 contrasts comparing treatment within cell types (first group).
+#' Factors should be separated by space, dash or underscore in the combined treatment group for parsing.
 #'
 #' @return A list of tibbles for each contrast
 #'
@@ -51,19 +50,10 @@ results_all <- function( object, biomart,  vs= "all", vs2= TRUE, alpha = 0.05, a
    # add option to re-level ?
    contrast <- utils::combn(n, 2)
 
-   if( vs == "combined1"){
-      ## if two columns are combined into a single trt group, compare first group
-      n1 <- apply(contrast, 2, function(x) length(unique( gsub(" [^ ]+", "", x)))==1)
+   if( vs == "combined"){
+      ## if two columns are combined into a single trt group, compare within first group
+      n1 <- apply(contrast, 2, function(x) length(unique( gsub("[ _-].+", "", x)))==1)
       contrast <- contrast[, n1]
-   }else if( vs == "combined2"){
-      ## or second group
-      n2 <- apply(contrast, 2, function(x) length(unique( gsub("[^ ]+ ", "", x)))==1)
-      contrast <- contrast[, n2]
-   }else if( vs == "combined"){
-      ## or both groups
-      n1 <- apply(contrast, 2, function(x) length(unique( gsub(" [^ ]+", "", x)))==1)
-      n2 <- apply(contrast, 2, function(x) length(unique( gsub("[^ ]+ ", "", x)))==1)
-      contrast <- contrast[, n1 | n2]
     }else if( vs %in% n){
       if(vs2){
          contrast <- rbind( n[n!=vs], vs)

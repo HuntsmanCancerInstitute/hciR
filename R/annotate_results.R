@@ -17,8 +17,6 @@
 #' }
 #' @export
 
-## use dplyr join
-
 annotate_results <- function(result, biomart, add, id = 1 ){
    n1 <- match( rownames(result), biomart[[id]])
    if(missing(add)) add <- c("gene_name", "biotype", "description")

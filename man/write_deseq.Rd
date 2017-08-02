@@ -2,9 +2,10 @@
 % Please edit documentation in R/write_deseq.R
 \name{write_deseq}
 \alias{write_deseq}
-\title{Write DESeq results to an Excel file}
+\title{Write DESeq results}
 \usage{
-write_deseq(dds, result_all, rld, biomart, file = "DESeq.xlsx", ...)
+write_deseq(dds, result_all, rld, biomart, txt_files = FALSE,
+  file = "DESeq.xlsx", ...)
 }
 \arguments{
 \item{dds}{a DESeqDataset objects object with Ensembl IDs as row names}
@@ -15,6 +16,8 @@ write_deseq(dds, result_all, rld, biomart, file = "DESeq.xlsx", ...)
 
 \item{biomart}{annotations from \code{read_biomart}}
 
+\item{txt_files}{write results to separate txt files, mainly for IPA input}
+
 \item{file}{file name}
 
 \item{\dots}{additional options passed to \code{annotate_results}}
@@ -23,7 +26,7 @@ write_deseq(dds, result_all, rld, biomart, file = "DESeq.xlsx", ...)
 A tibble
 }
 \description{
-Write DESeq result files, raw counts, rlog values, normalized counts.
+Write DESeq result files, raw counts, rlog values, normalized counts to an Excel file.
 }
 \examples{
 \dontrun{

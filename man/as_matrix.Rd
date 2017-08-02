@@ -4,7 +4,7 @@
 \alias{as_matrix}
 \title{Convert tibbles to a matrix}
 \usage{
-as_matrix(x, ...)
+as_matrix(x)
 }
 \arguments{
 \item{x}{a tibble with identifiers in column 1 (assigned as rownames) and

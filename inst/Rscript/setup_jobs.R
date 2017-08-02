@@ -155,7 +155,7 @@ if( opt$run == "NA" ){
      file.symlink( fastq_full[i], ids[i])
      cmd_txt <- paste0(ids[i], "/cmd.txt")
      ## avoid error for paired end
-     if(!file.exits(cmd_txt))  file.link( "cmd.txt", cmd_txt)
+     if(!file.exists(cmd_txt))  file.link( "cmd.txt", cmd_txt)
    }
    message("Linked ",  length(fastq), " Fastq files in ", repo)
 }
