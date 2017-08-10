@@ -54,5 +54,6 @@ gage_all <- function(res, gsets, fdr = 0.05, ...){
       }
       gage_res[[i]] <-  x
    }
+   if(length( gage_res) == 1 ) gage_res <- gage_res[[1]]
    gage_res
 }

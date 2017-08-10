@@ -69,12 +69,13 @@ if(length(vs)==0) stop("No contrasts found")
    ## padded for message
    vs1 <- sprintf(paste0("%-", max(nchar(vs))+2, "s"), paste0(vs, ":") )
 
-   if(missing(add_columns)) add_columns <- c("gene_name", "biotype", "chromosome", "start", "description")
+   if(missing(add_columns)) add_columns <- c("gene_name", "biotype", "chromosome", "description")
    # add one extra to defaults...
    if(!missing(other_columns)) add_columns <- c(add_columns, other_columns)
 
    for(i in seq_along( vs )){
        res1 <- DESeq2::results(object, contrast = c( trt, contrast[1,i], contrast[2,i] ), alpha = alpha, ...)
+       ft <- S4Vectors::metadata(res1)$filterThreshold
        x <- suppressMessages( summary_deseq(res1) )
        message(i, ". ", vs1[i], x[1,2], " up and ", x[2,2], " down regulated" )
        if(!missing(biomart)){
@@ -82,6 +83,7 @@ if(length(vs)==0) stop("No contrasts found")
            res1 <- suppressMessages( annotate_results( res1, biomart, add_columns) )
            attr(res1, "contrast") <- vs[i]
            attr(res1, "alpha") <- alpha
+           attr(res1, "filterThreshold") <- ft
        }
        res[[i]] <- res1
    }

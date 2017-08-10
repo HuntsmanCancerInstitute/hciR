@@ -9,7 +9,8 @@
 #' @param dendsort reorder branches using \code{dendsort} package
 #' @param midpoint0 center color scale midpoint at zero
 #' @param max_scale min and max value for color scale, default is max(abs(range(x)))
-#' @param border pheatmap border color, default none
+#' @param border pheatmap border color, default NA
+#' @param scale, center and scale values, default none
 #' @param \dots additional options passed to \code{pheatmap} or \code{d3heatmap}
 #'
 #' @return A pheatmap or d3heatmap
@@ -25,7 +26,8 @@
 #' plot_genes(top_counts(pasilla$results, pasilla$rlog, top=200), output = "d3")
 #' @export
 
- plot_genes <-  function( x, intgroup, output="pheatmap", palette="RdBu", dendsort=TRUE, midpoint0 = TRUE, max_scale = NA, border=NA,  ...){
+ plot_genes <-  function( x, intgroup, output="pheatmap", palette="RdBu", dendsort=TRUE,
+      midpoint0 = TRUE, max_scale = NA, border=NA,  scale="none",  ...){
    clrs <- palette
    if(length(palette)==1){
        # reverse divergent color palette
@@ -42,21 +44,24 @@
    }
    ## convert tibble to matrix
    x <- as_matrix(x)
-   # subtract the row mean
-   x <- x - rowMeans(x)
    brks <- NA
-   if(midpoint0){
+   if(scale == "none"){
+      # subtract the row mean ...
+      x <- x - rowMeans(x)
+      if(midpoint0){
           n <- max_scale
           if(is.na(n)) n <- max(abs(range(x)))
           brks <- seq(-n, n, length=255)
+      }
    }
    if(output == "pheatmap"){
       ## use  dendsort to reorder branches
       if(dendsort){
          callback <- function(hc, ...){ dendsort::dendsort(hc)  }
-         pheatmap::pheatmap(x, clrs, clustering_callback = callback, annotation_col=df, breaks=brks, border=border,  ...)
+         pheatmap::pheatmap(x, clrs, clustering_callback = callback, annotation_col=df,
+               scale=scale, breaks=brks, border=border,  ...)
       }else{
-         pheatmap::pheatmap(x, clrs, annotation_col=df, breaks=brks, border=border,  ...)
+         pheatmap::pheatmap(x, clrs, annotation_col=df, scale=scale, breaks=brks, border=border,  ...)
       }
    }else{
       ## Breaks for d3heatmap ?  or scale = "row"
