@@ -38,6 +38,9 @@ write_deseq <- function(result_all, dds, rld, biomart, txt_files = FALSE, file =
          readr::write_tsv(res[[i]], vs)
       }
    }else{
+     if( !class(dds)[1] == "DESeqDataSet") stop("dds should be a DESeqDataSet object")
+     if( !class(rld)[1] == "DESeqTransform") stop("rld should be a DESeqTransform object")
+
    ## 1. summary
    sum1 <-  dplyr::bind_rows(lapply(result_all, summary_deseq), .id= "contrast")
    # write.xlsx does not like tibbles, so use as.data.frame
