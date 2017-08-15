@@ -59,9 +59,9 @@
       if(dendsort){
          callback <- function(hc, ...){ dendsort::dendsort(hc)  }
          pheatmap::pheatmap(x, clrs, clustering_callback = callback, annotation_col=df,
-               scale=scale, breaks=brks, border=border,  ...)
+               scale=scale, breaks=brks, border_color=border,  ...)
       }else{
-         pheatmap::pheatmap(x, clrs, annotation_col=df, scale=scale, breaks=brks, border=border,  ...)
+         pheatmap::pheatmap(x, clrs, annotation_col=df, scale=scale, breaks=brks, border_color=border,  ...)
       }
    }else{
       ## Breaks for d3heatmap ?  or scale = "row"

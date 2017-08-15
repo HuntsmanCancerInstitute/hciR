@@ -35,7 +35,7 @@ summary_deseq <-  function(object){
 
    up <- sum(object$padj < alpha & object$log2FoldChange > 0, na.rm = TRUE)
  down <- sum(object$padj < alpha & object$log2FoldChange < 0, na.rm = TRUE)
-  x1 <- data.frame( summary = c("up-regulated", "down-regulated", "outliers", paste("low counts <", ft) ),
+  x1 <- tibble::tibble( summary = c("up-regulated", "down-regulated", "outliers", paste("low counts <", ft) ),
                     count = c( up, down, outlier, filt),
                  percent = round(c( up, down, outlier, filt) /notallzero *  100, 2)
                   )

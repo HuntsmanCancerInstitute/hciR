@@ -2,8 +2,7 @@
 #'
 #' Join DESeq results to rlog or other counts, mainly for plotting gene heatmaps.
 #'
-#' @param res either an annotated DESeq2 results file (and \code{top_genes} will be called to subset)
-#'  or a tibble that has already be subsetted
+#' @param res an annotated DESeq2 results file (and \code{top_genes} will be run to subset)
 #' @param rld rlog or other counts in DESeqTransform object
 #' @param by join count rownames by this column number in results, default 1
 #' @param col_names a column name in colData(rld) to use as column names
@@ -16,11 +15,9 @@
 #'
 #' @examples
 #' \dontrun{
-#'  x <- top_counts(res, rld)
-#'  pheatamp(x)
-#'  pheatmap_genes(x)
-#'  # or with annotation bar, re-ordered branches and color scale midpoint at zero
-#'  pheatmap_genes(x, "Trt", border=NA )
+#'  x <- top_counts(res[[1]], rld)
+#'  pheatmap(as_matrix(x))
+#'  plot_genes(x, "trt")
 #' }
 #' @export
 
@@ -35,12 +32,9 @@ top_counts <- function(res, rld, by="id",  col_names, row_names="gene_name", ...
          colnames(rldx) <- n
          rownames(colx) <- n
       }
-    ## IF tibble from results_all, run top_genes...
-    if( "contrast" %in% names(attributes(res ) )){
-       x <- top_genes(res, ...)
-    } else{
-      x <- res
-    }
+
+      x <- top_genes(res, ...)
+
      ## match column 1 in results to count rownames
      n <- match(x[[ by ]], rownames(rldx))
      if(all(is.na(n))) stop("Column ", by, " in results and rownames in counts do not match")

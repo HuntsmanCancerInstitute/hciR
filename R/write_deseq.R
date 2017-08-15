@@ -2,8 +2,8 @@
 #'
 #' Write DESeq result files, raw counts, rlog values, normalized counts to an Excel file.
 #'
-#' @param dds a DESeqDataset objects object with Ensembl IDs as row names
 #' @param result_all a list from \code{results_all}
+#' @param dds a DESeqDataset object with count tables
 #' @param rld a DESeqTransform obect with rlog values
 #' @param biomart annotations from \code{read_biomart}
 #' @param txt_files write results to separate txt files, mainly for IPA input
@@ -16,11 +16,11 @@
 #'
 #' @examples
 #' \dontrun{
-#'  write_deseq(dds, res, rld, hsa)
+#'  write_deseq(res, dds, rld, hsa)
 #' }
 #' @export
 
-write_deseq <- function(dds, result_all, rld, biomart, txt_files = FALSE, file = "DESeq.xlsx", ...){
+write_deseq <- function(result_all, dds, rld, biomart, txt_files = FALSE, file = "DESeq.xlsx", ...){
 
    ##  if results are a tibble (since simplify=TRUE by default)
    if(!class(result_all)[1] == "list"){
@@ -29,6 +29,7 @@ write_deseq <- function(dds, result_all, rld, biomart, txt_files = FALSE, file =
          names(result_all) <- n
    }
    if(txt_files){
+      res <- result_all
       for (i in 1:length(res)){
          vs <- gsub( "\\.* ", "_", names(res[i]))
          vs <- gsub("_+_", "_", vs, fixed=TRUE)
