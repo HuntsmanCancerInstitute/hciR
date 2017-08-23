@@ -1,18 +1,15 @@
 ## RNA-seq workflows at [HCI]
 
 This package is intended to work with the [tidyverse] and therefore imports but does not
-load [DESeq2] and other [Bioconductor] packages.  It was mainly designed to simplify basic
-[RNA-seq workflows] so users can focus on writing [R Markdown] reports.
-
-Use `devtools` to install the package from GitHub.
+load [DESeq2] and other [Bioconductor] packages.  Use `devtools` to install the package from GitHub.
 
 ```r
 library(devtools)
 install_github("HuntsmanCancerInstitute/hciR")
 ```
 
-A few sample Markdown files are in the [inst/Rmd] directory and rendered
-output in the [docs] directory, which are best viewed from the Github pages.
+To learn more about the package, check the [Markdown] files in the [inst/Rmd] directory.
+The rendered output is in the [docs] directory, which are best viewed from the Github pages.
 
 1. [pasilla_DESeq.html] - Load pasilla count matrix and samples, run DESeq2, plot PCA and heatmaps.
 2. [pasilla_flex.html] - Browse linked MA plot, volcano plot, and result table in a [Flex dashboard] using [Crosstalk].
@@ -33,7 +30,7 @@ A few functions are also included in R scripts like `read_featureCounts.R` to ru
 [GSE81784.html]: https://huntsmancancerinstitute.github.io/hciR/GSE81784.html
 [inst/Rmd]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/inst/Rmd
 [docs]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/docs
-[R Markdown]: http://rmarkdown.rstudio.com/
+[Markdown]: http://rmarkdown.rstudio.com/
 [Flex dashboard]: http://rmarkdown.rstudio.com/flexdashboard/
 [Crosstalk]: https://rstudio.github.io/crosstalk/
 [R scripts for RNA-Seq at HCI]: https://huntsmancancerinstitute.github.io/hciR/hciR_scripts.html
