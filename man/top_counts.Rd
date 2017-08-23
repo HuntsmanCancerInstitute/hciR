@@ -7,8 +7,7 @@
 top_counts(res, rld, by = "id", col_names, row_names = "gene_name", ...)
 }
 \arguments{
-\item{res}{either an annotated DESeq2 results file (and \code{top_genes} will be called to subset)
-or a tibble that has already be subsetted}
+\item{res}{an annotated DESeq2 results file (and \code{top_genes} will be run to subset)}
 
 \item{rld}{rlog or other counts in DESeqTransform object}
 
@@ -28,11 +27,9 @@ Join DESeq results to rlog or other counts, mainly for plotting gene heatmaps.
 }
 \examples{
 \dontrun{
- x <- top_counts(res, rld)
- pheatamp(x)
- pheatmap_genes(x)
- # or with annotation bar, re-ordered branches and color scale midpoint at zero
- pheatmap_genes(x, "Trt", border=NA )
+ x <- top_counts(res[[1]], rld)
+ pheatmap(as_matrix(x))
+ plot_genes(x, "trt")
 }
 }
 \author{

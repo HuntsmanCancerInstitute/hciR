@@ -27,21 +27,26 @@
 
 read_biomart <- function( dataset="human" , attributes, fragments = FALSE, ...){
 
-   common <- c(human="hsapiens",  mouse="mmusculus", rat= "rnorvegicus", zebrafish="drerio",
-             fly="dmelanogaster", fruitfly="dmelanogaster", scerevisiae="yeast")
-  if( tolower(dataset) %in% names(common))  dataset <- common[[tolower(dataset)]]
-  if( !grepl("gene_ensembl$", dataset) )  dataset <- paste0(dataset, "_gene_ensembl")
+   common <- c(human = "hsapiens",
+               mouse = "mmusculus",
+               rat = "rnorvegicus",
+               zebrafish = "drerio",
+               fly = "dmelanogaster",
+               fruitfly = "dmelanogaster",
+               scerevisiae = "yeast")
 
+   if( tolower(dataset) %in% names(common))  dataset <- common[[tolower(dataset)]]
+   if( !grepl("gene_ensembl$", dataset) )  dataset <- paste0(dataset, "_gene_ensembl")
    ensembl <- biomaRt::useEnsembl(biomart="ensembl", dataset=dataset)
 
    if(missing(attributes)){
-      bm <- biomaRt::getBM(attributes=c('ensembl_gene_id','external_gene_name', 'gene_biotype', 'chromosome_name',
-            'start_position', 'end_position','strand', 'description', 'transcript_count', 'entrezgene'),
-             mart = ensembl, ...)
+      bm <- biomaRt::getBM(attributes=c('ensembl_gene_id','external_gene_name', 'gene_biotype',
+                  'chromosome_name', 'start_position', 'end_position','strand', 'description',
+                  'transcript_count', 'entrezgene'), mart = ensembl, ...)
      # replace long names like ensembl_gene_id
       names(bm)[1:6] <- c("id", "gene_name", "biotype", "chromosome", "start", "end")
       n <-   length(unique(bm$id))
-     message("Downloaded ", nrow(bm), " results, grouping into ", n, " rows with a unique Ensembl ID" )
+      message("Downloaded ", nrow(bm), " results, grouping into ", n, " rows with a unique Ensembl ID" )
       ## group by first 9 columns and paste entrezgene into comma-separated list so ensembl id is unique
       bm <- dplyr::group_by_( bm , .dots= colnames(bm)[-ncol(bm)]) %>%
              dplyr::summarize( entrez_gene = paste(entrezgene, collapse=","))
@@ -51,7 +56,7 @@ read_biomart <- function( dataset="human" , attributes, fragments = FALSE, ...){
            message("Dropped ", n-nrow(bm),  " rows with chromosome fragments, ", nrow(bm), " total rows")
        }
    }else{
-      bm <- biomaRt::getBM(attributes= attributes, mart = ensembl, ...)
+       bm <- biomaRt::getBM(attributes= attributes, mart = ensembl, ...)
        message("Downloaded ", nrow(bm), " features")
    }
    # drop source from description  [Source:MGI Symbol;Acc:MGI:102478]

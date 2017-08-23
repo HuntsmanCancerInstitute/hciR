@@ -5,7 +5,8 @@
 \title{Plot heatmap of top genes}
 \usage{
 plot_genes(x, intgroup, output = "pheatmap", palette = "RdBu",
-  dendsort = TRUE, midpoint0 = TRUE, max_scale = NA, border = NA, ...)
+  dendsort = TRUE, midpoint0 = TRUE, max_scale = NA, border = NA,
+  scale = "none", ...)
 }
 \arguments{
 \item{x}{a tibble from \code{\link{top_counts}}}
@@ -22,7 +23,9 @@ plot_genes(x, intgroup, output = "pheatmap", palette = "RdBu",
 
 \item{max_scale}{min and max value for color scale, default is max(abs(range(x)))}
 
-\item{border}{pheatmap border color, default none}
+\item{border}{pheatmap border color, default NA}
+
+\item{scale, }{center and scale values, default none}
 
 \item{\dots}{additional options passed to \code{pheatmap} or \code{d3heatmap}}
 }

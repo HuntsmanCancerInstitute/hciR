@@ -26,7 +26,8 @@ summary_deseq <-  function(object){
           contrast <- attr(object, "contrast")
           ft <- attr(object, "filterThreshold")
       }
-   ft <- round(ft, 1)
+   if(!is.null(ft))   ft <- round(ft, 1)
+   if(is.null(alpha)) alpha <- 0.05
    notallzero <- sum(object$baseMean > 0)
     outlier <- sum(object$baseMean > 0 & is.na(object$pvalue))
    # check if  "ihwResult" %in% names(metadata(object)) ??

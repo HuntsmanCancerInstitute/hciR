@@ -4,13 +4,13 @@
 \alias{write_deseq}
 \title{Write DESeq results}
 \usage{
-write_deseq(dds, result_all, rld, biomart, txt_files = FALSE,
+write_deseq(result_all, dds, rld, biomart, txt_files = FALSE,
   file = "DESeq.xlsx", ...)
 }
 \arguments{
-\item{dds}{a DESeqDataset objects object with Ensembl IDs as row names}
-
 \item{result_all}{a list from \code{results_all}}
+
+\item{dds}{a DESeqDataset object with count tables}
 
 \item{rld}{a DESeqTransform obect with rlog values}
 
@@ -30,7 +30,7 @@ Write DESeq result files, raw counts, rlog values, normalized counts to an Excel
 }
 \examples{
 \dontrun{
- write_deseq(dds, res, rld, hsa)
+ write_deseq(res, dds, rld, hsa)
 }
 }
 \author{
