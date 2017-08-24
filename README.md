@@ -25,7 +25,7 @@ A few functions are also included in [inst/Rscript] like `read_featureCounts.R` 
 [DESeq2]: https://bioconductor.org/packages/release/bioc/html/DESeq2.html
 [Bioconductor]: https://bioconductor.org/
 [inst/Rmd]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/inst/Rmd
-[inst/Rmd]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/inst/Rscript
+[inst/Rscript]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/inst/Rscript
 [pasilla_flex.html]: https://huntsmancancerinstitute.github.io/hciR/pasilla_flex.html
 [pasilla_DESeq.html]: https://huntsmancancerinstitute.github.io/hciR/pasilla_DESeq.html
 [GSE81784.html]: https://huntsmancancerinstitute.github.io/hciR/GSE81784.html
