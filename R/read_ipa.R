@@ -20,11 +20,13 @@
 #' @export
 
 read_ipa <- function(file,  excel=FALSE, mylists=FALSE){
-   x <- readLines(file)
+   x <- readr::read_lines(file)
    ## Find start of tables
    n <- grep("for My Projects", x)
    # save results
    n1 <- length(n)
+   ## check...
+   if(n1 ==0) stop("No My Projects headers. File should be an IPA output file from Export All")
    z <- vector("list", n1)
    ## get names for Excel tabs
    TABS <-  gsub( " for My .*", "", x[n])
@@ -39,16 +41,9 @@ read_ipa <- function(file,  excel=FALSE, mylists=FALSE){
       if(end - start == 0) next
       message("Loading ", TABS[i])
       y <- x[  start:end  ]
-      if(i == 1){
-           ## fix parsing problems with 1 or 3 columns to avoid warnings
-           ## firt tried suppressWarnings, but not working within function, ok in Rstudio
-           y[12] <- gsub("\tand ", " and ", y[12])
-           y <- y[!y %in% c("", "Analysis Settings", "Filter Summary\t")]
-           n2 <- grep("\t", y, invert=TRUE)
-           y[n2] <- paste0(y[n2], "\t\t")  # 1 \t gets trimmed
-           y <- c("Analysis Settings\tValue", y)
-      }
-      z[[i]] <- readr::read_tsv( paste( gsub("\t$", "", y), collapse ="\n"))
+      ## fix 1 row with  3 columns
+      if(i == 1)  y <- gsub("\tand consider Both up", " and consider Both up", y)
+      z[[i]] <- suppressWarnings( readr::read_tsv( paste( gsub("\t$", "", y), collapse ="\n")) )
     }
     ## sort pathways by p-value
     z[["Canonical Pathways"]] <- arrange(z[["Canonical Pathways"]], desc(`-log(p-value)`))

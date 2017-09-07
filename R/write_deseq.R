@@ -6,6 +6,7 @@
 #' @param dds a DESeqDataset object with count tables
 #' @param rld a DESeqTransform obect with rlog values
 #' @param biomart annotations from \code{read_biomart}
+#' @param blind blind the rlog transformation, default TRUE
 #' @param txt_files write results to separate txt files, mainly for IPA input
 #' @param file file name
 #' @param \dots additional options passed to \code{annotate_results}
@@ -20,7 +21,7 @@
 #' }
 #' @export
 
-write_deseq <- function(result_all, dds, rld, biomart, txt_files = FALSE, file = "DESeq.xlsx", ...){
+write_deseq <- function(result_all, dds, rld, biomart, blind = TRUE, txt_files = FALSE, file = "DESeq.xlsx", ...){
 
    ##  if results are a tibble (since simplify=TRUE by default)
    if(!class(result_all)[1] == "list"){
@@ -66,7 +67,7 @@ write_deseq <- function(result_all, dds, rld, biomart, txt_files = FALSE, file =
    list(
      "raw_counts" = DESeq2::counts(dds),
      "normalized" = DESeq2::counts(dds, normalized=TRUE),
-     "rlog"       = SummarizedExperiment::assay(rld),
+     "rlog"       = SummarizedExperiment::assay(rld, blind = blind),
      "samples"    = samp1,
      "Ensembl"    = as.data.frame(biomart))
   )

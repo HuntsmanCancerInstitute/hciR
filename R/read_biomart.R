@@ -4,6 +4,7 @@
 #'
 #' @param dataset The first letter of genus and full species name like btaurus, ecaballus, sscrofa from \code{listEnsembl}.
 #' A few common names are accepted for human, mouse, rat, fruitfly, yeast and zebrafish.
+#' @param version Ensembl version number for \code{useEnsembl}. Default is current version.
 #' @param attributes vector of column names to pass to \code{getBM}, default ensembl_gene_id,
 #'  external_gene_name, gene_biotype, chromosome_name, start_position, end_position, strand,
 #'  description, transcript_count, and entrezgene
@@ -25,7 +26,7 @@
 #' }
 #' @export
 
-read_biomart <- function( dataset="human" , attributes, fragments = FALSE, ...){
+read_biomart <- function( dataset="human" , version = NULL, attributes, fragments = FALSE, ...){
 
    common <- c(human = "hsapiens",
                mouse = "mmusculus",
@@ -33,11 +34,12 @@ read_biomart <- function( dataset="human" , attributes, fragments = FALSE, ...){
                zebrafish = "drerio",
                fly = "dmelanogaster",
                fruitfly = "dmelanogaster",
+               pig = "sscrofa",
                scerevisiae = "yeast")
 
    if( tolower(dataset) %in% names(common))  dataset <- common[[tolower(dataset)]]
    if( !grepl("gene_ensembl$", dataset) )  dataset <- paste0(dataset, "_gene_ensembl")
-   ensembl <- biomaRt::useEnsembl(biomart="ensembl", dataset=dataset)
+   ensembl <- biomaRt::useEnsembl(biomart="ensembl", dataset=dataset, version = version)
 
    if(missing(attributes)){
       bm <- biomaRt::getBM(attributes=c('ensembl_gene_id','external_gene_name', 'gene_biotype',
