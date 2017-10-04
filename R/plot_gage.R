@@ -2,7 +2,8 @@
 #'
 #' Plot heatmap with enrichment scores by contrast and gene set from \code{\link{gage_all}}
 #'
-#' @param
+#' @param x list from gage_all
+#' @param \dots other options passed to \code{pheatmap}
 #' @author Chris Stubben
 #' @examples
 #' \dontrun{
