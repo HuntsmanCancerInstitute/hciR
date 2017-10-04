@@ -7,10 +7,11 @@
 #' @param output  pheatmap or d3heatmap
 #' @param palette a color palette name or vector of colors, diverging color palettes are reversed
 #' @param dendsort reorder branches using \code{dendsort} package
-#' @param midpoint0 center color scale midpoint at zero
-#' @param max_scale min and max value for color scale, default is max(abs(range(x)))
+#' @param scale  scale values, default diff will substract the row mean from each value.
+#'   Other options are none, row and column as described in \code{heatmap}
+#' @param midpoint0 if scale = diff, then center color scale at zero
+#' @param max_scale if scale = diff, then max value for color scale, default is max(abs(range(x)))
 #' @param border pheatmap border color, default NA
-#' @param scale, center and scale values, default none
 #' @param \dots additional options passed to \code{pheatmap} or \code{d3heatmap}
 #'
 #' @return A pheatmap or d3heatmap
@@ -27,7 +28,7 @@
 #' @export
 
  plot_genes <-  function( x, intgroup, output="pheatmap", palette="RdBu", dendsort=TRUE,
-      midpoint0 = TRUE, max_scale = NA, border=NA,  scale="none",  ...){
+      scale="diff", midpoint0 = TRUE, max_scale = NA, border=NA,    ...){
    clrs <- palette
    if(length(palette)==1){
        # reverse divergent color palette
@@ -45,9 +46,10 @@
    ## convert tibble to matrix
    x <- as_matrix(x)
    brks <- NA
-   if(scale == "none"){
+   if(scale == "diff"){
       # subtract the row mean ...
       x <- x - rowMeans(x)
+      scale <- "none"   #for pheatmap
       if(midpoint0){
           n <- max_scale
           if(is.na(n)) n <- max(abs(range(x)))

@@ -52,6 +52,8 @@ read_biomart <- function( dataset="human" , version = NULL, attributes, fragment
       ## group by first 9 columns and paste entrezgene into comma-separated list so ensembl id is unique
       bm <- dplyr::group_by_( bm , .dots= colnames(bm)[-ncol(bm)]) %>%
              dplyr::summarize( entrez_gene = paste(entrezgene, collapse=","))
+      # drop source from description  [Source:MGI Symbol;Acc:MGI:102478]
+      bm$description <- gsub(" \\[.*\\]$", "" , bm$description)
       # drop fragments GL456211.1, CHR_MG132_PATCH
       if(fragments){
            bm <- subset(bm , nchar(chromosome) < 3)
@@ -61,8 +63,7 @@ read_biomart <- function( dataset="human" , version = NULL, attributes, fragment
        bm <- biomaRt::getBM(attributes= attributes, mart = ensembl, ...)
        message("Downloaded ", nrow(bm), " features")
    }
-   # drop source from description  [Source:MGI Symbol;Acc:MGI:102478]
-   bm$description <- gsub(" \\[.*\\]$", "" , bm$description)
+
    # drop the grouped_df class
    bm <- tibble::as_data_frame(bm)
    attr(bm, "downloaded") <- Sys.Date()
