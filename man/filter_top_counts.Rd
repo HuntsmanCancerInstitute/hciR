@@ -25,4 +25,3 @@ Remove columns from count matrix returned by \code{link{top_counts}} by subsetti
 \author{
 Chris Stubben
 }
-

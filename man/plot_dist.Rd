@@ -41,4 +41,3 @@ plot_dist(pasilla$rlog, output = "d3")
 \author{
 Chris Stubben
 }
-

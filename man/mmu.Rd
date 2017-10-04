@@ -25,4 +25,3 @@ group_by(mmu, biotype) \%>\%
   arrange(desc(n))
 }
 \keyword{datasets}
-

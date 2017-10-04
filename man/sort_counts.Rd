@@ -30,4 +30,3 @@ count_tbl <-  sort_counts(counts, samples)
 \author{
 Chris Stubben
 }
-

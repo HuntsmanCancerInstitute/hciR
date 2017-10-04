@@ -14,9 +14,9 @@ factor_trts(samples)
 
 \item{sample_tbl}{a sample table with names matching count table column names in row 1}
 
-\item{samples}{a sample table}
-
 \item{\dots}{additional options like design formula passed to \code{DESeqDataSetFromMatrix}}
+
+\item{samples}{a sample table}
 }
 \value{
 A DESeqDataSet object
@@ -28,6 +28,7 @@ Creates DESeqDataSet object using count and sample tibbles as input and run DESe
 \itemize{
 \item \code{factor_trts}: Avoid warnings about factors
 }}
+
 \note{
 This function first runs \code{\link{sort_counts}} to check and
 reorder count_tbl columns by the first column in sample_tbl, and then \code{DESeqDataSetFromMatrix}
@@ -41,4 +42,3 @@ and \code{DESeq}
 \author{
 Chris Stubben
 }
-

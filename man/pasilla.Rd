@@ -20,4 +20,3 @@ data(pasilla)
 pasilla
 }
 \keyword{datasets}
-

@@ -25,4 +25,3 @@ This is a wrapper for \code{rlog} and avoids loading the DESeq2 package for basi
 \author{
 Chris Stubben
 }
-

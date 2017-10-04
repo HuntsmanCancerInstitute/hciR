@@ -20,4 +20,3 @@ sapply(msig, length)
 msig$KEGG[1:3]
 }
 \keyword{datasets}
-

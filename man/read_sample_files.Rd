@@ -38,4 +38,3 @@ Sample names are parsed from file names without extensions.  If the file name is
 \author{
 Chris Stubben
 }
-

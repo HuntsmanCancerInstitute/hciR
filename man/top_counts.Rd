@@ -4,14 +4,17 @@
 \alias{top_counts}
 \title{Get a count matrix of top genes}
 \usage{
-top_counts(res, rld, by = "id", col_names, row_names = "gene_name", ...)
+top_counts(res, rld, by = "id", filter = TRUE, col_names,
+  row_names = "gene_name", ...)
 }
 \arguments{
-\item{res}{an annotated DESeq2 results file (and \code{top_genes} will be run to subset)}
+\item{res}{an annotated DESeq2 results file}
 
 \item{rld}{rlog or other counts in DESeqTransform object}
 
-\item{by}{join count rownames by this column number in results, default 1}
+\item{by}{join count rownames by this column number in results, default id}
+
+\item{filter}{filter the results using \code{\link{top_genes}}}
 
 \item{col_names}{a column name in colData(rld) to use as column names}
 
@@ -35,4 +38,3 @@ Join DESeq results to rlog or other counts, mainly for plotting gene heatmaps.
 \author{
 Chris Stubben
 }
-

@@ -33,4 +33,3 @@ data(pasilla)
 \author{
 Chris Stubben
 }
-

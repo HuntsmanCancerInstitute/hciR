@@ -29,4 +29,3 @@ Add BioMart annotations to a DESeq2 result table
 \author{
 Chris Stubben
 }
-

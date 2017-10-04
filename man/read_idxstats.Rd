@@ -30,4 +30,3 @@ Read mapped reads by sequence in samtools idxstats output
 \author{
 Chris Stubben
 }
-

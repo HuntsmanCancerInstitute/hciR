@@ -56,4 +56,3 @@ apply( combn(c("heart", "lung", "control"), 2), 2, paste, collapse= " vs. ")
 \author{
 Chris Stubben
 }
-

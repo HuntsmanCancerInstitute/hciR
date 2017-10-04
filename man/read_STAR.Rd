@@ -38,4 +38,3 @@ Reading output files requires a unique sample identifier in either the file name
 \author{
 Chris Stubben
 }
-

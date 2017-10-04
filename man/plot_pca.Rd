@@ -35,4 +35,3 @@ plot_pca(pasilla$rlog, c("condition", "type"))
 \author{
 Chris Stubben
 }
-

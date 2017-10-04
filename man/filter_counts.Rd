@@ -29,4 +29,3 @@ filter_counts(c1, sum=TRUE)
 \author{
 Chris Stubben
 }
-

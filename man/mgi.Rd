@@ -28,4 +28,3 @@ mgi
 table( mgi$Human == toupper(mgi$Mouse) )  # 85.7\% are the same
 }
 \keyword{datasets}
-

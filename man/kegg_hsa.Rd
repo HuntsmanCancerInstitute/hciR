@@ -25,4 +25,3 @@ filter(kegg_hsa, id \%in\% attr(kegg_hsa, "dise.idx")) \%>\%
   group_by(pathway) \%>\% summarize(n = n()) \%>\% arrange(desc(n))
 }
 \keyword{datasets}
-

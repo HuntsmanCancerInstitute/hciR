@@ -26,4 +26,3 @@ for both maximum and total reads
 \author{
 Chris Stubben
 }
-

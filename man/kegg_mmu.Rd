@@ -25,4 +25,3 @@ filter(kegg_mmu, id \%in\% attr(kegg_mmu, "dise.idx")) \%>\%
   group_by(pathway) \%>\% summarize(n = n()) \%>\% arrange(desc(n))
 }
 \keyword{datasets}
-

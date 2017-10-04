@@ -30,4 +30,3 @@ Reads CollectRnaSeqMetric output files and creates metrics and coverage tables.
 \author{
 Chris Stubben
 }
-

@@ -55,11 +55,10 @@ hchart(x, "bar", x=sample, y= value, group=stat) \%>\%
   hc_plotOptions(bar = list(stacking = "normal"))
 }
 }
-\author{
-Chris Stubben
-}
 \references{
 \url{https://github.com/deweylab/RSEM/blob/master/cnt_file_description.txt} and
 \url{https://github.com/deweylab/RSEM/blob/master/model_file_description.txt} for output format
 }
-
+\author{
+Chris Stubben
+}

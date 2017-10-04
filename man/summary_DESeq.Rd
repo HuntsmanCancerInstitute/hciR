@@ -22,4 +22,3 @@ summary_deseq(pasilla$results)
 \author{
 Chris Stubben
 }
-

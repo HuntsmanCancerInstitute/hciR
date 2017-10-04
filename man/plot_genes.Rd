@@ -5,8 +5,8 @@
 \title{Plot heatmap of top genes}
 \usage{
 plot_genes(x, intgroup, output = "pheatmap", palette = "RdBu",
-  dendsort = TRUE, midpoint0 = TRUE, max_scale = NA, border = NA,
-  scale = "none", ...)
+  dendsort = TRUE, scale = "diff", midpoint0 = TRUE, max_scale = NA,
+  border = NA, ...)
 }
 \arguments{
 \item{x}{a tibble from \code{\link{top_counts}}}
@@ -19,13 +19,14 @@ plot_genes(x, intgroup, output = "pheatmap", palette = "RdBu",
 
 \item{dendsort}{reorder branches using \code{dendsort} package}
 
-\item{midpoint0}{center color scale midpoint at zero}
+\item{scale}{scale values, default diff will substract the row mean from each value.
+Other options are none, row and column as described in \code{heatmap}}
 
-\item{max_scale}{min and max value for color scale, default is max(abs(range(x)))}
+\item{midpoint0}{if scale = diff, then center color scale at zero}
+
+\item{max_scale}{if scale = diff, then max value for color scale, default is max(abs(range(x)))}
 
 \item{border}{pheatmap border color, default NA}
-
-\item{scale, }{center and scale values, default none}
 
 \item{\dots}{additional options passed to \code{pheatmap} or \code{d3heatmap}}
 }
@@ -46,4 +47,3 @@ plot_genes(top_counts(pasilla$results, pasilla$rlog, top=200), output = "d3")
 \author{
 Chris Stubben
 }
-

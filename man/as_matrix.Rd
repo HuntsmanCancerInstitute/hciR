@@ -25,4 +25,3 @@ require a matrix as input.
 \author{
 Chris Stubben
 }
-

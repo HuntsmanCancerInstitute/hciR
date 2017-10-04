@@ -26,4 +26,3 @@ Writes gene name (or human homolog) and log2 fold change sorted in
 \author{
 Chris Stubben
 }
-

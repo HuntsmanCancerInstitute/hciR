@@ -4,11 +4,14 @@
 \alias{read_biomart}
 \title{Read biomart annotations}
 \usage{
-read_biomart(dataset = "human", attributes, fragments = FALSE, ...)
+read_biomart(dataset = "human", version = NULL, attributes,
+  fragments = FALSE, ...)
 }
 \arguments{
 \item{dataset}{The first letter of genus and full species name like btaurus, ecaballus, sscrofa from \code{listEnsembl}.
 A few common names are accepted for human, mouse, rat, fruitfly, yeast and zebrafish.}
+
+\item{version}{Ensembl version number for \code{useEnsembl}. Default is current version.}
 
 \item{attributes}{vector of column names to pass to \code{getBM}, default ensembl_gene_id,
 external_gene_name, gene_biotype, chromosome_name, start_position, end_position, strand,
@@ -38,4 +41,3 @@ entrezgene is grouped into a comma-separated list so ensembl id is unique.
 \author{
 Chris Stubben
 }
-

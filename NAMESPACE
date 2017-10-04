@@ -2,6 +2,7 @@
 
 export(annotate_results)
 export(as_matrix)
+export(check_contrasts)
 export(deseq_from_tibble)
 export(extract_samples)
 export(filter_counts)

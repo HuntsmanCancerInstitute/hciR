@@ -39,4 +39,3 @@ Reads featureCount count or alignment summary files and optionally reshape into
 \author{
 Chris Stubben
 }
-

@@ -24,4 +24,3 @@ group_by(hsa, biotype) \%>\% summarize(n=n()) \%>\% arrange(desc(n))
 table(nchar(gsub("[^,]", "", hsa[["entrez_gene"]]))+1)
 }
 \keyword{datasets}
-

@@ -4,7 +4,7 @@
 \alias{write_deseq}
 \title{Write DESeq results}
 \usage{
-write_deseq(result_all, dds, rld, biomart, txt_files = FALSE,
+write_deseq(result_all, dds, rld, biomart, blind = TRUE, txt_files = FALSE,
   file = "DESeq.xlsx", ...)
 }
 \arguments{
@@ -15,6 +15,8 @@ write_deseq(result_all, dds, rld, biomart, txt_files = FALSE,
 \item{rld}{a DESeqTransform obect with rlog values}
 
 \item{biomart}{annotations from \code{read_biomart}}
+
+\item{blind}{blind the rlog transformation, default TRUE}
 
 \item{txt_files}{write results to separate txt files, mainly for IPA input}
 
@@ -36,4 +38,3 @@ Write DESeq result files, raw counts, rlog values, normalized counts to an Excel
 \author{
 Chris Stubben
 }
-

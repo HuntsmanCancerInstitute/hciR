@@ -31,4 +31,3 @@ x <- gage_all(res, gsets=msig$KEGG)
 \author{
 Chris Stubben
 }
-
