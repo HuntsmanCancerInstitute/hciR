@@ -6,6 +6,11 @@
 \usage{
 plot_gage(x, ...)
 }
+\arguments{
+\item{x}{list from gage_all}
+
+\item{\dots}{other options passed to \code{pheatmap}}
+}
 \description{
 Plot heatmap with enrichment scores by contrast and gene set from \code{\link{gage_all}}
 }

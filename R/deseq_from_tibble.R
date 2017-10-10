@@ -39,7 +39,7 @@ deseq_from_tibble <- function( count_tbl, sample_tbl,  ...){
 factor_trts <- function(samples){
    for(i in 1:ncol(samples)){
       if(class(samples[[i]])=="character" ){
-         if(sum(duplicated(samples[[i]])) > 1 ){
+         if(sum(duplicated(samples[[i]])) > 0 ){
              samples[[i]] <- factor(samples[[i]])
          }
       }

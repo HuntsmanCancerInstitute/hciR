@@ -4,7 +4,7 @@
 \alias{write_deseq}
 \title{Write DESeq results}
 \usage{
-write_deseq(result_all, dds, rld, biomart, blind = TRUE, txt_files = FALSE,
+write_deseq(result_all, dds, rld, biomart, blind = TRUE, text_files = FALSE,
   file = "DESeq.xlsx", ...)
 }
 \arguments{
@@ -18,7 +18,7 @@ write_deseq(result_all, dds, rld, biomart, blind = TRUE, txt_files = FALSE,
 
 \item{blind}{blind the rlog transformation, default TRUE}
 
-\item{txt_files}{write results to separate txt files, mainly for IPA input}
+\item{text_files}{write results to separate txt files, mainly for IPA input}
 
 \item{file}{file name}
 

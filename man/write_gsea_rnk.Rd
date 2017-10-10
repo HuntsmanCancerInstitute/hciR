@@ -4,19 +4,18 @@
 \alias{write_gsea_rnk}
 \title{Write DESeq results to GSEA rank file}
 \usage{
-write_gsea_rnk(res, txt = TRUE)
+write_gsea_rnk(res)
 }
 \arguments{
 \item{res}{a list of DESeq results}
-
-\item{txt}{add .txt ending to contrast.rnk for GNomEx}
 }
 \value{
 Tab-delimited file with gene name and log2 fold change
 }
 \description{
 Writes gene name (or human homolog) and log2 fold change sorted in
- descending order to tab-delimited file
+ descending order to tab-delimited file.  Duplicate gene name with the lowest
+ absolute fold change value are removed.
 }
 \examples{
 \dontrun{
