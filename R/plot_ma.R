@@ -54,4 +54,5 @@ plot_ma <- function(res, baseMean = 10000 , log2FoldChange = 2, radius=2, ggplot
          highcharter::hc_yAxis(title = list(text = "Log2 Fold Change")) %>%
          highcharter::hc_chart(zoomType = "xy", ...) %>%
          highcharter::hc_exporting(enabled=TRUE, filename = "MA-plot")
+   }
 }
