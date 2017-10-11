@@ -5,7 +5,7 @@
 \alias{factor_trts}
 \title{Run DESeq from tibbles}
 \usage{
-deseq_from_tibble(count_tbl, sample_tbl, ...)
+deseq_from_tibble(count_tbl, sample_tbl, betaprior = FALSE, ...)
 
 factor_trts(samples)
 }
@@ -13,6 +13,8 @@ factor_trts(samples)
 \item{count_tbl}{a count table with feature ids in row 1}
 
 \item{sample_tbl}{a sample table with names matching count table column names in row 1}
+
+\item{betaprior, }{betaPrior for DESeq, default FALSE  (set TRUE to match results from versions < 1.16)}
 
 \item{\dots}{additional options like design formula passed to \code{DESeqDataSetFromMatrix}}
 
@@ -31,7 +33,7 @@ Creates DESeqDataSet object using count and sample tibbles as input and run DESe
 
 \note{
 This function first runs \code{\link{sort_counts}} to check and
-reorder count_tbl columns by the first column in sample_tbl, and then \code{DESeqDataSetFromMatrix}
+reorder count columns by the first column in samples, and then \code{DESeqDataSetFromMatrix}
 and \code{DESeq}
 }
 \examples{

@@ -4,7 +4,8 @@
 \alias{plot_volcano}
 \title{Highchart version of volcano plot}
 \usage{
-plot_volcano(res, padj = 0.05, log2FoldChange = 2, ...)
+plot_volcano(res, padj = 0.05, log2FoldChange = 2, radius = 4,
+  ggplot = FALSE, ...)
 }
 \arguments{
 \item{res}{Annotated DESeq results table from results_all}
@@ -12,6 +13,10 @@ plot_volcano(res, padj = 0.05, log2FoldChange = 2, ...)
 \item{padj}{p-value cutoff for labeling points, default 0.05}
 
 \item{log2FoldChange}{absolute value of log2 fold change cutoff for labeling points, default 2}
+
+\item{radius}{point size, default 4}
+
+\item{ggplot}{plot ggplot version}
 
 \item{\dots}{other options like width passed to \code{hc_chart}}
 }

@@ -31,9 +31,10 @@ write_gsea_rnk <- function(res){
         vs <- gsub("_+_", "_", vs, fixed=TRUE)
          ## add txt for GNomEx
       outfile <- paste0( gsub("/", "", vs), ".rnk")
-      if("human_homolog" %in% colnames(res[[i]])){
+      if("human_homolog" %in% colnames(y)){
           x <- dplyr::filter( y, human_homolog != "") %>%
                 dplyr::select(human_homolog, log2FoldChange)
+         names(x)[1] <- "gene_name"
       }else{
           x <- dplyr::filter( y, gene_name != "") %>%
                 dplyr::select(gene_name, log2FoldChange)

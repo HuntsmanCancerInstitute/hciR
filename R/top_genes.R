@@ -4,7 +4,7 @@
 #'
 #' @param res an annotated DESeq2 results file
 #' @param top  Number of top genes to display in matrix
-#' @param alpha Adjusted p-value cutoff
+#' @param padjust Adjusted p-value cutoff
 #' @param basemean basemean cutoff
 #' @param log2FC absolute value log2 fold change cutoff
 #' @param sort_fc Sort by fold changes and get top n/2 up and down-regulated,
@@ -19,9 +19,9 @@
 #'  top_genes(pasilla$results)
 #' @export
 
-top_genes <- function(res, top=40, alpha = 0.05,  basemean, log2FC, sort_fc=FALSE){
+top_genes <- function(res, top=40, padjust = 0.05,  basemean, log2FC, sort_fc=FALSE){
     ## TO DO  code for DataFrame -  fix for tibbles
-     x <- subset(res, padj <= alpha )
+     x <- subset(res, padj <  padjust )
     if(!missing(basemean))  x <- subset(res, baseMean > basemean )
     if(!missing(log2FC))  x <- subset(res, abs(log2FoldChange) > log2FC )
     if(nrow(x) == 0 ) stop("No rows matching cutoffs")
