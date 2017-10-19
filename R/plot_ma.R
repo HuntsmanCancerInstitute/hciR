@@ -47,7 +47,8 @@ plot_ma <- function(res, baseMean = 10000 , log2FoldChange = 2, radius=2, ggplot
          message("Missing ", sum(n), " gene names, using Ensembl IDs instead")
          x[["gene_name"]][n] <- x[["id"]][n]
       }
-    highcharter::hchart(x, "scatter", hcaes( log10(baseMean), log2FoldChange, group = sig, value = gene_name), color = 'rgba(0,0,255, 0.3)',
+    highcharter::hchart(x, "scatter", highcharter::hcaes( log10(baseMean), log2FoldChange,
+            group = sig, value = gene_name), color = 'rgba(0,0,255, 0.3)',
              enableMouseTracking = c(FALSE, TRUE), showInLegend=FALSE, marker = list(radius = radius)) %>%
         highcharter::hc_tooltip( pointFormat = "{point.value}", headerFormat = "") %>%
          highcharter::hc_xAxis(title = list(text = "Log10 Mean Normalized Counts"), gridLineWidth = 1, tickLength = 0, startOnTick = "true", endOnTick = "true") %>%

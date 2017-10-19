@@ -49,7 +49,8 @@ plot_volcano <- function(res, padj = 0.05 , log2FoldChange = 2, radius=4, ggplot
          x[["gene_name"]][n] <- x[["id"]][n]
       }
 
-    highcharter::hchart(x, "scatter", hcaes(log2FoldChange,  -log10(padj), group = sig, value = gene_name), color = 'rgba(0,0,255, 0.3)',
+    highcharter::hchart(x, "scatter", highcharter::hcaes(log2FoldChange,  -log10(padj),
+                 group = sig, value = gene_name), color = 'rgba(0,0,255, 0.3)',
              enableMouseTracking = c(FALSE, TRUE), showInLegend=FALSE, marker = list(radius = radius)) %>%
         highcharter::hc_tooltip( pointFormat = "{point.value}", headerFormat = "") %>%
          highcharter::hc_xAxis(title = list(text = "Log2 Fold Change"), gridLineWidth = 1, tickLength = 0, startOnTick = "true", endOnTick = "true" , min= -fc, max=fc) %>%

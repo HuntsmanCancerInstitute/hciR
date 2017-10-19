@@ -15,11 +15,19 @@
 plot_gage <- function(x, ...){
    y <- dplyr::bind_rows(x, .id = "contrast")
    ## fix KEGG names in all CAPS
-   y$name <- stringr::str_to_title(gsub("_", " ", y$name))
-   CAPs <- c(Dna= "DNA", Trna="tRNA", Tca="TCA", And="and")
-   y$name <- stringr::str_replace_all(y$name, CAPs)
+   y$name <- format_msig( y$name)
    z <- dplyr::select(y, contrast, name, stat.mean) %>%
          tidyr::spread(contrast, stat.mean)
    clrs <- grDevices::colorRampPalette(rev(RColorBrewer::brewer.pal(n = 11, name = "RdYlBu")))(255)
    pheatmap::pheatmap(as_matrix(z), color = clrs, cluster_rows=FALSE, cluster_cols=FALSE, ...)
+}
+
+
+format_msig <- function( name ){
+   name <- stringr::str_to_title(gsub("_", " ", name))
+   CAPs <- c(Dna= "DNA", Rna = "RNA", Trna="tRNA", Tca="TCA", ` Als` = " ALS", Abc = "ABC",
+    ` And `=" and ", ` In ` = " in ", ` Of ` = " of ", ` The `= " the ", ` By ` = " by ",
+      ` To `= " to ", ` For ` = " for ", ` From `= " from ", ` Or `= " or ", ` An `=" an ",
+      ` Ii `= " II ",  Iii = "III", ` Ri ` = " RI "  )
+   stringr::str_replace_all(name, CAPs)
 }

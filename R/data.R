@@ -15,7 +15,7 @@
 #'
 #' Human and Mouse Homology with phenotype annotations from MGI
 #'
-#' @format A tibble with 18,463 rows and 6 variables:
+#' @format A tibble with 18,501 rows and 6 variables:
 #' \describe{
 #'   \item{Human}{ Human Marker Symbol }
 #'   \item{EntrezGene}{ Human Entrez Gene ID }
@@ -24,14 +24,17 @@
 #'   \item{MGI}{ MGI Marker Accession ID }
 #'   \item{PhenotypeId}{ High-level Mammalian Phenotype ID  }
 #' }
-#' @source \url{http://www.informatics.jax.org/downloads/reports/HMD_HumanPhenotype.rpt}
+#' @source \url{http://www.informatics.jax.org/downloads/reports/HMD_HumanPhenotype.rpt}.
+#' @notes See the \code{data-raw} directory for code to download.
 #' @examples
 #' data(mgi)
 #' mgi
-#' table( mgi$Human == toupper(mgi$Mouse) )  # 85.7% are the same
+#' table( mgi$Human == toupper(mgi$Mouse) )  # 86% are the same
+#' table(duplicated(mgi$Mouse))
+#' attr(mgi, "downloaded")
 "mgi"
 
-#' Human gene annotations from Ensembl
+#' Human gene annotations from Ensembl release 90
 #'
 #' @format A tibble with 63,305 rows and 10 columns: id, gene_name, biotype, chromosome,
 #' start, end, strand, description, transcript_count, entrez_gene
@@ -45,7 +48,7 @@
 #' table(nchar(gsub("[^,]", "", hsa[["entrez_gene"]]))+1)
 "hsa"
 
-#' Mouse gene annotations from Ensembl
+#' Mouse gene annotations from Ensembl release 90
 #'
 #' @format A tibble with 50,143 rows and 11 columns
 #' @source \code{read_biomart("mouse")}
@@ -58,7 +61,7 @@
 #'   arrange(desc(n))
 "mmu"
 
-#' Fruitfly gene annotations from Ensembl
+#' Fruitfly gene annotations from Ensembl release 90
 #'
 #' @format A tibble with 17,559 rows and 10 columns
 #' @source \code{read_biomart("fly")}
