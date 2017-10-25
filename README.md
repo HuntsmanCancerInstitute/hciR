@@ -8,7 +8,7 @@ devtools::install_github("HuntsmanCancerInstitute/hciR")
 
 This package is intended to simplify code in [R Markdown] reports and includes functions
 to read [featureCounts], [RSEM] and other count tables, run DESeq2 using sample and
-count tibbles as input, get annotated DESeq result tibbles and create interactive plots
+count tibbles as input, get annotated DESeq results and create interactive plots
 and heatmaps.
 
 To learn more about the package, check the [R Markdown] files in the [inst/Rmd] directory.
