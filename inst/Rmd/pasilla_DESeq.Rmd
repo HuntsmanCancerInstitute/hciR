@@ -16,6 +16,7 @@ You can render this HTML report by finding the path to the [pasilla_DESeq.Rmd] f
 
 ```{r render, eval=FALSE}
 library(hciR)
+library(rmarkdown)
 rmd <- system.file("Rmd", "pasilla_DESeq.Rmd", package="hciR")
 render(rmd, output_dir=".")
 ```
@@ -119,11 +120,11 @@ render(rmd, output_file="pasilla_flex.html",  output_dir=".",
 
 ### Save results
 
-Save the DESeq results to a single Excel file in [DESeq.xlsx].  The `write_deseq` function will also
+Save the DESeq results to a single Excel file in [pasilla_DESeq.xlsx].  The `write_deseq` function will also
 output raw counts, rlog values, normalized counts, samples and fly annotations.
 
 ```{r write, eval=FALSE}
-write_deseq(res, dds, rld, fly)
+write_deseq(res, dds, rld, fly, file="pasilla_DESeq.xlsx")
 ```
 
 
@@ -178,5 +179,5 @@ plot_genes( top_counts( res, rld, top=400), output="d3", xaxis_font_size=12, sho
 [MA-plot]: https://en.wikipedia.org/wiki/MA_plot
 [volcano plot]: https://en.wikipedia.org/wiki/Volcano_plot_(statistics)
 [pasilla_flex.html]: https://huntsmancancerinstitute.github.io/hciR/pasilla_flex.html
-[DESeq.xlsx]: https://huntsmancancerinstitute.github.io/hciR/DESeq.xlsx
-[DESeq.Rmd]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/inst/Rmd/DESeq.Rmd
+[pasilla_DESeq.xlsx]: https://huntsmancancerinstitute.github.io/hciR/pasilla_DESeq.xlsx
+[pasilla_DESeq.Rmd]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/inst/Rmd/pasilla_DESeq.Rmd
