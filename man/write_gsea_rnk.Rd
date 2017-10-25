@@ -14,8 +14,8 @@ Tab-delimited file with gene name and log2 fold change
 }
 \description{
 Writes gene name (or human homolog) and log2 fold change sorted in
- descending order to tab-delimited file.  Duplicate gene name with the lowest
- absolute fold change value are removed.
+descending order to tab-delimited file.  Duplicate gene name with the lowest
+absolute fold change value are removed.
 }
 \examples{
 \dontrun{

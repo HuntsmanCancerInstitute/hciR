@@ -21,23 +21,24 @@
 #'
 #' @examples
 #' \dontrun{
-#'    # same as data(mmu) except this gets the most recent version
-#'    mmu <- read_biomart("mouse")
-#'    x1 <- read_biomart("mouse", list= "attributes")
-#'    count(x1, page)
-#'    filter(x1, grepl("hsapiens_homolog", name)
-#'   mmu_homologs <- read_biomart("mouse",  attributes = c("ensembl_gene_id",
+#'  mmu <- read_biomart("mouse")
+#'  # Mouse and Human homologs
+#'  x1 <- read_biomart("mouse", list= "attributes")
+#'  count(x1, page)
+#'  filter(x1, grepl("hsapiens_homolog", name)
+#'  mmu_homologs <- read_biomart("mouse",  attributes = c("ensembl_gene_id",
 #'    "hsapiens_homolog_ensembl_gene", "hsapiens_homolog_associated_gene_name",
 #'    "hsapiens_homolog_perc_id"))
-#'   # ADD filter
-#'    x2 <- read_biomart("mouse", list= "filters")
-#'    mmu_signalp  <- read_biomart( attributes = c("ensembl_transcript_id",
-#'         "ensembl_gene_id",  "external_gene_name", "signalp_start",  "signalp_end"  ))
+#'  # genes with SignalP
+#'  x2 <- read_biomart("human", list= "filters")
+#'  filter(x2, grepl("signal", name))
+#'    mmu_signalp  <- read_biomart("human", attributes = c("ensembl_transcript_id",
+#'         "ensembl_gene_id",  "external_gene_name", "signalp_start",  "signalp_end"),
+#'          filter="with_signalp", values=TRUE)
 #' }
 #' @export
 
 read_biomart <- function( dataset="human" , attributes, version = NULL, list = NULL, ...){
-
    common <- c(human = "hsapiens",
                mouse = "mmusculus",
                rat = "rnorvegicus",

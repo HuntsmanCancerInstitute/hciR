@@ -1,0 +1,165 @@
+---
+title: Volcano plots
+output: html_document
+---
+
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, comment="# ", collapse=TRUE)
+```
+
+This guide explores a few ways to plot fold changes and p-values in a volcano plot
+using the `pasilla` results in the [hciR] package.
+
+
+```{r load_pasilla, eval=FALSE}
+library(hciR)
+data(pasilla)
+res <- pasilla$results
+```
+
+## base R
+
+Plot transparent blue dots and label the top 4 genes.
+
+```{r base, fig.height=5, echo=-1}
+par(mar=c(4,4,0,0)+0.1)
+plot(res$log2FoldChange, -log10(res$padj), pch=19, col=rgb(0,0,1,.3), xlim=c(-6,6),
+    xlab="Log2 fold change",  ylab= "-Log10 p-value", bty="l")
+x <- filter(res, padj < 1e-100)
+text(x$log2FoldChange, -log10(x$padj), x$gene_name, pos=4)
+```
+
+
+### ggplot2
+
+Skip the rows with missing p-values to avoid a warning.
+
+```{r ggplot, fig.height=5}
+library(ggplot2)
+x <- filter( res, !is.na(padj))
+p <- ggplot(data=x, aes(x=log2FoldChange, y= -log10(padj), text=gene_name )) +
+     geom_point(alpha=0.3, size=1.5, color="blue") +
+     xlab("Log2 fold change") + ylab("-Log10 p-value") +xlim(-6,6)
+y <- filter(x, padj < 1e-100)
+p + geom_text( data=y, aes(x=log2FoldChange, y= -log10(padj), label=gene_name),
+       hjust="left", nudge_x=.1)
+```
+
+
+### Plotly
+
+Use [Plotly] to make interactive plots using the `ggplotly` function to convert the ggplot2 object above.
+This plot has 8K points and the response to zooming and mouseover may be slow (and most volcano plots
+will have over 20K points).
+
+```{r ggplotly1}
+library(plotly)
+ggplotly(p)
+```
+
+<br>
+
+You can use the `plot_ly` function for more control over the plot.  This code will add Ensembl IDs
+to missing gene names and then set the gene name to NA to remove the hover box
+if that gene is above a p-value cutoff of 1e-10 or absolute
+fold change below 1.  Finally, set hoverinfo to text to remove the p-value and fold change values from the hover box.
+
+
+```{r plotly}
+x <- filter( res, !is.na(padj))
+x$gene_name <- ifelse(is.na(x$gene_name), x$id, x$gene_name )
+x$gene_name[x$padj > 1e-10 & abs(x$log2FoldChange) < 1] <- NA
+plot_ly(data = x, x = ~ log2FoldChange , y = ~ -log10(padj),
+       type="scatter", mode="markers", hoverinfo="text", text = ~ gene_name,
+        marker = list(size = 10, color = 'rgba(0, 0, 255, .3)')) %>%
+  layout( yaxis = list(title = "-Log10 p-value", zeroline = FALSE),
+         xaxis = list(title = "Log2 fold change", zeroline = FALSE, range=c(-6,6)))
+```
+
+<br>
+
+If the response is still slow, another hack is to remove 80% or more of the points by randomly sampling rows from
+genes below the cutoff (at the bottom center of the plot where most points are overlapping)
+
+```{r hack1}
+y <-  bind_rows(
+ filter(x, !is.na(gene_name)),
+ filter(x, is.na(gene_name))  %>% sample_n(1000)
+)
+```
+
+
+### Highcharts
+
+[Highcharter] is another package for interactive plots. Genes names with NAs will display as
+an empty box, so you can use the enableMouseTracking option on a vector to display the gene.
+
+
+```{r hchart}
+library(highcharter)
+x <- filter( res, !is.na(padj))
+x$gene_name <- ifelse(is.na(x$gene_name), x$id, x$gene_name )
+x$sig <- ifelse(x$padj > 1e-10 & abs(x$log2FoldChange) < 1, "N", "Y")
+hchart(x, "scatter", hcaes(log2FoldChange, -log10(padj), group = sig, value = gene_name),
+    color = "rgba(0,0,255, 0.3)", enableMouseTracking = c(FALSE, TRUE),
+    showInLegend = FALSE, marker = list(radius = 4)) %>%
+ hc_tooltip(pointFormat = "{point.value}",  headerFormat = "") %>%
+ hc_xAxis(title = list(text = "Log2 fold change"), gridLineWidth = 1,
+    tickLength = 0, startOnTick = "true", endOnTick = "true", min = -6, max = 6) %>%
+ hc_yAxis(title = list(text = "-Log10 p-value")) %>%
+ hc_chart(zoomType = "xy", width=700) %>%
+ hc_exporting(enabled = TRUE, filename = "volcano")
+```
+
+<br>
+
+The code above is also included in the `plot_volcano` function in the [hciR] package.
+
+
+```{r hchart2, eval=FALSE}
+plot_volcano(res, padj = 1e-10, log2FoldChange = 1)
+```
+
+
+###  Crosstalk
+
+Use [crosstalk] to link a d3 scatterplot and data table. This requires the development
+version of [DT] on [Github] to use the sharedData object.  You can click and drag to
+create a box to highlight points and view matching rows, or select rows to view points.
+You can also drag the box around the plot to easily highlight other points and rows.
+
+ Note that [Plotly] should be compatible with crosstalk, but I can only select a single point
+ and not a region to display in the table.
+
+```{r d3scatter}
+library(crosstalk)
+library(d3scatter)
+library(DT)
+x <- filter( res, !is.na(padj)) %>% dplyr::select(c(1:2,6:7,11))
+sd <- SharedData$new(x)
+```
+
+
+```{r scatter2}
+bscols(
+d3scatter(sd, x = ~log2FoldChange, y = ~ -log10(padj), color= "blue", width = "99%", height = 350,
+    x_label = "log2 Fold change", y_label = "-log10 p-value", x_lim= c(-6,6) ),
+datatable(sd, rownames = FALSE, width = "99%", extensions = c('Scroller', 'Buttons'),
+   options = list( scrollY = 200,  scroller = TRUE,  dom = "Bfrtip",
+     buttons = c('copy', 'csv', 'pdf'))) %>%
+   formatRound(3, 1) %>% formatSignif( 4:5)
+)
+```
+
+<br>
+<br>
+
+[Highcharter]: http://jkunst.com/highcharter/
+[Plotly]: https://plot.ly/r/
+[Github]: https://github.com/rstudio/DT
+[DT]: https://rstudio.github.io/DT/
+[crosstalk]: https://rstudio.github.io/crosstalk/
+[DESeq2]: http://www.bioconductor.org/packages/release/bioc/html/DESeq2.html
+[featureCounts]: http://bioinf.wehi.edu.au/featureCounts/
+[hciR]: https://github.com/HuntsmanCancerInstitute/hciR

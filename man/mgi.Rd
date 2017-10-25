@@ -4,7 +4,7 @@
 \name{mgi}
 \alias{mgi}
 \title{Human and Mouse Homologs}
-\format{A tibble with 18,463 rows and 6 variables:
+\format{A tibble with 18,501 rows and 6 variables:
 \describe{
   \item{Human}{ Human Marker Symbol }
   \item{EntrezGene}{ Human Entrez Gene ID }
@@ -14,7 +14,8 @@
   \item{PhenotypeId}{ High-level Mammalian Phenotype ID  }
 }}
 \source{
-\url{http://www.informatics.jax.org/downloads/reports/HMD_HumanPhenotype.rpt}
+\url{http://www.informatics.jax.org/downloads/reports/HMD_HumanPhenotype.rpt}.
+See the \code{data-raw} directory for code to download.
 }
 \usage{
 mgi
@@ -25,6 +26,8 @@ Human and Mouse Homology with phenotype annotations from MGI
 \examples{
 data(mgi)
 mgi
-table( mgi$Human == toupper(mgi$Mouse) )  # 85.7\% are the same
+table( mgi$Human == toupper(mgi$Mouse) )  # 86\% are the same
+table(duplicated(mgi$Mouse))
+attr(mgi, "downloaded")
 }
 \keyword{datasets}

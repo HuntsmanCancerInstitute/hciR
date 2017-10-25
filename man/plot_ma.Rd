@@ -4,7 +4,8 @@
 \alias{plot_ma}
 \title{Highchart version of MA-plot}
 \usage{
-plot_ma(res, baseMean = 10000, log2FoldChange = 2, radius = 2, ...)
+plot_ma(res, baseMean = 10000, log2FoldChange = 2, radius = 2,
+  ggplot = FALSE, ...)
 }
 \arguments{
 \item{res}{Annotated DESeq results table from results_all}
@@ -14,6 +15,8 @@ plot_ma(res, baseMean = 10000, log2FoldChange = 2, radius = 2, ...)
 \item{log2FoldChange}{absolute value of log2 fold change cutoff for labeling points, default 2}
 
 \item{radius}{point size, default 2}
+
+\item{ggplot}{plot ggplot version}
 
 \item{\dots}{other options like width passed to \code{hc_chart}}
 }

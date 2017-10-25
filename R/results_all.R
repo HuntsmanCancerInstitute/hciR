@@ -9,7 +9,7 @@
 #' @param vs2 position of specific treatment in contrast vector, set FALSE for specific treatment vs all
 #' @param alpha the significance cutoff for the adjusted p-value cutoff (FDR)
 #' @param add_columns a vector of biomart columns to add to result table, default
-#'        gene_name, biotype, chromosome, start and description
+#'        gene_name, biotype, chromosome and description
 #' @param other_columns a vector of additional columns in biomart table
 #' @param simplify return a tibble if only 1 contrast present
 #' @param \dots additional options passed to \code{results}

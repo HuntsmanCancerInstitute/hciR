@@ -12,7 +12,7 @@ opts <-  list(
    make_option(c("-r", "--run"), default="NA",
          help="Run ID with Fastq files to link"),
    make_option(c("-d", "--database"), default="human",
-         help="Reference database, either human, mouse, fly or rat, default human"),
+         help="Reference database, either human, mouse, fly, zebrafish or rat, default human"),
     make_option(c("-l", "--length"), default="50",
        help="Read length, default 50")
 )
@@ -51,8 +51,12 @@ if( grepl( "mouse|mus", opt$database, ignore.case = TRUE) ) {
    assembly <- "Rnor_6.0"
    name <- "Rattus_norvegicus"
    db <- "Rat"
+}else if(grepl( "zebra", opt$database, ignore.case = TRUE) ){
+   assembly <- "GRCz10"
+   name <- "Danio_rerio"
+   db <- "Zebrafish"
 }else{
-   stop("Database should be human, mouse, rat, or fly")
+   stop("Database should be human, mouse, rat, zebrafish or fly")
 }
 
 ## Configure header

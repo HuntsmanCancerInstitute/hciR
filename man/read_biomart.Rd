@@ -4,23 +4,22 @@
 \alias{read_biomart}
 \title{Read biomart annotations}
 \usage{
-read_biomart(dataset = "human", version = NULL, attributes,
-  fragments = FALSE, ...)
+read_biomart(dataset = "human", attributes, version = NULL, list = NULL,
+  ...)
 }
 \arguments{
 \item{dataset}{The first letter of genus and full species name like btaurus, ecaballus, sscrofa from \code{listEnsembl}.
 A few common names are accepted for human, mouse, rat, fruitfly, yeast and zebrafish.}
 
-\item{version}{Ensembl version number for \code{useEnsembl}. Default is current version.}
-
 \item{attributes}{vector of column names to pass to \code{getBM}, default ensembl_gene_id,
 external_gene_name, gene_biotype, chromosome_name, start_position, end_position, strand,
 description, transcript_count, and entrezgene}
 
-\item{fragments}{drop fragments like GL456211.1, CHR_MG132_PATCH (any chromosome
-name with 3 or more characters), default FALSE}
+\item{version}{Ensembl version number for \code{useEnsembl}. Default is current version.}
 
-\item{\dots}{additional options passed to \code{getBM}}
+\item{list}{return a list of either datasets, attributes or filters only.}
+
+\item{\dots}{additional options passed to \code{getBM} or \code{listAttributes}}
 }
 \value{
 A tibble
@@ -35,7 +34,20 @@ entrezgene is grouped into a comma-separated list so ensembl id is unique.
 }
 \examples{
 \dontrun{
-   mm <- read_biomart("mouse")
+ mmu <- read_biomart("mouse")
+ # Mouse and Human homologs
+ x1 <- read_biomart("mouse", list= "attributes")
+ count(x1, page)
+ filter(x1, grepl("hsapiens_homolog", name)
+ mmu_homologs <- read_biomart("mouse",  attributes = c("ensembl_gene_id",
+   "hsapiens_homolog_ensembl_gene", "hsapiens_homolog_associated_gene_name",
+   "hsapiens_homolog_perc_id"))
+ # genes with SignalP
+ x2 <- read_biomart("human", list= "filters")
+ filter(x2, grepl("signal", name))
+   mmu_signalp  <- read_biomart("human", attributes = c("ensembl_transcript_id",
+        "ensembl_gene_id",  "external_gene_name", "signalp_start",  "signalp_end"),
+         filter="with_signalp", values=TRUE)
 }
 }
 \author{

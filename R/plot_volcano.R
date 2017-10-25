@@ -20,7 +20,7 @@
 #' @export
 
 plot_volcano <- function(res, padj = 0.05 , log2FoldChange = 2, radius=4, ggplot=FALSE, ...){
-   if(!is_tibble(res)){
+   if(!tibble::is_tibble(res)){
       if(is.list(res)){
         message("Plotting the first table in the list")
         res <- res[[1]]
@@ -38,12 +38,12 @@ plot_volcano <- function(res, padj = 0.05 , log2FoldChange = 2, radius=4, ggplot
         xlab("Log2 Fold Change") + ylab("-Log10 Adjusted P-value")  + xlim( -fc, fc)
   }else{
    ### Grouping column for enableMouseTracking
-   x$sig = ifelse( x$padj  < padj | abs(x$log2FoldChange)> log2FoldChange, "Y", "N")
+   x$sig = ifelse( x$padj  > padj & abs(x$log2FoldChange) < log2FoldChange, "N", "Y")
    n <- sum(x$sig == "Y")
    if(n ==0) stop("No points above cutoffs, need to fix hchart to plot this case")
     message("Adding mouseover labels to ", n, " genes (",  round( n/nrow(x)*100, 1), "%)")
     ## use Ensembl ID if gene_name is missing ?
-     n <- is.na(x[["gene_name"]]) | x[["gene_name"]] == ""
+     n <- x$sig=="Y" & (is.na(x[["gene_name"]]) | x[["gene_name"]] == "")
      if(sum(n)>0 ){
          message("Missing ", sum(n), " gene names, using Ensembl IDs instead")
          x[["gene_name"]][n] <- x[["id"]][n]

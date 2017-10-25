@@ -3,8 +3,8 @@
 \docType{data}
 \name{hsa}
 \alias{hsa}
-\title{Human gene annotations from Ensembl}
-\format{A tibble with 63,305 rows and 10 columns: id, gene_name, biotype, chromosome,
+\title{Human gene annotations from Ensembl release 90}
+\format{A tibble with 63,967 rows and 10 columns: id, gene_name, biotype, chromosome,
 start, end, strand, description, transcript_count, entrez_gene}
 \source{
 \code{read_biomart("human")}
@@ -13,7 +13,7 @@ start, end, strand, description, transcript_count, entrez_gene}
 hsa
 }
 \description{
-Human gene annotations from Ensembl
+Human gene annotations from Ensembl release 90
 }
 \examples{
 data(hsa)

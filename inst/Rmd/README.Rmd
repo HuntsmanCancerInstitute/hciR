@@ -33,6 +33,9 @@ if(params$database =="mouse"){
 }else if(params$database == "rat"){
    assembly <- "Rnor_6.0"
    name <- "Rattus_norvegicus"
+}else if(params$database == "zebrafish"){
+   assembly <- "GRCz10"
+   name <- "Danio_rerio"   
 }else{
    stop("Database should be human, mouse, rat, or fly.  Usage: ", usage)
 }

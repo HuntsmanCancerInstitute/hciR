@@ -36,7 +36,7 @@ if( !file.exists( opt$samples) ){
    print_help(parser)
    quit(status=1)
 }
-if( !opt$database %in% c("human", "mouse", "fly", "rat")) stop("Database name should be human, mouse, rat, or fly")
+#if( !opt$database %in% c("human", "mouse", "fly", "rat")) stop("Database name should be human, mouse, rat, or fly")
 
 
 suppressPackageStartupMessages(library("rmarkdown"))

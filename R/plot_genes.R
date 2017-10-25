@@ -69,9 +69,9 @@
       ## Breaks for d3heatmap ?  or scale = "row"
       if(dendsort){
           ##  need to flip rows to match pheatmap??
-          d3heatmap::d3heatmap(x, reorderfun= function(d,w) dendsort::dendsort(d) , colors = clrs, ...)
+          d3heatmap::d3heatmap(x, reorderfun= function(d,w) dendsort::dendsort(d), colors = clrs, scale=scale, ...)
       }else{
-         d3heatmap::d3heatmap(x, colors = clrs, ...)
+         d3heatmap::d3heatmap(x, colors = clrs, scale=scale, ...)
       }
    }
 }

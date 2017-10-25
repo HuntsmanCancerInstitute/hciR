@@ -3,7 +3,7 @@
 \docType{data}
 \name{fly}
 \alias{fly}
-\title{Fruitfly gene annotations from Ensembl}
+\title{Fruitfly gene annotations from Ensembl release 90}
 \format{A tibble with 17,559 rows and 10 columns}
 \source{
 \code{read_biomart("fly")}
@@ -12,7 +12,7 @@
 fly
 }
 \description{
-Fruitfly gene annotations from Ensembl
+Fruitfly gene annotations from Ensembl release 90
 }
 \examples{
 data(mmu)

@@ -3,19 +3,18 @@
 \docType{data}
 \name{mmu}
 \alias{mmu}
-\title{Mouse gene annotations from Ensembl}
-\format{A tibble with 50,143 rows and 11 columns}
+\title{Mouse gene annotations from Ensembl release 90}
+\format{A tibble with 53,110 rows and 11 columns}
 \source{
-\code{read_biomart("mouse")}
+\code{read_biomart("mouse")}. Human homologs are added from Ensembl
+using the maximum percent identity.  See
+ the \code{mmu.R} file in the \code{data-raw} directory for details.
 }
 \usage{
 mmu
 }
 \description{
-Mouse gene annotations from Ensembl
-}
-\note{
-Human homologs added from \code{\link{mgi}}
+Mouse gene annotations from Ensembl release 90
 }
 \examples{
 data(mmu)

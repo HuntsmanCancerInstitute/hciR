@@ -12,9 +12,9 @@ opts <-  list(
    make_option(c("-a", "--analysis"), default="NA",
          help="Analysis ID for GNomEx file links"),
    make_option(c("-d", "--database"), default="human",
-      help="Reference database, either human, mouse, fly or rat, default human"),
+      help="Reference database, either human, mouse, rat, zebrafish or fly, default human"),
    make_option(c("-o", "--output"), default="Alignments",
-         help="STAR alignment output directory name"),
+         help="STAR alignment output directory name, default Alignments"),
     make_option(c("-l", "--length"), default=50,
        help="Read length, default 50")
 )
@@ -32,7 +32,7 @@ if( "NA"  %in% c(opt$run, opt$analysis  )){
    print_help(parser)
    quit(status=1)
 }
-if( !opt$database %in% c("human", "mouse", "fly", "rat")) stop("Database name should be human, mouse, rat, or fly")
+if( !opt$database %in% c("human", "mouse", "fly", "rat", "zebrafish")) stop("Database name should be human, mouse, rat, zebrafish or fly")
 
 render("README.Rmd", quiet=TRUE, params=list( run = opt$run, analysis = opt$analysis,
     database = opt$database, output = opt$output, length = opt$length ) )

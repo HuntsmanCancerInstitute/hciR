@@ -6,6 +6,8 @@ suppressPackageStartupMessages(library("hciR"))
 opts <-  list(
    make_option(c("-d", "--directory"), default="NA",
       help="Directory with featuerCounts output files"),
+   make_option(c("-p", "--pattern"), default="counts$",
+      help="Pattern for matching output files"),
     make_option(c("-o", "--output"), default="counts.txt",
        help="Output file name, default counts.txt")
 )
@@ -22,6 +24,6 @@ Combine featureCount output files into a single count matix")
   }
 
 
-counts <- read_featureCounts(opt$directory)
+counts <- read_featureCounts(opt$directory, opt$pattern)
 message("Saved ", ncol(counts) - 1, " samples to ", opt$output)
-write_tsv(counts, opt$output )
+readr::write_tsv(counts, opt$output )

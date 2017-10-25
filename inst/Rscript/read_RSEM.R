@@ -24,4 +24,4 @@ Combine RSEM output files into a single count matix")
 
 counts <- read_RSEM(opt$directory, value = opt$value)
 message("Saved ", ncol(counts) - 1, " samples to ", opt$output)
-write_tsv(counts, opt$output )
+readr::write_tsv(counts, opt$output )
