@@ -56,7 +56,7 @@ read_STAR <- function( path=".", pattern, reshape=FALSE){
       x <- dplyr::filter(x, stat %in% n) %>%
             dplyr::mutate( stat = factor(stat, levels= n)) %>%
              tidyr::spread( stat, value)  %>%
-              dplyr::mutate_each( funs(as.integer ) , -1)
+              dplyr::mutate_each( dplyr::funs(as.integer ) , -1)
    }
    x
 }

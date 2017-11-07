@@ -52,7 +52,7 @@ read_biomart <- function( dataset="human" , attributes, version = NULL, list = N
 
    ## SAVE version as attribute
    if(is.null(version)){
-      x <- listEnsembl()
+      x <- biomaRt::listEnsembl()
       version <- x$version[x$biomart=="ensembl"]
       version <- gsub("Ensembl Genes ", "", version)
    }
@@ -61,16 +61,16 @@ read_biomart <- function( dataset="human" , attributes, version = NULL, list = N
   ## LIST
    if(!is.null(list)){
       if(tolower(list) == "datasets"){
-         ensembl <- useEnsembl(biomart="ensembl")
-         bm <- listDatasets(ensembl)
+         ensembl <- biomaRt::useEnsembl(biomart="ensembl")
+         bm <- biomaRt::listDatasets(ensembl)
          message("Downloaded ", nrow(bm), " datasets")
       }else{
          ensembl <- biomaRt::useEnsembl(biomart="ensembl", dataset=dataset, version = version)
          if(tolower(list) == "filters"){
-             bm <- listFilters(ensembl, ...)
+             bm <- biomaRt::listFilters(ensembl, ...)
              message("Downloaded ", nrow(bm), " filters")
          }else{
-             bm <- listAttributes(ensembl, ...)
+             bm <- biomaRt::listAttributes(ensembl, ...)
              message("Downloaded ", nrow(bm), " attributes")
          }
       }

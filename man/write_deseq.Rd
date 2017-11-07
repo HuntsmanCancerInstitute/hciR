@@ -4,8 +4,8 @@
 \alias{write_deseq}
 \title{Write DESeq results}
 \usage{
-write_deseq(result_all, dds, rld, biomart, blind = TRUE, text_files = FALSE,
-  file = "DESeq.xlsx", ...)
+write_deseq(result_all, dds, rld, biomart, fpkm, blind = TRUE,
+  text_files = FALSE, file = "DESeq.xlsx", ...)
 }
 \arguments{
 \item{result_all}{a list from \code{results_all}}
@@ -15,6 +15,8 @@ write_deseq(result_all, dds, rld, biomart, blind = TRUE, text_files = FALSE,
 \item{rld}{a DESeqTransform obect with rlog values}
 
 \item{biomart}{annotations from \code{read_biomart}}
+
+\item{fpkm}{matrix of fpkm values, optional}
 
 \item{blind}{blind the rlog transformation, default TRUE}
 

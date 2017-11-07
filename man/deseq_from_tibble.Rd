@@ -2,43 +2,34 @@
 % Please edit documentation in R/deseq_from_tibble.R
 \name{deseq_from_tibble}
 \alias{deseq_from_tibble}
-\alias{factor_trts}
 \title{Run DESeq from tibbles}
 \usage{
-deseq_from_tibble(count_tbl, sample_tbl, betaprior = FALSE, ...)
-
-factor_trts(samples)
+deseq_from_tibble(counts, samples, run_deseq = TRUE, ...)
 }
 \arguments{
-\item{count_tbl}{a count table with feature ids in row 1}
+\item{counts}{a count table with feature ids in row 1}
 
-\item{sample_tbl}{a sample table with names matching count table column names in row 1}
+\item{samples}{a sample table with names matching count table column names in row 1}
 
-\item{betaprior, }{betaPrior for DESeq, default FALSE  (set TRUE to match results from versions < 1.16)}
+\item{run_deseq}{Run \code{\link{DESeq}}, default TRUE}
 
-\item{\dots}{additional options like design formula passed to \code{DESeqDataSetFromMatrix}}
-
-\item{samples}{a sample table}
+\item{\dots}{additional options like the design formula are passed to \code{DESeqDataSetFromMatrix}}
 }
 \value{
 A DESeqDataSet object
 }
 \description{
-Creates DESeqDataSet object using count and sample tibbles as input and run DESeq
+Creates DESeqDataSet object using count and sample tibbles as input and optionally runs DESeq
 }
-\section{Functions}{
-\itemize{
-\item \code{factor_trts}: Avoid warnings about factors
-}}
-
 \note{
 This function first runs \code{\link{sort_counts}} to check and
 reorder count columns by the first column in samples, and then \code{DESeqDataSetFromMatrix}
-and \code{DESeq}
+and optionally \code{DESeq}.  To match DESeq2 versions < 1.16, set run_deseq = FALSE and then
+run \code{DESeq(dds, betaPrior =TRUE)}'
 }
 \examples{
 \dontrun{
-   deseq_from_tibble(count_tbl, sample_tbl, design = ~ trt)
+   deseq_from_tibble(counts, samples, design = ~ trt)
 }
 }
 \author{

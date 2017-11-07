@@ -20,7 +20,7 @@
 #' @export
 
 plot_ma <- function(res, baseMean = 10000 , log2FoldChange = 2, radius=2, ggplot=FALSE, ...){
-   if(!is_tibble(res)){
+   if(!tibble::is_tibble(res)){
       if(is.list(res)){
         message("Plotting the first table in the list")
         res <- res[[1]]
@@ -32,9 +32,9 @@ plot_ma <- function(res, baseMean = 10000 , log2FoldChange = 2, radius=2, ggplot
    ## plot(log10(x$baseMean), x$log2FoldChange, col=rgb(0,0,1,.3), pch=19)
 
    if(ggplot){
-   ggplot2::ggplot(data=x, aes(x=log10(baseMean), y= log2FoldChange )) +
-        geom_point(color="blue", alpha=0.3, size=1) +
-        xlab("Log10 Mean Normalized Counts") + ylab("Log2 Fold Change")
+   ggplot2::ggplot(data=x, ggplot2::aes(x=log10(baseMean), y= log2FoldChange )) +
+        ggplot2::geom_point(color="blue", alpha=0.3, size=1) +
+        ggplot2::xlab("Log10 Mean Normalized Counts") + ggplot2::ylab("Log2 Fold Change")
   }else{
    ### Grouping column for enableMouseTracking
    x$sig = ifelse( x$baseMean > baseMean | abs(x$log2FoldChange)> log2FoldChange, "Y", "N")

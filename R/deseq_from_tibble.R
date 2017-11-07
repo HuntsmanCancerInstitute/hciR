@@ -1,48 +1,37 @@
 #' Run DESeq from tibbles
 #'
-#' Creates DESeqDataSet object using count and sample tibbles as input and run DESeq
-
-#' @param count_tbl a count table with feature ids in row 1
-#' @param sample_tbl a sample table with names matching count table column names in row 1
-#' @param betaprior,  betaPrior for DESeq, default FALSE  (set TRUE to match results from versions < 1.16)
-#' @param \dots additional options like design formula passed to \code{DESeqDataSetFromMatrix}
+#' Creates DESeqDataSet object using count and sample tibbles as input and optionally runs DESeq
+#'
+#' @param counts a count table with feature ids in row 1
+#' @param samples a sample table with names matching count table column names in row 1
+#' @param run_deseq Run \code{\link{DESeq}}, default TRUE
+#' @param \dots additional options like the design formula are passed to \code{DESeqDataSetFromMatrix}
 #' @return A DESeqDataSet object
 #'
 #' @note This function first runs \code{\link{sort_counts}} to check and
 #' reorder count columns by the first column in samples, and then \code{DESeqDataSetFromMatrix}
-#' and \code{DESeq}
+#' and optionally \code{DESeq}.  To match DESeq2 versions < 1.16, set run_deseq = FALSE and then
+#' run \code{DESeq(dds, betaPrior =TRUE)}'
 #'
 #' @author Chris Stubben
 #'
 #' @examples
 #' \dontrun{
-#'    deseq_from_tibble(count_tbl, sample_tbl, design = ~ trt)
+#'    deseq_from_tibble(counts, samples, design = ~ trt)
 #' }
 #' @export
 
-deseq_from_tibble <- function( count_tbl, sample_tbl, betaprior = FALSE, ...){
-   count_tbl <- sort_counts(count_tbl, sample_tbl)
-   ## use as_matrix to convert to matrix
-   counts <- as_matrix(count_tbl)
+deseq_from_tibble <- function( counts, samples, run_deseq = TRUE, ...){
+   counts <- sort_counts(counts, samples)
+   ## use hciR::as_matrix to convert to matrix
+   counts <- as_matrix(counts)
    ## round for RSEM?
-   counts <- round( counts, 0)
-   mode(counts) <- "integer"
-   ## convert to factor ??
-   samples <- factor_trts(sample_tbl )
-   dds <- DESeq2::DESeqDataSetFromMatrix(counts, samples, ...)
-   dds <- DESeq2::DESeq(dds, betaPrior = betaprior)
-   dds
-}
-
-#' @describeIn deseq_from_tibble Avoid warnings about factors
-#' @param samples a sample table
-factor_trts <- function(samples){
-   for(i in 1:ncol(samples)){
-      if(class(samples[[i]])=="character" ){
-         if(sum(duplicated(samples[[i]])) > 0 ){
-             samples[[i]] <- factor(samples[[i]])
-         }
-      }
+   if (any(round(counts[1:10,]) != counts[1:10,])) {
+     message("Rounding counts (from RSEM?)")
+     counts <- round( counts, 0)
    }
-   samples
+   mode(counts) <- "integer"
+   dds <- DESeq2::DESeqDataSetFromMatrix(counts, samples, ...)
+   if(run_deseq) dds <- DESeq2::DESeq(dds)
+   dds
 }

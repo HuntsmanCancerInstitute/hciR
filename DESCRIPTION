@@ -1,17 +1,18 @@
 Package: hciR
 Title: RNA-seq workflows at HCI
-Version: 1.2.0
-Date: 2017-10-25
+Version: 1.2.1
+Date: 2017-11-07
 Author: Chris Stubben
 Maintainer: Chris Stubben <chris.stubben@hci.utah.edu>
 Depends:
-    R (>= 2.10),
+    R (>= 3.2),
     dplyr
 Imports:
     readr,
     rmarkdown,
     tidyr,
     tibble,
+    magrittr,
     DESeq2,
     SummarizedExperiment,
     S4Vectors,
@@ -23,9 +24,11 @@ Imports:
     htmlwidgets,
     openxlsx,
     biomaRt,
-    dendsort
-Suggests:
     gage,
+    dendsort,
+    stringr,
+    ggplot2
+Suggests:
     flexdashboard,
     crosstalk,
     d3scatter

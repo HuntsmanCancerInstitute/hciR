@@ -46,7 +46,7 @@ read_ipa <- function(file,  excel=FALSE, mylists=FALSE){
       z[[i]] <- suppressWarnings( readr::read_tsv( paste( gsub("\t$", "", y), collapse ="\n")) )
     }
     ## sort pathways by p-value
-    z[["Canonical Pathways"]] <- arrange(z[["Canonical Pathways"]], desc(`-log(p-value)`))
+    z[["Canonical Pathways"]] <- dplyr::arrange(z[["Canonical Pathways"]], dplyr::desc(`-log(p-value)`))
     ## zscores, either #NUM! or lots of decimals in Excel
     z[["Canonical Pathways"]]$zScore  <-  sprintf("%.3f", z[["Canonical Pathways"]]$zScore)
     # drop Analysis name and empty ID

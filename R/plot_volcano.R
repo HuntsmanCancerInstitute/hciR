@@ -33,9 +33,10 @@ plot_volcano <- function(res, padj = 0.05 , log2FoldChange = 2, radius=4, ggplot
    fc <- max(abs(x$log2FoldChange), na.rm=TRUE)
 
    if(ggplot){
-   ggplot2::ggplot(data=x, aes(x=log2FoldChange, y= -log10(padj) )) +
-        geom_point(alpha=0.4, size=1.5, color= "blue") +
-        xlab("Log2 Fold Change") + ylab("-Log10 Adjusted P-value")  + xlim( -fc, fc)
+   ggplot2::ggplot(data=x, ggplot2::aes(x=log2FoldChange, y= -log10(padj) )) +
+        ggplot2::geom_point(alpha=0.4, size=1.5, color= "blue") +
+        ggplot2::xlab("Log2 Fold Change") + ggplot2::ylab("-Log10 Adjusted P-value")  +
+        ggplot2::xlim( -fc, fc)
   }else{
    ### Grouping column for enableMouseTracking
    x$sig = ifelse( x$padj  > padj & abs(x$log2FoldChange) < log2FoldChange, "N", "Y")

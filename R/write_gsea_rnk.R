@@ -41,11 +41,11 @@ write_gsea_rnk <- function(res){
                 dplyr::select(gene_name, log2FoldChange)
       }
       ## remove duplicates
-      x <- dplyr::arrange(x, gene_name, desc( abs(log2FoldChange)) )
+      x <- dplyr::arrange(x, gene_name, dplyr::desc( abs(log2FoldChange)) )
       n <- duplicated(x$gene_name)
       if( i == 1) message( "Removing ", sum(n), " duplicate genes")
       x <- x[!n,]
-      x <- dplyr::arrange(x, desc( log2FoldChange))
+      x <- dplyr::arrange(x, dplyr::desc( log2FoldChange))
       message("Saving ", outfile)
       readr::write_tsv(x, outfile, col_names=FALSE)
    }

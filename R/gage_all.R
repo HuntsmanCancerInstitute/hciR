@@ -17,6 +17,7 @@
 #' x <- gage_all(res, gsets=msig$KEGG)
 #' }
 #'
+#' @importFrom dplyr filter
 #' @export
 
 gage_all <- function(res, gsets, fdr = 0.05, ...){

@@ -19,7 +19,7 @@ results_all(object, biomart, vs = "all", vs2 = TRUE, alpha = 0.05,
 \item{alpha}{the significance cutoff for the adjusted p-value cutoff (FDR)}
 
 \item{add_columns}{a vector of biomart columns to add to result table, default
-gene_name, biotype, chromosome, start and description}
+gene_name, biotype, chromosome and description}
 
 \item{other_columns}{a vector of additional columns in biomart table}
 

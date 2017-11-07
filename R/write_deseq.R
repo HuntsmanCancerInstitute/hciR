@@ -6,6 +6,7 @@
 #' @param dds a DESeqDataset object with count tables
 #' @param rld a DESeqTransform obect with rlog values
 #' @param biomart annotations from \code{read_biomart}
+#' @param fpkm matrix of fpkm values, optional
 #' @param blind blind the rlog transformation, default TRUE
 #' @param text_files write results to separate txt files, mainly for IPA input
 #' @param file file name
@@ -21,7 +22,8 @@
 #' }
 #' @export
 
-write_deseq <- function(result_all, dds, rld, biomart, blind = TRUE, text_files = FALSE, file = "DESeq.xlsx", ...){
+write_deseq <- function(result_all, dds, rld, biomart, fpkm,
+   blind = TRUE, text_files = FALSE, file = "DESeq.xlsx", ...){
 
    ##  if results are a tibble (since simplify=TRUE by default)
    if(!class(result_all)[1] == "list"){
@@ -61,16 +63,17 @@ write_deseq <- function(result_all, dds, rld, biomart, blind = TRUE, text_files 
     samp1 <- samp1[, colnames(samp1) != "treatments"]
     samp1$replaceable <- NULL
 
-   DESeq_tables <-  c(
-     sum1,
-     res1,
-   list(
-     "raw_counts" = DESeq2::counts(dds),
-     "normalized" = DESeq2::counts(dds, normalized=TRUE),
-     "rlog"       = SummarizedExperiment::assay(rld, blind = blind),
+  Counts <-    list(
+       "raw_counts" = DESeq2::counts(dds),
+       "normalized" = DESeq2::counts(dds, normalized=TRUE),
+       "rlog"       = SummarizedExperiment::assay(rld, blind = blind))
+  if(!missing(fpkm))  Counts <- c( Counts, list("fpkm"= fpkm))
+   Meta <- list(
      "samples"    = samp1,
-     "Ensembl"    = as.data.frame(biomart))
-  )
+     "ensembl"    = as.data.frame(biomart))
+
+   DESeq_tables <-  c( sum1, res1, Counts, Meta)
+
    message("Saving ", length(DESeq_tables), " worksheets to ", file)
   # DESeq_tables
    openxlsx::write.xlsx(DESeq_tables, file = file, rowNames= sapply(DESeq_tables, is.matrix) )
