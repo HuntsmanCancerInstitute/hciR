@@ -3,6 +3,9 @@
 #' Plot heatmap with enrichment scores by contrast and gene set from \code{\link{gage_all}}
 #'
 #' @param x list from gage_all
+#' @param trim trim long set names, default more than 70 characters
+#' @param n_sets display contrasts sharing n or more sets for n > 1.  If n = 1,
+#' then only plot unique sets.  If missing, then plots all sets, default.
 #' @param \dots other options passed to \code{pheatmap}
 #' @author Chris Stubben
 #' @examples
@@ -12,22 +15,27 @@
 #'   plot_gage(x)
 #'  }
 
-plot_gage <- function(x, ...){
+plot_gage <- function(x, trim=70, n_sets, ...){
    y <- dplyr::bind_rows(x, .id = "contrast")
-   ## fix KEGG names in all CAPS
+   ## order columns by order in list (or alphabetical)
+   y$contrast <- factor(y$contrast, levels= names(x))
+   ## fix names in all CAPS
    y$name <- format_msig( y$name)
+   y$name <- ifelse(nchar(y$name) > trim, paste0(substr(y$name, 1, trim-2), "..."), y$name)
    z <- dplyr::select(y, contrast, name, stat.mean) %>%
          tidyr::spread(contrast, stat.mean)
+   if(!missing(n_sets)){
+     n <- apply(z[, -1], 1, function(x) sum(!is.na(x)))
+     if(n_sets ==1){
+        z <- filter(z, n == 1)
+     }else{
+        z <- filter(z, n >= n_sets)
+     }
+   }
    clrs <- grDevices::colorRampPalette(rev(RColorBrewer::brewer.pal(n = 11, name = "RdYlBu")))(255)
-   pheatmap::pheatmap(as_matrix(z), color = clrs, cluster_rows=FALSE, cluster_cols=FALSE, ...)
-}
-
-
-format_msig <- function( name ){
-   name <- stringr::str_to_title(gsub("_", " ", name))
-   CAPs <- c(Dna= "DNA", Rna = "RNA", Trna="tRNA", Tca="TCA", ` Als` = " ALS", Abc = "ABC",
-    ` And `=" and ", ` In ` = " in ", ` Of ` = " of ", ` The `= " the ", ` By ` = " by ",
-      ` To `= " to ", ` For ` = " for ", ` From `= " from ", ` Or `= " or ", ` An `=" an ",
-      ` Ii `= " II ",  Iii = "III", ` Ri ` = " RI "  )
-   stringr::str_replace_all(name, CAPs)
+   ## too many NAs to cluster
+   z <- as_matrix(z)
+   n1 <- max(abs(z), na.rm=TRUE)
+   brks <- seq(-n1, n1, length = 255)
+   pheatmap::pheatmap(z, color = clrs, breaks = brks, cluster_cols=FALSE, cluster_rows=FALSE, ...)
 }

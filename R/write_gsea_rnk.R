@@ -5,6 +5,7 @@
 #' absolute fold change value are removed.
 #'
 #' @param res a list of DESeq results
+#' @param write write a file (default) or return a list of tables
 #'
 #' @return Tab-delimited file with gene name and log2 fold change
 #'
@@ -16,7 +17,7 @@
 #' }
 #' @export
 
-write_gsea_rnk <- function(res){
+write_gsea_rnk <- function(res, write=TRUE){
    # needs list as input
    if(is.data.frame(res) ){
       n <- attr(res, "contrast")
@@ -25,6 +26,7 @@ write_gsea_rnk <- function(res){
    }
    ## add check for mouse or human
    n <- length(res)
+   rnk <- vector("list", n)
    for(i in 1:n){
       y <- res[[i]]
       vs <- gsub( "\\.* ", "_", names(res[i]))
@@ -46,7 +48,15 @@ write_gsea_rnk <- function(res){
       if( i == 1) message( "Removing ", sum(n), " duplicate genes")
       x <- x[!n,]
       x <- dplyr::arrange(x, dplyr::desc( log2FoldChange))
-      message("Saving ", outfile)
-      readr::write_tsv(x, outfile, col_names=FALSE)
+      if(write){
+          message("Saving ", outfile)
+          readr::write_tsv(x, outfile, col_names=FALSE)
+      }else{
+         rnk[[i]] <- x
+      }
+   }
+   if(!write){
+      if(length(rnk)==1)  rnk <- rnk[[1]]
+      rnk
    }
 }
