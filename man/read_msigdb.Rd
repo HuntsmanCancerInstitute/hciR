@@ -17,7 +17,7 @@ then a list of gene sets only)
 Reads MSigDB GMT files from \url{http://software.broadinstitute.org/gsea/msigdb/collections.jsp}
 }
 \examples{
- gmt <- system.file("extdata", "c2.cp.v6.0.symbols.gmt", package = "hciR")
+ gmt <- system.file("extdata", "c2.cp.v6.1.symbols.gmt", package = "hciR")
  msig <- read_msigdb(gmt)
  # a list with 9 pathways dbs
  sapply(msig, length)

@@ -4,10 +4,12 @@
 \alias{write_gsea_rnk}
 \title{Write DESeq results to GSEA rank file}
 \usage{
-write_gsea_rnk(res)
+write_gsea_rnk(res, write = TRUE)
 }
 \arguments{
 \item{res}{a list of DESeq results}
+
+\item{write}{write a file (default) or return a list of tables}
 }
 \value{
 Tab-delimited file with gene name and log2 fold change

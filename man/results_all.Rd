@@ -5,7 +5,7 @@
 \title{Extract and annotate all results from a DESeq analysis}
 \usage{
 results_all(object, biomart, vs = "all", vs2 = TRUE, alpha = 0.05,
-  add_columns, other_columns, simplify = TRUE, ...)
+  add_columns, other_columns, lfcShrink = TRUE, simplify = TRUE, ...)
 }
 \arguments{
 \item{object}{a DESeqDataSet}
@@ -22,6 +22,8 @@ results_all(object, biomart, vs = "all", vs2 = TRUE, alpha = 0.05,
 gene_name, biotype, chromosome and description}
 
 \item{other_columns}{a vector of additional columns in biomart table}
+
+\item{lfcShrink}{shrink fold changes using \code{lfcShrink} for DESeq2 version >= 1.16}
 
 \item{simplify}{return a tibble if only 1 contrast present}
 

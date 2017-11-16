@@ -4,10 +4,15 @@
 \alias{plot_gage}
 \title{Plot gage_all output}
 \usage{
-plot_gage(x, ...)
+plot_gage(x, trim = 70, n_sets, ...)
 }
 \arguments{
 \item{x}{list from gage_all}
+
+\item{trim}{trim long set names, default more than 70 characters}
+
+\item{n_sets}{display contrasts sharing n or more sets for n > 1.  If n = 1,
+then only plot unique sets.  If missing, then plots all sets, default.}
 
 \item{\dots}{other options passed to \code{pheatmap}}
 }

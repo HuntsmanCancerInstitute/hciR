@@ -68,9 +68,8 @@ write_deseq <- function(result_all, dds, rld, biomart, fpkm,
        "normalized" = DESeq2::counts(dds, normalized=TRUE),
        "rlog"       = SummarizedExperiment::assay(rld, blind = blind))
   if(!missing(fpkm))  Counts <- c( Counts, list("fpkm"= fpkm))
-   Meta <- list(
-     "samples"    = samp1,
-     "ensembl"    = as.data.frame(biomart))
+   Meta <- list( "samples"    = samp1)
+   if(!missing(biomart)) Meta <- c(Meta, list( "ensembl"= as.data.frame(biomart)))
 
    DESeq_tables <-  c( sum1, res1, Counts, Meta)
 
