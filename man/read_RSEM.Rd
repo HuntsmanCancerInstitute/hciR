@@ -4,17 +4,17 @@
 \alias{read_RSEM}
 \title{Read RSEM output files}
 \usage{
-read_RSEM(path = ".", pattern = "genes.results$", reshape = TRUE,
-  value = "expected_count", stats = FALSE)
+read_RSEM(path = ".", gene = TRUE, value = "expected_count",
+  reshape = TRUE, stats = FALSE)
 }
 \arguments{
 \item{path}{the path to RSEM output files, the default corresponds to the working directory.}
 
-\item{pattern}{regular expression for count file name matching, deafult .genes.results}
-
-\item{reshape}{reshape into wide format with samples in rows (a count matrix).}
+\item{gene}{read gene or transcript (isoform) result files, default gene}
 
 \item{value}{a string with the RSEM column name to populate cell values, default expected_count}
+
+\item{reshape}{reshape into wide format with samples in rows (a count matrix).}
 
 \item{stats}{read stat files, default counts}
 }
@@ -31,28 +31,11 @@ and the parser may fail.
 \examples{
 \dontrun{
  # count matrix
-rsem_counts <- read_RSEM( ".")
-rsem_counts
-# need to round expected counts for some functions
- rlog_values <- rlog( round( as.matrix(rsem_counts)))
-rsem_all <- read_RSEM( ".", , reshape=TRUE)
-rsem_all
- # create TPM or FPKM matrix
-tpm <- dplyr::select( x, sample, gene_id, tpm) \%>\% tidyr::spread(sample, tpm)
-
+rsem_counts <- read_RSEM( "Alignments")
+ # read TPM
+tpm <- read_RSEM("Alignments", value="TPM")
  # reshape uses alignments stats only (rows 1-3 in *.cnt files)
 read_RSEM( ".", stats=TRUE)
-# read all cnt and model stats into long format
-rsem <- read_RSEM( ".", stats=TRUE, reshape=FALSE)
- plot Fragment length, Read length, Read start position, or Reads per alignment
-x <- filter(rsem, stat=="Fragment length", n < 350)
-hchart(x, "line", x=n ,  y= value, group=sample)
-
-xCol <- c("Unique", "Multiple", "Unaligned", "Filtered")
-x <- filter(rsem, stat \%in\% xCol ) \%>\%
- mutate(stat = factor(stat, levels=xCol))
-hchart(x, "bar", x=sample, y= value, group=stat) \%>\%
-  hc_plotOptions(bar = list(stacking = "normal"))
 }
 }
 \references{

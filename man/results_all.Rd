@@ -4,7 +4,7 @@
 \alias{results_all}
 \title{Extract and annotate all results from a DESeq analysis}
 \usage{
-results_all(object, biomart, vs = "all", vs2 = TRUE, alpha = 0.05,
+results_all(object, biomart, vs = "all", vs2 = TRUE, levels, alpha = 0.05,
   add_columns, other_columns, lfcShrink = TRUE, simplify = TRUE, ...)
 }
 \arguments{
@@ -12,9 +12,11 @@ results_all(object, biomart, vs = "all", vs2 = TRUE, alpha = 0.05,
 
 \item{biomart}{annotations from \code{read_biomart} with column 1 matching row names in results}
 
-\item{vs}{either compare all vs. all (default) or a specific treatment vs. all, or see note.}
+\item{vs}{either compare all vs. all (default) or all vs specific treatment, or see note.}
 
 \item{vs2}{position of specific treatment in contrast vector, set FALSE for specific treatment vs all}
+
+\item{levels}{Levels to compare, if missing then levels(dds$trt)}
 
 \item{alpha}{the significance cutoff for the adjusted p-value cutoff (FDR)}
 
@@ -36,10 +38,14 @@ A list of tibbles for each contrast
 Extract all possible contrasts and annotate result tables from a DESeq object.
 Currently supports simple designs with a single variable.
 }
+\details{
+Uses the first treatment in the design formula for contrasts.  Levels are
+taken from levels(dds$trt) or use the levels option to re-order or compare a subset of levels.
+}
 \note{
 If you combine factors of interest into a single group following section 3.3 in the DESeq2 vignette,
- you can set vs = "combined" to limit the comparisons.
- For example, if you combine 3 cell types and 2 treatment, then the default
+ you can set vs = "combined" to limit the comparisons.  See \code{\link{check_contrasts}} for details.
+ If you combine 3 cell types and 2 treatments, then the default
 returns 18 contrasts while "combined" returns 3 contrasts comparing treatment within cell types (first group).
 Factors should be separated by space, dash or underscore in the combined treatment group for parsing.
 }
@@ -49,10 +55,9 @@ data(pasilla)
 data(fly)
 res <- results_all(pasilla$dds, fly)
 res
-# Set factor levels in the DESeq object to change contrast order
-#  since results_all uses combn on levels
-dds$trt <- factor(dds$trt, levels=c("heart", "lung", "control"))
-apply( combn(c("heart", "lung", "control"), 2), 2, paste, collapse= " vs. ")
+# Use levels to change default contrast order in dds$trt
+levels(dds$trt)
+results_all(dds, mmu, levels=c("heart", "lung", "control"))
 }
 }
 \author{
