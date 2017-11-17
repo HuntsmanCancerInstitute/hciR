@@ -3,9 +3,9 @@
 #' Reads RSEM counts or stats files and optionally reshape into wide format.
 #'
 #' @param path the path to RSEM output files, the default corresponds to the working directory.
-#' @param pattern regular expression for count file name matching, deafult .genes.results
-#' @param reshape reshape into wide format with samples in rows (a count matrix).
+#' @param gene read gene or transcript (isoform) result files, default gene
 #' @param value a string with the RSEM column name to populate cell values, default expected_count
+#' @param reshape reshape into wide format with samples in rows (a count matrix).
 #' @param stats read stat files, default counts
 #'
 #' @note The cnt and model files in the stats directory vary depending on RSEM options
@@ -20,37 +20,27 @@
 #' @examples
 #' \dontrun{
 #'  # count matrix
-#' rsem_counts <- read_RSEM( ".")
-#' rsem_counts
-#' # need to round expected counts for some functions
-#'  rlog_values <- rlog( round( as.matrix(rsem_counts)))
-#' rsem_all <- read_RSEM( ".", , reshape=TRUE)
-#' rsem_all
-#'  # create TPM or FPKM matrix
-#' tpm <- dplyr::select( x, sample, gene_id, tpm) %>% tidyr::spread(sample, tpm)
-#'
+#' rsem_counts <- read_RSEM( "Alignments")
+#'  # read TPM
+#' tpm <- read_RSEM("Alignments", value="TPM")
 #'  # reshape uses alignments stats only (rows 1-3 in *.cnt files)
 #' read_RSEM( ".", stats=TRUE)
-#' # read all cnt and model stats into long format
-#' rsem <- read_RSEM( ".", stats=TRUE, reshape=FALSE)
-#'  plot Fragment length, Read length, Read start position, or Reads per alignment
-#' x <- filter(rsem, stat=="Fragment length", n < 350)
-#' hchart(x, "line", x=n ,  y= value, group=sample)
-#'
-#' xCol <- c("Unique", "Multiple", "Unaligned", "Filtered")
-#' x <- filter(rsem, stat %in% xCol ) %>%
-#'  mutate(stat = factor(stat, levels=xCol))
-#' hchart(x, "bar", x=sample, y= value, group=stat) %>%
-#'   hc_plotOptions(bar = list(stacking = "normal"))
 #' }
 #' @export
 
-read_RSEM <- function(path = ".", pattern = "genes.results$", reshape = TRUE, value="expected_count", stats = FALSE){
+read_RSEM <- function(path = ".", gene = TRUE, value="expected_count", reshape = TRUE, stats = FALSE){
    if(!stats){
+      if(gene){
+          pattern <- "genes.results$"
+          id_col <- "gene_id"
+       }else{
+          pattern <- "isoforms.results$"
+              id_col <- "transcript_id"
+       }
       res1 <- read_sample_files(path, pattern)
       if(reshape){
           if(!value %in% c("expected_count", "TPM", "FPKM")) stop("value not found")
-         res1 <- dplyr::select_(res1, "sample", "gene_id", value) %>% tidyr::spread_("sample", value)
+         res1 <- dplyr::select_(res1, "sample", id_col, value) %>% tidyr::spread_("sample", value)
            #  sort HCI samples as X1, X2, ..., X10, X11
           res1  <-  res1[, c(1, order_samples(colnames(res1)[-1])+1) ]
        }

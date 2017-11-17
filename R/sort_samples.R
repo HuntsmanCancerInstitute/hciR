@@ -20,6 +20,7 @@ sort_samples <- function(samples){
 }
 
 #' @describeIn sort_samples Order sample names
+#' @export
 order_samples <- function( samples ){
     order(as.numeric(gsub("[^0-9]", "",  samples )))
 }

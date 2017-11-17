@@ -81,13 +81,12 @@ if(length(vs)==0) stop("No contrasts found")
    if(missing(add_columns)) add_columns <- c("gene_name", "biotype", "chromosome", "description")
    # add one extra to defaults...
    if(!missing(other_columns)) add_columns <- c(add_columns, other_columns)
+   if(lfcShrink)  message("Adding shrunken fold changes to log2FoldChange")
 
    for(i in seq_along( vs )){
        res1 <- DESeq2::results(object, contrast = c( trt, contrast[1,i], contrast[2,i] ), alpha = alpha, ...)
       if(lfcShrink){
         ## GET shrunken fold change - requires DESeq2 version >= 1.16
-         message("Adding shrunken fold changes to log2FoldChange")
-         # log2FC <- res1$log2FoldChange
          res1 <-  DESeq2::lfcShrink(object, contrast=c( trt, contrast[1,i], contrast[2,i] ), res=res1)
       }
        ft <- S4Vectors::metadata(res1)$filterThreshold

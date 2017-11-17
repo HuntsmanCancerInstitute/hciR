@@ -33,6 +33,8 @@ write_deseq <- function(result_all, dds, rld, biomart, fpkm,
    }
    if(text_files){
       res <- result_all
+      names(res)  <- gsub( "/", "", names(res))
+
       for (i in 1:length(res)){
          vs <- gsub( "\\.* ", "_", names(res[i]))
          vs <- gsub("_+_", "_", vs, fixed=TRUE)

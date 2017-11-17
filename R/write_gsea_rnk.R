@@ -34,12 +34,12 @@ write_gsea_rnk <- function(res, write=TRUE){
       ## add txt for GNomEx
       outfile <- paste0( gsub("/", "", vs), ".rnk")
       if("human_homolog" %in% colnames(y)){
-          x <- dplyr::filter( y, human_homolog != "") %>%
+          x <- dplyr::filter( y, !is.na(padj), human_homolog != "") %>%
                 dplyr::select(human_homolog, log2FoldChange)
           names(x)[1] <- "gene_name"
       }
       else{
-          x <- dplyr::filter( y, gene_name != "") %>%
+          x <- dplyr::filter( y, !is.na(padj), gene_name != "") %>%
                 dplyr::select(gene_name, log2FoldChange)
       }
       ## remove duplicates
