@@ -15,6 +15,7 @@ Imports:
     magrittr,
     DESeq2,
     SummarizedExperiment,
+    Biobase,
     S4Vectors,
     DT,
     d3heatmap,

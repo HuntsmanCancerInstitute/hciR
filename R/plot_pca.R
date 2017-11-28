@@ -1,10 +1,10 @@
 #' Highchart version of plotPCA in DESeq2
 #'
-#' Highchart version of sample PCA plot for transformed data
+#' Highchart version of sample PCA plot
 #'
-#' @param object a DESeqTransform object
-#' @param intgroup a character vector of names in colData(x) for grouping, default 'condition'
-#' @param tooltip a character vector of names in colData(x) for tooltip display,
+#' @param object a matrix, ExpressionSet or DESeqTransform object
+#' @param intgroup a character vector of names in pData(x) or colData(x) for grouping, default 'trt'
+#' @param tooltip a character vector of names in pData(x) or colData(x) for tooltip display,
 #'       default displays the object column names
 #' @param ntop number of top variable genes to use for principal components
 #' @param pc a vector of components to plot, default 1st and 2nd
@@ -20,18 +20,30 @@
 #' plot_pca(pasilla$rlog, c("condition", "type"))
 #' @export
 
-plot_pca <- function(object, intgroup="condition", tooltip, ntop = 500, pc=c(1,2), ...){
-   if(length(pc)!=2) stop( "pc should be a vector of length 2")
-   if(!all(intgroup %in% names( SummarizedExperiment::colData(object)))) stop("intgroup should match columns of colData(object)")
-   n  <- apply( SummarizedExperiment::assay(object), 1, stats::var)
-   x  <-  utils::head( SummarizedExperiment::assay(object)[ order(n, decreasing=TRUE),], ntop)
+plot_pca <- function(object, intgroup="trt", tooltip, ntop = 500, pc=c(1,2), ...){
+   if(length(pc) != 2) stop( "pc should be a vector of length 2")
+   if( class(object)[1] == "matrix"){
+       group <- colnames(object)  # or no key?
+      colMetadata <- data.frame(id= colnames(object))
+      n  <- apply(object, 1, stats::var)
+      x <- utils::head(object[ order(n, decreasing=TRUE),], ntop)
+   }else if( class(object)[1] == "ExpressionSet"){
+       colMetadata <- Biobase::pData(object)
+       if(!all(intgroup %in% names( colMetadata))) stop("intgroup should match columns of pData(object)")
+       group <-  apply( as.data.frame(colMetadata[, intgroup, drop=FALSE]), 1, paste, collapse=": ")
+       n  <- apply(Biobase::exprs(object), 1, stats::var)
+       x <- utils::head(Biobase::exprs(object)[ order(n, decreasing=TRUE),], ntop)
+   }else{
+      colMetadata <- SummarizedExperiment::colData(object)
+      if(!all(intgroup %in% names( colMetadata))) stop("intgroup should match columns of colData(object)")
+      group <-  apply( as.data.frame(colMetadata[, intgroup, drop=FALSE]), 1, paste, collapse=": ")
+      n  <- apply( SummarizedExperiment::assay(object), 1, stats::var)
+      x  <-  utils::head( SummarizedExperiment::assay(object)[ order(n, decreasing=TRUE),], ntop)
+   }
    pca <- stats::prcomp(t(x))
    percentVar <- round(pca$sdev^2/sum(pca$sdev^2) * 100, 1)
-
-   group <-  apply( as.data.frame(SummarizedExperiment::colData(object)[, intgroup, drop=FALSE]), 1, paste, collapse=": ")
-
    d <- data.frame( PC1 = pca$x[, pc[1] ], PC2 = pca$x[, pc[2] ], INTGRP = group,
-         COLNAMES = colnames(object), SummarizedExperiment::colData(object) )
+         COLNAMES = colnames(object), colMetadata )
 
    # if tooltip is missing use column names
    if(missing(tooltip)){

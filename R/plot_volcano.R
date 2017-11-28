@@ -7,6 +7,7 @@
 #' @param log2FoldChange absolute value of log2 fold change cutoff for labeling points, default 2
 #' @param max_pvalue y-axis range from 0 to max_pvalue, default 100 (padj = 1e-100)
 #' @param radius point size, default 4
+#' @param alpha alpha transparency, default 0.3
 #' @param ggplot plot ggplot version
 #' @param \dots other options like width passed to \code{hc_chart}
 #'
@@ -20,7 +21,7 @@
 #' }
 #' @export
 
-plot_volcano <- function(res, padj = 0.05, log2FoldChange = 2, max_pvalue = 100, radius=4, ggplot=FALSE, ...){
+plot_volcano <- function(res, padj = 0.05, log2FoldChange = 2, max_pvalue = 100, radius=4, alpha = 0.3, ggplot=FALSE, ...){
    if(!tibble::is_tibble(res)){
       if(is.list(res)){
         message("Plotting the first table in the list")
@@ -40,7 +41,7 @@ plot_volcano <- function(res, padj = 0.05, log2FoldChange = 2, max_pvalue = 100,
    }
    if(ggplot){
    ggplot2::ggplot(data=x, ggplot2::aes(x=log2FoldChange, y= -log10(padj) )) +
-        ggplot2::geom_point(alpha=0.4, size=1.5, color= "blue") +
+        ggplot2::geom_point(alpha=alpha, size=1.5, color= "blue") +
         ggplot2::xlab("Log2 Fold Change") + ggplot2::ylab("-Log10 Adjusted P-value")  +
         ggplot2::xlim( -fc, fc)
   }else{
@@ -57,7 +58,7 @@ plot_volcano <- function(res, padj = 0.05, log2FoldChange = 2, max_pvalue = 100,
       }
 
     highcharter::hchart(x, "scatter", highcharter::hcaes(log2FoldChange,  -log10(padj),
-                 group = sig, value = gene_name), color = 'rgba(0,0,255, 0.3)',
+                 group = sig, value = gene_name), color = 'rgba(0,0,255, alpha)',
              enableMouseTracking = c(FALSE, TRUE), showInLegend=FALSE, marker = list(radius = radius)) %>%
         highcharter::hc_tooltip( pointFormat = "{point.value}", headerFormat = "") %>%
          highcharter::hc_xAxis(title = list(text = "Log2 Fold Change"), gridLineWidth = 1, tickLength = 0, startOnTick = "true", endOnTick = "true" , min= -fc, max=fc) %>%
