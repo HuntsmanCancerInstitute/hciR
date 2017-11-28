@@ -10,7 +10,7 @@
 #' @param biomart annotations from \code{read_biomart} with column 1 matching row names in results
 #' @param vs either compare all vs. all (default) or all vs specific treatment, or see note.
 #' @param vs2 position of specific treatment in contrast vector, set FALSE for specific treatment vs all
-#' @param levels Levels to compare, if missing then levels(dds$trt)
+#' @param relevel Levels to compare, if missing then levels(dds$trt)
 #' @param alpha the significance cutoff for the adjusted p-value cutoff (FDR)
 #' @param add_columns a vector of biomart columns to add to result table, default
 #'        gene_name, biotype, chromosome and description
@@ -35,13 +35,13 @@
 #' data(fly)
 #' res <- results_all(pasilla$dds, fly)
 #' res
-#' # Use levels to change default contrast order in dds$trt
+#' # Relevel to change default contrast order in dds$trt
 #' levels(dds$trt)
-#' results_all(dds, mmu, levels=c("heart", "lung", "control"))
+#' results_all(dds, mmu, relevel=c("heart", "lung", "control"))
 #' }
 #' @export
 
-results_all <- function( object, biomart,  vs= "all", vs2= TRUE, levels, alpha = 0.05,
+results_all <- function( object, biomart,  vs= "all", vs2= TRUE, relevel, alpha = 0.05,
  add_columns, other_columns, lfcShrink= TRUE, simplify=TRUE,  ...){
    message("Using adjusted p-value < ", alpha)
    n <- as.character( DESeq2::design(object))
@@ -51,12 +51,11 @@ results_all <- function( object, biomart,  vs= "all", vs2= TRUE, levels, alpha =
       n[2] <- gsub(" \\+.*", "", n[2])
    }
    trt <- n[2]
-   if(missing(levels)){
-       n <- levels( object[[trt]] )
+   if(missing(relevel)){
+       n <- levels(object[[trt]])
     }else{
-      n <- levels
+      n <- relevel
    }
-   # add option to re-level ?
    contrast <- utils::combn(n, 2)
 
    if( vs == "combined"){
