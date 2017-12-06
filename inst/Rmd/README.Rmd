@@ -9,6 +9,7 @@ params:
     database: NA
     output: Alignments
     length: 50
+    version: 90
 ---
 
 ```{r setup, include=FALSE}
@@ -19,7 +20,7 @@ analysis_dir <- paste0( "DownloadAnalysisSingleFileServlet.gx?idAnalysis=",
                       substring(params$analysis, 2),
                      "&view=Y&fileName=/Repository/AnalysisData/2017/", params$analysis)
 ## Parts of fasta and gtf file names - add as option?
-release <- 87
+release <- opt$version
 ftp <- paste0( "ftp://ftp.ensembl.org/pub/release-", release, "/")
 if(params$database =="mouse"){
     assembly <- "GRCm38"

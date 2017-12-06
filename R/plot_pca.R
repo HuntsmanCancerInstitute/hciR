@@ -8,6 +8,7 @@
 #'       default displays the object column names
 #' @param ntop number of top variable genes to use for principal components
 #' @param pc a vector of components to plot, default 1st and 2nd
+#' @param ggplot plot ggplot version
 #' @param \dots additional options passed to \code{hc_chart}
 #'
 #' @return A highchart
@@ -20,7 +21,7 @@
 #' plot_pca(pasilla$rlog, c("condition", "type"))
 #' @export
 
-plot_pca <- function(object, intgroup="trt", tooltip, ntop = 500, pc=c(1,2), ...){
+plot_pca <- function(object, intgroup="trt", tooltip, ntop = 500, pc=c(1,2), ggplot=FALSE, ...){
    if(length(pc) != 2) stop( "pc should be a vector of length 2")
    if( class(object)[1] == "matrix"){
        group <- colnames(object)  # or no key?
@@ -45,11 +46,17 @@ plot_pca <- function(object, intgroup="trt", tooltip, ntop = 500, pc=c(1,2), ...
    d <- data.frame( PC1 = pca$x[, pc[1] ], PC2 = pca$x[, pc[2] ], INTGRP = group,
          COLNAMES = colnames(object), colMetadata )
 
+   if(ggplot){
+      ggplot(data=d, aes(x=PC1, y=PC2, color=INTGRP)) + geom_point(size=3) +
+            xlab(paste0("PC1: ", percentVar[pc[1]],"% variance")) +
+              ylab(paste0("PC2: ", percentVar[pc[2]],"% variance")) +
+              theme(legend.title = element_blank(), legend.key = element_blank())
+   }else{
    # if tooltip is missing use column names
    if(missing(tooltip)){
       tooltipJS <- "this.point.COLNAMES"
     }else{
-       if(!all(tooltip %in% names(SummarizedExperiment::colData(object)))) stop("tooltip should match columns of colData(object)")
+       if(!all(tooltip %in% names(colMetadata))) stop("tooltip should match columns of colData(object)")
        ## if tooltip = ID, patient, gender  then tooltipJS =
       ##  'ID: ' + this.point.ID + '<br>patient: ' + this.point.patient + '<br>gender: ' + this.point.gender
       tooltipJS <-  paste0("'", paste( tooltip, ": ' + this.point.", tooltip, sep="", collapse = " + '<br>"))
@@ -62,4 +69,5 @@ plot_pca <- function(object, intgroup="trt", tooltip, ntop = 500, pc=c(1,2), ...
       highcharter::hc_yAxis(title = list(text = paste0("PC", pc[2], ": ", percentVar[ pc[2] ], "% variance"))) %>%
        highcharter::hc_chart(zoomType = "xy", ...)  %>%
         highcharter::hc_exporting(enabled=TRUE, filename = "pca")
+    }
 }
