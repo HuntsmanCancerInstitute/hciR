@@ -13,7 +13,7 @@ gdc_coldata(gdc)
 A tibble
 }
 \description{
-Summarized the \code{colData} slot from \code{GDCprepare} in \code{TCGAbiolinks}
+Summarize the \code{colData} slot from \code{GDCprepare} in \code{TCGAbiolinks}
 }
 \examples{
 \dontrun{
