@@ -53,10 +53,10 @@ read_biomart <- function( dataset="human" , attributes, version = NULL, list = N
    ## SAVE version as attribute
    if(is.null(version)){
       x <- biomaRt::listEnsembl()
-      version <- x$version[x$biomart=="ensembl"]
-      version <- gsub("Ensembl Genes ", "", version)
+      version2 <- x$version[x$biomart=="ensembl"]
+      version2 <- gsub("Ensembl Genes ", "", version2)
    }
-   message("Ensembl Release ", version)
+   message("Ensembl Release ", version2)
 
   ## LIST
    if(!is.null(list)){
@@ -99,6 +99,6 @@ read_biomart <- function( dataset="human" , attributes, version = NULL, list = N
    # will also drop the grouped_df class
    bm <- tibble::as_data_frame(bm)
    attr(bm, "downloaded") <- Sys.Date()
-   attr(bm, "version") <- version
+   attr(bm, "version") <- version2
    bm
 }

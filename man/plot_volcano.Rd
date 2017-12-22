@@ -4,8 +4,8 @@
 \alias{plot_volcano}
 \title{Highchart version of volcano plot}
 \usage{
-plot_volcano(res, padj = 0.05, log2FoldChange = 2, max_pvalue = 100,
-  radius = 4, ggplot = FALSE, ...)
+plot_volcano(res, padj = 0.05, log2FoldChange = 2, max_pvalue = 200,
+  radius = 4, alpha = 0.3, ggplot = FALSE, ...)
 }
 \arguments{
 \item{res}{Annotated DESeq results table from results_all}
@@ -14,9 +14,11 @@ plot_volcano(res, padj = 0.05, log2FoldChange = 2, max_pvalue = 100,
 
 \item{log2FoldChange}{absolute value of log2 fold change cutoff for labeling points, default 2}
 
-\item{max_pvalue}{y-axis range from 0 to max_pvalue, default 100 (padj = 1e-100)}
+\item{max_pvalue}{y-axis range from 0 to max_pvalue, default 200 (padj = 1e-200)}
 
 \item{radius}{point size, default 4}
+
+\item{alpha}{alpha transparency, default 0.3}
 
 \item{ggplot}{plot ggplot version}
 

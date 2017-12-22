@@ -4,14 +4,14 @@
 \alias{gage_all}
 \title{Run GAGE on all DESeq2 result tables}
 \usage{
-gage_all(res, gsets, fdr = 0.05, ...)
+gage_all(res, gsets, FDR = 0.1, ...)
 }
 \arguments{
 \item{res}{DESeq results}
 
 \item{gsets}{gene set}
 
-\item{fdr}{FDR cutoff, default 0.05}
+\item{FDR}{FDR cutoff, default 0.05}
 
 \item{\dots}{Additional options passed to \code{gage}}
 }

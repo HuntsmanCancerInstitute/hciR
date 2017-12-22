@@ -5,7 +5,7 @@
 #' @param res Annotated DESeq results table from results_all
 #' @param  padj p-value cutoff for labeling points, default 0.05
 #' @param log2FoldChange absolute value of log2 fold change cutoff for labeling points, default 2
-#' @param max_pvalue y-axis range from 0 to max_pvalue, default 100 (padj = 1e-100)
+#' @param max_pvalue y-axis range from 0 to max_pvalue, default 200 (padj = 1e-200)
 #' @param radius point size, default 4
 #' @param alpha alpha transparency, default 0.3
 #' @param ggplot plot ggplot version
@@ -21,7 +21,7 @@
 #' }
 #' @export
 
-plot_volcano <- function(res, padj = 0.05, log2FoldChange = 2, max_pvalue = 100, radius=4, alpha = 0.3, ggplot=FALSE, ...){
+plot_volcano <- function(res, padj = 0.05, log2FoldChange = 2, max_pvalue = 200, radius=4, alpha = 0.3, ggplot=FALSE, ...){
    if(!tibble::is_tibble(res)){
       if(is.list(res)){
         message("Plotting the first table in the list")
@@ -33,11 +33,19 @@ plot_volcano <- function(res, padj = 0.05, log2FoldChange = 2, max_pvalue = 100,
    x <- dplyr::filter(res, !is.na(padj))
    ## center at zero...
    fc <- max(abs(x$log2FoldChange), na.rm=TRUE)
+
+## fix points with zero
+  n <- x$padj ==0
+  if(sum(n)>0){
+     message( "Setting ", sum(n), " zero p-values to 1e-", max_pvalue)
+     x$padj[n] <-  1/10^ max_pvalue
+ }
+
 ## fix points with really low -p-values?
    n <- x$padj < 1/10^ max_pvalue
    if(sum(n)>0){
      message( "Setting ", sum(n), " low p-values to 1e-", max_pvalue)
-     x$padj[x$padj < 1/10^ max_pvalue ] <-  1/10^ max_pvalue
+     x$padj[ n ] <-  1/10^ max_pvalue
    }
    if(ggplot){
    ggplot2::ggplot(data=x, ggplot2::aes(x=log2FoldChange, y= -log10(padj) )) +

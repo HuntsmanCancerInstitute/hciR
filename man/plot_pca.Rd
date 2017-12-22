@@ -4,20 +4,22 @@
 \alias{plot_pca}
 \title{Highchart version of plotPCA in DESeq2}
 \usage{
-plot_pca(object, intgroup = "condition", tooltip, ntop = 500, pc = c(1,
-  2), ...)
+plot_pca(object, intgroup = "trt", tooltip, ntop = 500, pc = c(1, 2),
+  ggplot = FALSE, ...)
 }
 \arguments{
-\item{object}{a DESeqTransform object}
+\item{object}{a matrix, ExpressionSet or DESeqTransform object}
 
-\item{intgroup}{a character vector of names in colData(x) for grouping, default 'condition'}
+\item{intgroup}{a character vector of names in pData(x) or colData(x) for grouping, default 'trt'}
 
-\item{tooltip}{a character vector of names in colData(x) for tooltip display,
+\item{tooltip}{a character vector of names in pData(x) or colData(x) for tooltip display,
 default displays the object column names}
 
 \item{ntop}{number of top variable genes to use for principal components}
 
 \item{pc}{a vector of components to plot, default 1st and 2nd}
+
+\item{ggplot}{plot ggplot version}
 
 \item{\dots}{additional options passed to \code{hc_chart}}
 }
@@ -25,7 +27,7 @@ default displays the object column names}
 A highchart
 }
 \description{
-Highchart version of sample PCA plot for transformed data
+Highchart version of sample PCA plot
 }
 \examples{
 data(pasilla)

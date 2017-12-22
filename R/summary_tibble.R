@@ -31,6 +31,7 @@ summary_tibble <- function(x){
 }
 
 #' @describeIn summary_tibble Top three values
+#' @export
 top3 <- function(y){
    z <- sort( table(y), decreasing = TRUE)
    if(length(z) > 3) z <- z[1:3]
@@ -39,6 +40,7 @@ top3 <- function(y){
 }
 
 #' @describeIn summary_tibble Drop empty columns
+#' @export
 drop_empty_columns <- function(x){
    n1 <- apply(x, 2, function(y) all(is.na(y) | y=="") )
    if(sum(n1) > 0){

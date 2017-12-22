@@ -4,8 +4,9 @@
 \alias{results_all}
 \title{Extract and annotate all results from a DESeq analysis}
 \usage{
-results_all(object, biomart, vs = "all", vs2 = TRUE, levels, alpha = 0.05,
-  add_columns, other_columns, lfcShrink = TRUE, simplify = TRUE, ...)
+results_all(object, biomart, vs = "all", vs2 = TRUE, relevel,
+  alpha = 0.05, add_columns, other_columns, lfcShrink = TRUE,
+  simplify = TRUE, ...)
 }
 \arguments{
 \item{object}{a DESeqDataSet}
@@ -16,7 +17,7 @@ results_all(object, biomart, vs = "all", vs2 = TRUE, levels, alpha = 0.05,
 
 \item{vs2}{position of specific treatment in contrast vector, set FALSE for specific treatment vs all}
 
-\item{levels}{Levels to compare, if missing then levels(dds$trt)}
+\item{relevel}{Levels to compare, if missing then levels(dds$trt)}
 
 \item{alpha}{the significance cutoff for the adjusted p-value cutoff (FDR)}
 
@@ -55,9 +56,9 @@ data(pasilla)
 data(fly)
 res <- results_all(pasilla$dds, fly)
 res
-# Use levels to change default contrast order in dds$trt
+# Relevel to change default contrast order in dds$trt
 levels(dds$trt)
-results_all(dds, mmu, levels=c("heart", "lung", "control"))
+results_all(dds, mmu, relevel=c("heart", "lung", "control"))
 }
 }
 \author{
