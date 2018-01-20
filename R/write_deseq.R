@@ -7,7 +7,6 @@
 #' @param rld a DESeqTransform obect with rlog values
 #' @param biomart annotations from \code{read_biomart}
 #' @param fpkm matrix of fpkm values, optional
-#' @param blind blind the rlog transformation, default TRUE
 #' @param text_files write results to separate txt files, mainly for IPA input
 #' @param file file name
 #' @param \dots additional options passed to \code{annotate_results}
@@ -23,7 +22,7 @@
 #' @export
 
 write_deseq <- function(result_all, dds, rld, biomart, fpkm,
-   blind = TRUE, text_files = FALSE, file = "DESeq.xlsx", ...){
+   text_files = FALSE, file = "DESeq.xlsx", ...){
 
    ##  if results are a tibble (since simplify=TRUE by default)
    if(!class(result_all)[1] == "list"){
@@ -68,7 +67,7 @@ write_deseq <- function(result_all, dds, rld, biomart, fpkm,
   Counts <-    list(
        "raw_counts" = DESeq2::counts(dds),
        "normalized" = DESeq2::counts(dds, normalized=TRUE),
-       "rlog"       = SummarizedExperiment::assay(rld, blind = blind))
+       "rlog"       = SummarizedExperiment::assay(rld))
   if(!missing(fpkm))  Counts <- c( Counts, list("fpkm"= fpkm))
    Meta <- list( "samples"    = samp1)
    if(!missing(biomart)) Meta <- c(Meta, list( "ensembl"= as.data.frame(biomart)))

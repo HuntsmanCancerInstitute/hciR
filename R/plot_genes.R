@@ -41,8 +41,12 @@
    df <- NA
    if(!missing( intgroup)){
        df <- attr(x, "colData")[, intgroup, drop=FALSE]
-       for(i in 1:ncol(df))  df[,i] <- paste0(df[,i], "    ")  # hack to fix right margin
-   }
+       for(i in 1:ncol(df)){
+             # hack to fix right margin by padding with spaces
+            if(is.character(df[,i])) df[, i] <- as.factor(df[, i])
+            if(is.factor(df[,i])) levels(df[, 1]) <- paste0(levels(df[, 1]), "    ")
+       }
+    }
    ## convert tibble to matrix
    x <- as_matrix(x)
    brks <- NA

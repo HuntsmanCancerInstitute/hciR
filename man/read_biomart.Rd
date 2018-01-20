@@ -4,8 +4,8 @@
 \alias{read_biomart}
 \title{Read biomart annotations}
 \usage{
-read_biomart(dataset = "human", attributes, version = NULL, list = NULL,
-  ...)
+read_biomart(dataset = "human", attributes, host = "www.ensembl.org",
+  list = NULL, ...)
 }
 \arguments{
 \item{dataset}{The first letter of genus and full species name like btaurus, ecaballus, sscrofa from \code{listEnsembl}.
@@ -15,7 +15,7 @@ A few common names are accepted for human, mouse, rat, fruitfly, yeast and zebra
 external_gene_name, gene_biotype, chromosome_name, start_position, end_position, strand,
 description, transcript_count, and entrezgene}
 
-\item{version}{Ensembl version number for \code{useEnsembl}. Default is current version.}
+\item{host}{URL from \code{listEnsemblArchives()} to download previous versions}
 
 \item{list}{return a list of either datasets, attributes or filters only.}
 
@@ -28,26 +28,31 @@ A tibble
 Read Ensembl annotations using \code{biomaRt} library
 }
 \note{
-Many attributes like entrezgene have a 0 to many relationship with ensembl_gene_id
+The version option in \code{useEnsembl} no longer works, so this was replaced with host on Jan 2, 2018.
 causing duplicate ensembl ids to be added.  The default returns a 10 column table where
 entrezgene is grouped into a comma-separated list so ensembl id is unique.
 }
 \examples{
 \dontrun{
+x1 <- read_biomart( list= "datasets")
+x1
+# Download latest version
  mmu <- read_biomart("mouse")
- # Mouse and Human homologs
+ # Download mouse genes and human homologs
  x1 <- read_biomart("mouse", list= "attributes")
- count(x1, page)
- filter(x1, grepl("hsapiens_homolog", name)
+ dplyr::count(x1, page)
+ filter(x1, grepl("hsapiens_homolog", name))
  mmu_homologs <- read_biomart("mouse",  attributes = c("ensembl_gene_id",
    "hsapiens_homolog_ensembl_gene", "hsapiens_homolog_associated_gene_name",
    "hsapiens_homolog_perc_id"))
- # genes with SignalP
+# Download version 87
+listEnsemblArchives()
+ # Human genes with SignalP
  x2 <- read_biomart("human", list= "filters")
  filter(x2, grepl("signal", name))
-   mmu_signalp  <- read_biomart("human", attributes = c("ensembl_transcript_id",
-        "ensembl_gene_id",  "external_gene_name", "signalp_start",  "signalp_end"),
-         filter="with_signalp", values=TRUE)
+ hsa_signalp  <- read_biomart("human", attributes = c("ensembl_transcript_id",
+       "ensembl_gene_id",  "external_gene_name", "signalp_start",  "signalp_end"),
+       filter="with_signalp", values=TRUE)
 }
 }
 \author{

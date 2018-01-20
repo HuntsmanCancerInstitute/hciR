@@ -6,6 +6,7 @@
 #' @param trim trim long set names, default more than 70 characters
 #' @param n_sets display contrasts sharing n or more sets for n > 1.  If n = 1,
 #' then only plot unique sets.  If missing, then plots all sets, default.
+#' @param cluster_cols cluster columns, default FALSE
 #' @param \dots other options passed to \code{pheatmap}
 #' @author Chris Stubben
 #' @examples
@@ -15,7 +16,7 @@
 #'   plot_gage(x)
 #'  }
 
-plot_gage <- function(x, trim=70, n_sets, ...){
+plot_gage <- function(x, trim=70, n_sets, cluster_cols=FALSE, ...){
    y <- dplyr::bind_rows(x, .id = "contrast")
    ## order columns by order in list (or alphabetical)
    y$contrast <- factor(y$contrast, levels= names(x))
@@ -35,5 +36,5 @@ plot_gage <- function(x, trim=70, n_sets, ...){
    z <- as_matrix(z)
    n1 <- max(abs(z), na.rm=TRUE)
    brks <- seq(-n1, n1, length = 255)
-   pheatmap::pheatmap(z, color = clrs, breaks = brks, cluster_cols=FALSE, cluster_rows=FALSE, ...)
+   pheatmap::pheatmap(z, color = clrs, breaks = brks, cluster_cols=cluster_cols, cluster_rows=FALSE, ...)
 }

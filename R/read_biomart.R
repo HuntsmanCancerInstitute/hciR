@@ -7,11 +7,12 @@
 #' @param attributes vector of column names to pass to \code{getBM}, default ensembl_gene_id,
 #'  external_gene_name, gene_biotype, chromosome_name, start_position, end_position, strand,
 #'  description, transcript_count, and entrezgene
-#' @param version Ensembl version number for \code{useEnsembl}. Default is current version.
+#' @param host URL from \code{listEnsemblArchives()} to download previous versions
 #' @param list return a list of either datasets, attributes or filters only.
 #' @param \dots additional options passed to \code{getBM} or \code{listAttributes}
 #'
-#' @note Many attributes like entrezgene have a 0 to many relationship with ensembl_gene_id
+#' @note The version option in \code{useEnsembl} no longer works, so this was replaced with host on Jan 2, 2018.
+#  Many attributes like entrezgene have a 0 to many relationship with ensembl_gene_id
 #' causing duplicate ensembl ids to be added.  The default returns a 10 column table where
 #' entrezgene is grouped into a comma-separated list so ensembl id is unique.
 #'
@@ -21,24 +22,32 @@
 #'
 #' @examples
 #' \dontrun{
+#' x1 <- read_biomart( list= "datasets")
+#' x1
+#' # Download latest version
 #'  mmu <- read_biomart("mouse")
-#'  # Mouse and Human homologs
+#'  # Download mouse genes and human homologs
 #'  x1 <- read_biomart("mouse", list= "attributes")
-#'  count(x1, page)
-#'  filter(x1, grepl("hsapiens_homolog", name)
+#'  dplyr::count(x1, page)
+#'  filter(x1, grepl("hsapiens_homolog", name))
 #'  mmu_homologs <- read_biomart("mouse",  attributes = c("ensembl_gene_id",
 #'    "hsapiens_homolog_ensembl_gene", "hsapiens_homolog_associated_gene_name",
 #'    "hsapiens_homolog_perc_id"))
-#'  # genes with SignalP
+#' # Download version 87
+#' listEnsemblArchives()
+#  mmu87 <- read_biomart("mouse", host = "http://Dec2016.archive.ensembl.org")
+#'  # Human genes with SignalP
 #'  x2 <- read_biomart("human", list= "filters")
 #'  filter(x2, grepl("signal", name))
-#'    mmu_signalp  <- read_biomart("human", attributes = c("ensembl_transcript_id",
-#'         "ensembl_gene_id",  "external_gene_name", "signalp_start",  "signalp_end"),
-#'          filter="with_signalp", values=TRUE)
+#'  hsa_signalp  <- read_biomart("human", attributes = c("ensembl_transcript_id",
+#'        "ensembl_gene_id",  "external_gene_name", "signalp_start",  "signalp_end"),
+#'        filter="with_signalp", values=TRUE)
 #' }
 #' @export
 
-read_biomart <- function( dataset="human" , attributes, version = NULL, list = NULL, ...){
+
+read_biomart <- function( dataset="human", attributes, host="www.ensembl.org",
+   list = NULL, ...){
    common <- c(human = "hsapiens",
                mouse = "mmusculus",
                rat = "rnorvegicus",
@@ -50,22 +59,16 @@ read_biomart <- function( dataset="human" , attributes, version = NULL, list = N
    if( tolower(dataset) %in% names(common))  dataset <- common[[tolower(dataset)]]
    if( !grepl("gene_ensembl$", dataset) )  dataset <- paste0(dataset, "_gene_ensembl")
 
-   ## SAVE version as attribute
-   if(is.null(version)){
-      x <- biomaRt::listEnsembl()
-      version2 <- x$version[x$biomart=="ensembl"]
-      version2 <- gsub("Ensembl Genes ", "", version2)
-   }
-   message("Ensembl Release ", version2)
-
   ## LIST
    if(!is.null(list)){
       if(tolower(list) == "datasets"){
-         ensembl <- biomaRt::useEnsembl(biomart="ensembl")
+         ensembl <- biomaRt::useEnsembl(biomart="ensembl", host=host)
          bm <- biomaRt::listDatasets(ensembl)
+         ## remove AsIs class
+         for(i in 1:3) class(bm[,i]) <- "character"
          message("Downloaded ", nrow(bm), " datasets")
       }else{
-         ensembl <- biomaRt::useEnsembl(biomart="ensembl", dataset=dataset, version = version)
+         ensembl <- biomaRt::useEnsembl(biomart="ensembl", dataset=dataset, host=host)
          if(tolower(list) == "filters"){
              bm <- biomaRt::listFilters(ensembl, ...)
              message("Downloaded ", nrow(bm), " filters")
@@ -76,7 +79,7 @@ read_biomart <- function( dataset="human" , attributes, version = NULL, list = N
       }
    }else{
       ## SEARCH
-      ensembl <- biomaRt::useEnsembl(biomart="ensembl", dataset=dataset, version = version)
+      ensembl <- biomaRt::useEnsembl(biomart="ensembl", dataset=dataset, host=host)
       # default search
       if(missing(attributes)){
           bm <- biomaRt::getBM(attributes=c('ensembl_gene_id','external_gene_name', 'gene_biotype',
@@ -99,6 +102,6 @@ read_biomart <- function( dataset="human" , attributes, version = NULL, list = N
    # will also drop the grouped_df class
    bm <- tibble::as_data_frame(bm)
    attr(bm, "downloaded") <- Sys.Date()
-   attr(bm, "version") <- version2
+   attr(bm, "host") <- host
    bm
 }

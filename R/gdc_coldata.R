@@ -39,6 +39,6 @@ gdc_coldata <- function(gdc){
    if(all(x$site_of_resection_or_biopsy == x$primary_diagnosis, na.rm=TRUE)) x <- x[, colnames(x) != "site_of_resection_or_biopsy"]
    if(all(x$released, na.rm=TRUE)) x <- x[, colnames(x) != "released"]  ## all TRUE
    ## not currently exported - need to FIX
-   x  <- suppressMessages( hciR:::drop_empty_columns(x) )
+   x  <- suppressMessages( drop_empty_columns(x) )
    x
 }

@@ -4,7 +4,7 @@
 \alias{plot_gage}
 \title{Plot gage_all output}
 \usage{
-plot_gage(x, trim = 70, n_sets, ...)
+plot_gage(x, trim = 70, n_sets, cluster_cols = FALSE, ...)
 }
 \arguments{
 \item{x}{list from gage_all}
@@ -13,6 +13,8 @@ plot_gage(x, trim = 70, n_sets, ...)
 
 \item{n_sets}{display contrasts sharing n or more sets for n > 1.  If n = 1,
 then only plot unique sets.  If missing, then plots all sets, default.}
+
+\item{cluster_cols}{cluster columns, default FALSE}
 
 \item{\dots}{other options passed to \code{pheatmap}}
 }

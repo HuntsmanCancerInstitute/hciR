@@ -6,8 +6,9 @@
 #' @param rld rlog or other counts in DESeqTransform object
 #' @param by join count rownames by this column number in results, default id
 #' @param filter filter the results using \code{\link{top_genes}}
-#' @param col_names a column name in colData(rld) to use as column names
+#' @param col_names optionally replace sample IDs with another column in colData(rld)
 #' @param row_names a column name in results to use as row names, default gene_name
+#' @param collapse collapse replicates and group by column means in colData(rld)
 #' @param \dots additional options passed to \code{\link{top_genes}}
 #'
 #' @return A tibble with colData attribute
@@ -22,39 +23,50 @@
 #' }
 #' @export
 
-top_counts <- function(res, rld, by="id",  filter = TRUE, col_names, row_names="gene_name", ...){
-    if(!class(rld) == "DESeqTransform") stop("rld shoud be a DESeqTransform")
-    rldx <- SummarizedExperiment::assay(rld)
-    colx <- data.frame( SummarizedExperiment::colData(rld) , drop=FALSE)
-    ## rename columns in heatmap
-    if(!missing(col_names)){
+top_counts <- function(res, rld, by="id",  filter = TRUE, col_names, row_names="gene_name",
+     collapse,  ...){
+   if(!class(rld) == "DESeqTransform") stop("rld shoud be a DESeqTransform")
+   ## update  on Jan 3, 2018 set blind = FALSE
+   rldx <- SummarizedExperiment::assay(rld, blind=FALSE)
+   colx <- data.frame( SummarizedExperiment::colData(rld) , drop=FALSE)
+   ## rename columns in heatmap
+   if(!missing(col_names)){
          n <- as.character( SummarizedExperiment::colData(rld)[[col_names]] )
          if(is.null(n)) stop("No column matching ", col_names, " in colData(rld)")
          colnames(rldx) <- n
          rownames(colx) <- n
-      }
-
-      if(filter){
+   }
+   if(filter){
          x <- top_genes(res, ...)
-      }else{
+   }else{
          x <- res
-      }
-      if( !row_names %in% colnames(x)){
+   }
+   if( !row_names %in% colnames(x)){
           message( "gene_name is missing from results, using id for row names")
           row_names <- "id"
-      }
-      ## match column 1 in results to count rownames
-      n <- match(x[[ by ]], rownames(rldx))
-      if(all(is.na(n))) stop("Column ", by, " in results and rownames in counts do not match")
-      if(any(is.na(n))) stop(sum(is.na(n)) , " result rows not in count matrix" )
-      mat <- rldx[n, ]
-      ## gene name by default as id  - use id if missing
-      if(row_names == "gene_name"){
+   }
+   ## match column 1 in results to count rownames
+   n <- match(x[[ by ]], rownames(rldx))
+   if(all(is.na(n))) stop("Column ", by, " in results and rownames in counts do not match")
+   if(any(is.na(n))) stop(sum(is.na(n)) , " result rows not in count matrix" )
+   mat <- rldx[n, ]
+   ## gene name by default as id  - use id if missing
+   if(row_names == "gene_name"){
            n <- is.na( x[["gene_name"]]) | x[["gene_name"]] ==""
            x[["gene_name"]][n] <- x[["id"]][n]
-        }
-
-     mat <- dplyr::bind_cols( tibble::tibble(id=x[[ row_names ]]), tibble::as_tibble(mat) )
-    attr(mat, "colData") <- colx
-    mat
+   }
+   mat <- dplyr::bind_cols( tibble::tibble(id=x[[ row_names ]]), tibble::as_tibble(mat) )
+   attr(mat, "colData") <- colx
+   if(!missing(collapse)){
+        message("Getting means by ", collapse)
+        x1 <- as_matrix( mat)
+      if(!collapse %in% names(colx)) stop("No columns matching ", collapse, " in colData(rld)")
+        t1 <- as.vector( unlist(colx[collapse]))
+        x1 <- split.data.frame(t(x1), t1)
+        x2 <-  sapply(x1, colMeans)
+        ## as_tibble
+        mat <- as_tibble( cbind( mat[,1], x2))
+        attr(mat, "colData") <- data.frame( trt=colnames(x2), row.names = colnames(x2) )
+   }
+   mat
 }

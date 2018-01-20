@@ -76,6 +76,7 @@ plot_pca(rld, "condition", tooltip=c("file", "type") , width=700)
 Cluster all the rlog values using the R function `dist` to calculate the Euclidean distance between samples.
 
 ```{r dist}
+# plot_dist(rld , c("condition", "type") )
 plot_dist(rld , c("condition", "type"), palette="Blues", diagNA=FALSE, reverse_pal=TRUE)
 ```
 
@@ -134,6 +135,7 @@ write_deseq(res, dds, rld, fly, file="pasilla_DESeq.xlsx")
 Plot the fold changes and p-values in an interactive volcano plot.
 
 ```{r volcano}
+plot_volcano(res, ggplot=TRUE)
 plot_volcano(res, padj = 1e-10, log2Fold =1 , width=700)
 ```
 

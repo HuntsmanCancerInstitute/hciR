@@ -45,10 +45,17 @@ read_ipa <- function(file,  excel=FALSE, mylists=FALSE){
       if(i == 1)  y <- gsub("\tand consider Both up", " and consider Both up", y)
       z[[i]] <- suppressWarnings( readr::read_tsv( paste( gsub("\t$", "", y), collapse ="\n")) )
     }
-    ## sort pathways by p-value
-    z[["Canonical Pathways"]] <- dplyr::arrange(z[["Canonical Pathways"]], dplyr::desc(`-log(p-value)`))
-    ## zscores, either #NUM! or lots of decimals in Excel
-    z[["Canonical Pathways"]]$zScore  <-  sprintf("%.3f", z[["Canonical Pathways"]]$zScore)
+    ## fix Pathways, rename columns, add total matches, set size
+    z[["Canonical Pathways"]] <- dplyr::rename(z[["Canonical Pathways"]],
+          Pathway =`Ingenuity Canonical Pathways`, pValue = `-log(p-value)`) %>%
+      dplyr::mutate(pValue = 10^(-pValue),
+           zScore = as.numeric(sprintf("%.3f", zScore)),
+             N = nchar( gsub("[^,]" , "", Molecules))+1 ,
+             setSize= round( N / Ratio, 0)) %>%
+       dplyr::arrange(pValue)
+  ## NaN read as #NUM! in Excel
+    z[["Canonical Pathways"]]$zScore[ is.nan( z[["Canonical Pathways"]]$zScore)] <- NA
+
     # drop Analysis name and empty ID
     z[["Upstream Regulators"]] <- z[["Upstream Regulators"]][,-(1:2)]
     z[["Networks"]] <-  z[["Networks"]][,-2]
