@@ -8,7 +8,7 @@
 #'       default displays the object column names
 #' @param ntop number of top variable genes to use for principal components
 #' @param pc a vector of components to plot, default 1st and 2nd
-#' @param scale option to scale variables option in prcomp, default FALSE
+#' @param scale option to scale variables in prcomp, default FALSE
 #' @param ggplot plot ggplot version
 #' @param \dots additional options passed to \code{hc_chart}
 #'
