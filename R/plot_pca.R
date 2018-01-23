@@ -8,6 +8,7 @@
 #'       default displays the object column names
 #' @param ntop number of top variable genes to use for principal components
 #' @param pc a vector of components to plot, default 1st and 2nd
+#' @param scale option to scale variables option in prcomp, default FALSE
 #' @param ggplot plot ggplot version
 #' @param \dots additional options passed to \code{hc_chart}
 #'
@@ -21,7 +22,7 @@
 #' plot_pca(pasilla$rlog, c("condition", "type"))
 #' @export
 
-plot_pca <- function(object, intgroup="trt", tooltip, ntop = 500, pc=c(1,2), ggplot=FALSE, ...){
+plot_pca <- function(object, intgroup="trt", tooltip, ntop = 500, pc=c(1,2), scale=FALSE, ggplot=FALSE, ...){
    if(length(pc) != 2) stop( "pc should be a vector of length 2")
    if( class(object)[1] == "matrix"){
        group <- colnames(object)  # or no key?
@@ -41,7 +42,7 @@ plot_pca <- function(object, intgroup="trt", tooltip, ntop = 500, pc=c(1,2), ggp
       n  <- apply( SummarizedExperiment::assay(object), 1, stats::var)
       x  <-  utils::head( SummarizedExperiment::assay(object)[ order(n, decreasing=TRUE),], ntop)
    }
-   pca <- stats::prcomp(t(x))
+   pca <- stats::prcomp(t(x), scale.=scale)
    percentVar <- round(pca$sdev^2/sum(pca$sdev^2) * 100, 1)
    d <- data.frame( PC1 = pca$x[, pc[1] ], PC2 = pca$x[, pc[2] ], INTGRP = group,
          COLNAMES = colnames(object), colMetadata )
