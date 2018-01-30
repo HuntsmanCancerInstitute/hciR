@@ -2,23 +2,24 @@
 % Please edit documentation in R/gdc_coldata.R
 \name{gdc_coldata}
 \alias{gdc_coldata}
-\title{GDC column summary}
+\title{GDC column data}
 \usage{
 gdc_coldata(gdc)
 }
 \arguments{
-\item{gdc}{a SummarizedExperiment object from \code{GDCprepare}}
+\item{gdc}{a SummarizedExperiment object from \code{GDCprepare} in the \code{TCGAbiolinks} package.}
 }
 \value{
 A tibble
 }
 \description{
-Summarize the \code{colData} slot from \code{GDCprepare} in \code{TCGAbiolinks}
+Removes empty and duplicated columns in the \code{colData} slot from \code{GDCprepare}
+and returns a tibble.
 }
 \examples{
 \dontrun{
 brca <- GDCprepare(query)
-meta <- gdc_meta(brca)
+meta <- gdc_coldata(brca)
 meta
 x <- summary_tibble(meta)
 x

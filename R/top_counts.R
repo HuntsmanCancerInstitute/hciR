@@ -65,7 +65,7 @@ top_counts <- function(res, rld, by="id",  filter = TRUE, col_names, row_names="
         x1 <- split.data.frame(t(x1), t1)
         x2 <-  sapply(x1, colMeans)
         ## as_tibble
-        mat <- as_tibble( cbind( mat[,1], x2))
+        mat <- tibble::as_tibble( cbind( mat[,1], x2))
         attr(mat, "colData") <- data.frame( trt=colnames(x2), row.names = colnames(x2) )
    }
    mat

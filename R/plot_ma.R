@@ -4,12 +4,12 @@
 #'
 #' @param res Annotated DESeq results table from results_all
 #' @param  baseMean normalized count cutoff for labeling points, default 10000
-#' @param log2FoldChange absolute value of log2 fold change cutoff for labeling points, default 2
-#' @param radius point size, default 2
+#' @param foldchange absolute value of log2 fold change cutoff for labeling points, default 2
+#' @param radius highchart point size, default 3
 #' @param ggplot plot ggplot version
 #' @param \dots other options like width passed to \code{hc_chart}
 #'
-#' @return A highchart. Only points above the baseMean and log2 fold change cutoffs have mouseover labels.
+#' @return A highchart or ggplot. Only points above the baseMean or log2 fold change cutoffs have mouseover labels.
 #'
 #' @author Chris Stubben
 #'
@@ -19,7 +19,7 @@
 #' }
 #' @export
 
-plot_ma <- function(res, baseMean = 10000 , log2FoldChange = 2, radius=2, ggplot=FALSE, ...){
+plot_ma <- function(res, baseMean = 10000 , foldchange = 2, radius=3, ggplot=FALSE, ...){
    if(!tibble::is_tibble(res)){
       if(is.list(res)){
         message("Plotting the first table in the list")

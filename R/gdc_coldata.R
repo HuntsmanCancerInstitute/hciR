@@ -1,8 +1,9 @@
-#' GDC column summary
+#' GDC column data
 #'
-#' Summarize the \code{colData} slot from \code{GDCprepare} in \code{TCGAbiolinks}
+#' Removes empty and duplicated columns in the \code{colData} slot from \code{GDCprepare}
+#' and returns a tibble.
 #'
-#' @param gdc a SummarizedExperiment object from \code{GDCprepare}
+#' @param gdc a SummarizedExperiment object from \code{GDCprepare} in the \code{TCGAbiolinks} package.
 #'
 #' @return A tibble
 #'
@@ -11,7 +12,7 @@
 #' @examples
 #' \dontrun{
 #' brca <- GDCprepare(query)
-#' meta <- gdc_meta(brca)
+#' meta <- gdc_coldata(brca)
 #' meta
 #' x <- summary_tibble(meta)
 #' x

@@ -4,7 +4,7 @@
 \alias{plot_ma}
 \title{Highchart version of MA-plot}
 \usage{
-plot_ma(res, baseMean = 10000, log2FoldChange = 2, radius = 2,
+plot_ma(res, baseMean = 10000, foldchange = 2, radius = 3,
   ggplot = FALSE, ...)
 }
 \arguments{
@@ -12,16 +12,16 @@ plot_ma(res, baseMean = 10000, log2FoldChange = 2, radius = 2,
 
 \item{baseMean}{normalized count cutoff for labeling points, default 10000}
 
-\item{log2FoldChange}{absolute value of log2 fold change cutoff for labeling points, default 2}
+\item{foldchange}{absolute value of log2 fold change cutoff for labeling points, default 2}
 
-\item{radius}{point size, default 2}
+\item{radius}{highchart point size, default 3}
 
 \item{ggplot}{plot ggplot version}
 
 \item{\dots}{other options like width passed to \code{hc_chart}}
 }
 \value{
-A highchart. Only points above the baseMean and log2 fold change cutoffs have mouseover labels.
+A highchart or ggplot. Only points above the baseMean or log2 fold change cutoffs have mouseover labels.
 }
 \description{
 Plot mean normalized counts and fold changes in an interactive MA-plot

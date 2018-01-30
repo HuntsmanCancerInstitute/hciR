@@ -5,7 +5,7 @@
 \title{Highchart version of plotPCA in DESeq2}
 \usage{
 plot_pca(object, intgroup = "trt", tooltip, ntop = 500, pc = c(1, 2),
-  ggplot = FALSE, ...)
+  scale = FALSE, ggplot = FALSE, ...)
 }
 \arguments{
 \item{object}{a matrix, ExpressionSet or DESeqTransform object}
@@ -18,6 +18,8 @@ default displays the object column names}
 \item{ntop}{number of top variable genes to use for principal components}
 
 \item{pc}{a vector of components to plot, default 1st and 2nd}
+
+\item{scale}{option to scale variables in prcomp, default FALSE}
 
 \item{ggplot}{plot ggplot version}
 

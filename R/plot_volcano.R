@@ -1,27 +1,32 @@
-#' Highchart version of volcano plot
+#' Volcano plot
 #'
-#' Plot fold changes and adjusted p-values in an interactive volcano plot
+#' Plot fold changes and adjusted p-values in an interactive volcano plot or ggplot
 #'
-#' @param res Annotated DESeq results table from results_all
-#' @param  padj p-value cutoff for labeling points, default 0.05
-#' @param log2FoldChange absolute value of log2 fold change cutoff for labeling points, default 2
-#' @param max_pvalue y-axis range from 0 to max_pvalue, default 200 (padj = 1e-200)
-#' @param radius point size, default 4
-#' @param alpha alpha transparency, default 0.3
+#' @param res Annotated DESeq results table from results_all.
+#' @param pvalue_cutoff label points above this cutoff on a -10 log10 y-axis scale, the default is 1.3 (padj = 0.05)
+#' for highcharts and no labels for ggplot
+#' @param foldchange_cutoff absolute value of log2 fold change cutoff for labeling highchart points, default 2
+#' @param max_pvalue y-axis limit, maximum value on a -10 log10 y-axis scale,  the default is
+#' 200 (padj < 1e-200), so genes below this cutoff are assigned the maximum p-value.
+#' @param radius highchart point size, default 4
 #' @param ggplot plot ggplot version
 #' @param \dots other options like width passed to \code{hc_chart}
 #'
-#' @return A highchart. Only points above the adjusted p-value and log2 fold change cutoffs have mouseover labels.
+#' @notes For ggplot, the results should not be sorted by p-value or fold change to avoid stacking close overlapping
+#' points (and then only black outlines are displayed in the center of the plot).  Labels are added using `ggrepel`,
+#' so avoid labeling too many points (200 is the limit).
+#'
+#' @return A highchart or ggplot.
 #'
 #' @author Chris Stubben
 #'
 #' @examples
 #' \dontrun{
-#' plot_volcano(res)
+#' plot_volcano(res, ggplot=TRUE, pvalue=10)
 #' }
 #' @export
 
-plot_volcano <- function(res, padj = 0.05, log2FoldChange = 2, max_pvalue = 200, radius=4, alpha = 0.3, ggplot=FALSE, ...){
+plot_volcano <- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200, radius=4, ggplot=FALSE, ...){
    if(!tibble::is_tibble(res)){
       if(is.list(res)){
         message("Plotting the first table in the list")
@@ -38,35 +43,67 @@ plot_volcano <- function(res, padj = 0.05, log2FoldChange = 2, max_pvalue = 200,
   n <- x$padj ==0
   if(sum(n)>0){
      message( "Setting ", sum(n), " zero p-values to 1e-", max_pvalue)
-     x$padj[n] <-  1/10^ max_pvalue
+     x$padj[n] <-  1/10^max_pvalue
  }
 
 ## fix points with really low -p-values?
-   n <- x$padj < 1/10^ max_pvalue
+   n <- x$padj < 1/10^max_pvalue
    if(sum(n)>0){
      message( "Setting ", sum(n), " low p-values to 1e-", max_pvalue)
-     x$padj[ n ] <-  1/10^ max_pvalue
+     x$padj[ n ] <-  1/10^max_pvalue
    }
+   ## ggplot
    if(ggplot){
-   ggplot2::ggplot(data=x, ggplot2::aes(x=log2FoldChange, y= -log10(padj) )) +
-        ggplot2::geom_point(alpha=alpha, size=1.5, color= "blue") +
-        ggplot2::xlab("Log2 Fold Change") + ggplot2::ylab("-Log10 Adjusted P-value")  +
-        ggplot2::xlim( -fc, fc)
+      p1 <- ggplot2::ggplot(data=x, ggplot2::aes(x=log2FoldChange, y= -log10(padj) )) +
+        ggplot2::geom_point(ggplot2::aes(fill = log2FoldChange), color="gray20", shape = 21, size=3) +
+        ggplot2::xlim( -fc, fc) + ggplot2::theme_light() +
+        ggplot2::xlab("Log2 Fold Change") +
+        ggplot2::ylab("-Log10 Adjusted P-value") +
+        ggplot2::scale_fill_gradientn( colors=c(rev(RColorBrewer::brewer.pal(7,"Greens")),
+                              RColorBrewer::brewer.pal(7,"Reds")), guide=FALSE)
+       ## add labels
+       if(!missing(pvalue_cutoff) || !missing(foldchange_cutoff)){
+           if(missing(foldchange_cutoff)){
+               y <- filter(x, padj < 1/10^pvalue_cutoff )
+            }else if(missing(pvalue_cutoff)){
+               y <- filter(x, abs(log2FoldChange) > foldchange_cutoff)
+            }else{
+              y <- filter(x, padj < 1/10^pvalue_cutoff | abs(log2FoldChange) > foldchange_cutoff)
+           }
+        if(nrow(y) > 0){
+           if(nrow(y) > 200){
+               message("Too many points for ggrepel to label (", nrow(y), "), check pvalue cutoff and use a -log10 scale")
+               p1
+            }else{
+                p1 + ggrepel::geom_text_repel(data=y, ggplot2::aes(label=gene_name), cex=3, box.padding=.1, point.padding=.1)
+              }
+         }else{
+            p1
+         }
+     }else{
+        p1
+     }
   }else{
    ### Grouping column for enableMouseTracking
-   x$sig = ifelse( x$padj  > padj & abs(x$log2FoldChange) < log2FoldChange, "N", "Y")
+   if(missing(pvalue_cutoff)) pvalue_cutoff <-  -log10(0.05)
+   if(missing(foldchange_cutoff))  foldchange_cutoff <- 2
+   x$sig = ifelse( x$padj  < 1/10^pvalue_cutoff | abs(x$log2FoldChange) > foldchange_cutoff, "Y", "N")
    n <- sum(x$sig == "Y")
-   if(n ==0) stop("No points above cutoffs, need to fix hchart to plot this case")
+   if(n ==0){
+         # message("No points above cutoffs")
+         x$sig[which.min(x$padj)] <- "Y"  #need as least one Y for enableMousetracking
+         n <- 1
+      }
     message("Adding mouseover labels to ", n, " genes (",  round( n/nrow(x)*100, 1), "%)")
     ## use Ensembl ID if gene_name is missing ?
      n <- x$sig=="Y" & (is.na(x[["gene_name"]]) | x[["gene_name"]] == "")
      if(sum(n)>0 ){
-         message("Missing ", sum(n), " gene names, using Ensembl IDs instead")
+         message("Missing ", sum(n), " gene names, using Ensembl ID instead")
          x[["gene_name"]][n] <- x[["id"]][n]
       }
 
     highcharter::hchart(x, "scatter", highcharter::hcaes(log2FoldChange,  -log10(padj),
-                 group = sig, value = gene_name), color = 'rgba(0,0,255, alpha)',
+                 group = sig, value = gene_name), color = 'rgba(0,0,255,0.3)',
              enableMouseTracking = c(FALSE, TRUE), showInLegend=FALSE, marker = list(radius = radius)) %>%
         highcharter::hc_tooltip( pointFormat = "{point.value}", headerFormat = "") %>%
          highcharter::hc_xAxis(title = list(text = "Log2 Fold Change"), gridLineWidth = 1, tickLength = 0, startOnTick = "true", endOnTick = "true" , min= -fc, max=fc) %>%

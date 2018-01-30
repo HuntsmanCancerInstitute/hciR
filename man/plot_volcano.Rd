@@ -2,37 +2,37 @@
 % Please edit documentation in R/plot_volcano.R
 \name{plot_volcano}
 \alias{plot_volcano}
-\title{Highchart version of volcano plot}
+\title{Volcano plot}
 \usage{
-plot_volcano(res, padj = 0.05, log2FoldChange = 2, max_pvalue = 200,
-  radius = 4, alpha = 0.3, ggplot = FALSE, ...)
+plot_volcano(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
+  radius = 4, ggplot = FALSE, ...)
 }
 \arguments{
-\item{res}{Annotated DESeq results table from results_all}
+\item{res}{Annotated DESeq results table from results_all.}
 
-\item{padj}{p-value cutoff for labeling points, default 0.05}
+\item{pvalue_cutoff}{label points above this cutoff on a -10 log10 y-axis scale, the default is 1.3 (padj = 0.05)
+for highcharts and no labels for ggplot}
 
-\item{log2FoldChange}{absolute value of log2 fold change cutoff for labeling points, default 2}
+\item{foldchange_cutoff}{absolute value of log2 fold change cutoff for labeling highchart points, default 2}
 
-\item{max_pvalue}{y-axis range from 0 to max_pvalue, default 200 (padj = 1e-200)}
+\item{max_pvalue}{y-axis limit, maximum value on a -10 log10 y-axis scale,  the default is
+200 (padj < 1e-200), so genes below this cutoff are assigned the maximum p-value.}
 
-\item{radius}{point size, default 4}
-
-\item{alpha}{alpha transparency, default 0.3}
+\item{radius}{highchart point size, default 4}
 
 \item{ggplot}{plot ggplot version}
 
 \item{\dots}{other options like width passed to \code{hc_chart}}
 }
 \value{
-A highchart. Only points above the adjusted p-value and log2 fold change cutoffs have mouseover labels.
+A highchart or ggplot.
 }
 \description{
-Plot fold changes and adjusted p-values in an interactive volcano plot
+Plot fold changes and adjusted p-values in an interactive volcano plot or ggplot
 }
 \examples{
 \dontrun{
-plot_volcano(res)
+plot_volcano(res, ggplot=TRUE, pvalue=10)
 }
 }
 \author{

@@ -48,7 +48,7 @@ plot_pca <- function(object, intgroup="trt", tooltip, ntop = 500, pc=c(1,2), sca
          COLNAMES = colnames(object), colMetadata )
 
    if(ggplot){
-      ggplot(data=d, ggplot2::aes(x=PC1, y=PC2, color=INTGRP)) + ggplot2::geom_point(size=3) +
+      ggplot(data=d, ggplot2::aes(x=PC1, y=PC2, color=INTGRP, shape=INTGRP)) + ggplot2::geom_point(size=2) +
             ggplot2::xlab(paste0("PC1: ", percentVar[pc[1]],"% variance")) +
               ggplot2::ylab(paste0("PC2: ", percentVar[pc[2]],"% variance")) +
               ggplot2::theme(legend.title = element_blank(), legend.key = element_blank())

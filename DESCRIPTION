@@ -28,6 +28,7 @@ Imports:
     gage,
     dendsort,
     stringr,
+    ggrepel,
     ggplot2
 Suggests:
     flexdashboard,
