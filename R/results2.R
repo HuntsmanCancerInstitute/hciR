@@ -24,9 +24,9 @@
 
 results2 <- function(dds, biomart, exp, ref, trt="trt", alpha =0.05, lfcShrink=TRUE){
       vs <- paste(c(exp, ref), collapse= " vs. ")
-      res1 <- results(dds, contrast = c(trt, exp, ref), alpha= alpha)
-      if(lfcShrink) res1 <- lfcShrink(dds, contrast = c(trt, exp, ref), res = res1)
-      ft <- metadata(res1)$filterThreshold
+      res1 <- DESeq2::results(dds, contrast = c(trt, exp, ref), alpha= alpha)
+      if(lfcShrink) res1 <- DESeq2::lfcShrink(dds, contrast = c(trt, exp, ref), res = res1)
+      ft <- S4Vectors::metadata(res1)$filterThreshold
       res1 <- annotate_results(res1, biomart, c("gene_name", "biotype", "chromosome",  "description"))
        x <- suppressMessages(summary_deseq(res1))
       message(vs, ": ", x[1, 2], " up and ", x[2, 2],  " down regulated")

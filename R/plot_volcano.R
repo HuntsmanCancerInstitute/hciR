@@ -60,15 +60,24 @@ plot_volcano <- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200
         ggplot2::xlab("Log2 Fold Change") +
         ggplot2::ylab("-Log10 Adjusted P-value") +
         ggplot2::scale_fill_gradientn( colors=c(rev(RColorBrewer::brewer.pal(7,"Greens")),
-                              RColorBrewer::brewer.pal(7,"Reds")), guide=FALSE)
+               RColorBrewer::brewer.pal(7,"Reds")), limits=c(-fc, fc),  guide=FALSE)
        ## add labels
        if(!missing(pvalue_cutoff) || !missing(foldchange_cutoff)){
            if(missing(foldchange_cutoff)){
                y <- filter(x, padj < 1/10^pvalue_cutoff )
             }else if(missing(pvalue_cutoff)){
-               y <- filter(x, abs(log2FoldChange) > foldchange_cutoff)
+               ### if vector with 2 values
+               if(length(foldchange_cutoff)==2){
+                    y <- filter(x, log2FoldChange < foldchange_cutoff[1] | log2FoldChange > foldchange_cutoff[2])
+               }else{
+                   y <- filter(x, abs(log2FoldChange) > foldchange_cutoff)
+                }
             }else{
-              y <- filter(x, padj < 1/10^pvalue_cutoff | abs(log2FoldChange) > foldchange_cutoff)
+               if(length(foldchange_cutoff)==2){
+                    y <- filter(x, padj < 1/10^pvalue_cutoff | log2FoldChange < foldchange_cutoff[1] | log2FoldChange > foldchange_cutoff[2])
+               }else{
+                   y <- filter(x, padj < 1/10^pvalue_cutoff | abs(log2FoldChange) > foldchange_cutoff)
+               }
            }
         if(nrow(y) > 0){
            if(nrow(y) > 200){
@@ -87,7 +96,11 @@ plot_volcano <- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200
    ### Grouping column for enableMouseTracking
    if(missing(pvalue_cutoff)) pvalue_cutoff <-  -log10(0.05)
    if(missing(foldchange_cutoff))  foldchange_cutoff <- 2
-   x$sig = ifelse( x$padj  < 1/10^pvalue_cutoff | abs(x$log2FoldChange) > foldchange_cutoff, "Y", "N")
+   if(length(foldchange_cutoff)==2){
+        x$sig <- ifelse( x$padj  < 1/10^pvalue_cutoff |  x$log2FoldChange < foldchange_cutoff[1] | x$log2FoldChange > foldchange_cutoff[2],  "Y", "N")
+   }else{
+       x$sig <- ifelse( x$padj  < 1/10^pvalue_cutoff | abs(x$log2FoldChange) > foldchange_cutoff, "Y", "N")
+   }
    n <- sum(x$sig == "Y")
    if(n ==0){
          # message("No points above cutoffs")
