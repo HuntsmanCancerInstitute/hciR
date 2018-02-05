@@ -15,7 +15,7 @@ plot_genes(x, intgroup, output = "pheatmap", palette = "RdBu",
 
 \item{output}{pheatmap or d3heatmap}
 
-\item{palette}{a color palette name or vector of colors, diverging color palettes are reversed}
+\item{palette}{RColorBrewer palette name, vector of colors, or "RdGn" for Red-Green color scale.}
 
 \item{dendsort}{reorder branches using \code{dendsort} package}
 

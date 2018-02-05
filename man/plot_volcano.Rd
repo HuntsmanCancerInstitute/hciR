@@ -5,7 +5,7 @@
 \title{Volcano plot}
 \usage{
 plot_volcano(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
-  radius = 4, ggplot = FALSE, ...)
+  radius = 4, ggplot = FALSE, palette = "RdBu", ...)
 }
 \arguments{
 \item{res}{Annotated DESeq results table from results_all.}
@@ -21,6 +21,8 @@ for highcharts and no labels for ggplot}
 \item{radius}{highchart point size, default 4}
 
 \item{ggplot}{plot ggplot version}
+
+\item{palette}{RColorBrewer palette name, vector of colors, or "RdGn" for ggplot}
 
 \item{\dots}{other options like width passed to \code{hc_chart}}
 }

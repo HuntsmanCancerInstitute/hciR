@@ -5,7 +5,7 @@
 #' @param x a tibble from \code{\link{top_counts}}
 #' @param intgroup one or more column names for pheatmap \code{annotation_col} bar
 #' @param output  pheatmap or d3heatmap
-#' @param palette a color palette name or vector of colors, diverging color palettes are reversed
+#' @param palette RColorBrewer palette name, vector of colors, or "RdGn" for Red-Green color scale.
 #' @param dendsort reorder branches using \code{dendsort} package
 #' @param scale  scale values, default diff will substract the row mean from each value.
 #'   Other options are none, row and column as described in \code{heatmap}
@@ -29,15 +29,9 @@
 
  plot_genes <-  function( x, intgroup, output="pheatmap", palette="RdBu", dendsort=TRUE,
       scale="diff", midpoint0 = TRUE, max_scale = NA, border=NA,    ...){
-   clrs <- palette
-   if(length(palette)==1){
-       # reverse divergent color palette
-       if(palette %in% c("BrBG","PiYG","PRGn","PuOr","RdBu","RdGy","RdYlBu","RdYlGn","Spectral")){
-          clrs <- rev( grDevices::colorRampPalette( RColorBrewer::brewer.pal(11, palette))(255) )
-       }else{
-          clrs <- grDevices::colorRampPalette( RColorBrewer::brewer.pal(9, palette))(255)
-       }
-   }
+     clrs <- palette
+     if(length(clrs)==1) clrs <- palette255(clrs)
+
    df <- NA
    if(!missing( intgroup)){
        df <- attr(x, "colData")[, intgroup, drop=FALSE]
