@@ -24,5 +24,6 @@ order_samples <- function( samples ){
      ## number [Character] number
      n1 <- gsub("[A-Za-z].*", "",  samples )
      n2 <-  gsub(".*[A-Za-z]", "", samples )
-    order( as.numeric(paste0(n1,sprintf("%06s", n2))) )
+    #  sprintf("%06s", n2) will pad zeros on Mac and blank on Linux
+    order( as.numeric(paste0(n1,sprintf("%06d", as.numeric(n2)))) )
 }
