@@ -28,16 +28,33 @@ plot_ma <- function(res, baseMean = 10000 , foldchange = 2, radius=3, ggplot=FAL
          stop("Results should be a tibble")
       }
    }
+   ## limma top_tibble? TO DO: don't use log10 for AveExpr!
+   n <- match(c("Gene.Symbol", "logFC"), names(res))
+   if( !any(is.na(n))){
+      names(res)[n] <- c("gene_name", "log2FoldChange")
+      res$gene_name <- gsub(", .*", "", res$gene_name)
+   }
+
    x <- dplyr::filter(res, !is.na(log2FoldChange))
    ## plot(log10(x$baseMean), x$log2FoldChange, col=rgb(0,0,1,.3), pch=19)
 
    if(ggplot){
-   ggplot2::ggplot(data=x, ggplot2::aes(x=log10(baseMean), y= log2FoldChange )) +
+    # limma top tibble
+    if( "AveExpr" %in% names(res)){
+        x1 <- res$AveExpr
+        xlab1 <- "Average Expression"
+   }else{
+       x1 <- log10( res$baseMean)
+       xlab1 <- "Log10 Mean Normalized Counts"
+   }
+      # TO DO - label genes
+   ggplot2::ggplot(data=x, ggplot2::aes(x= x1, y= log2FoldChange )) +
         ggplot2::geom_point(color="blue", alpha=0.3, size=1) +
-        ggplot2::xlab("Log10 Mean Normalized Counts") + ggplot2::ylab("Log2 Fold Change")
+        ggplot2::xlab( xlab1) + ggplot2::ylab("Log2 Fold Change") + ggplot2::theme_light()
   }else{
    ### Grouping column for enableMouseTracking
-   x$sig = ifelse( x$baseMean > baseMean | abs(x$log2FoldChange)> log2FoldChange, "Y", "N")
+   if( "AveExpr" %in% names(res)) stop("Only ggplot=TRUE for limma top table")
+   x$sig = ifelse( x$baseMean > baseMean | abs(x$log2FoldChange) > log2FoldChange, "Y", "N")
    n <- sum(x$sig == "Y")
    if(n ==0) stop("No points above cutoffs, need to fix hchart to plot this case")
     message("Adding mouseover labels to ", n, " genes (",  round( n/nrow(x)*100, 1), "%)")
@@ -51,7 +68,8 @@ plot_ma <- function(res, baseMean = 10000 , foldchange = 2, radius=3, ggplot=FAL
             group = sig, value = gene_name), color = 'rgba(0,0,255, 0.3)',
              enableMouseTracking = c(FALSE, TRUE), showInLegend=FALSE, marker = list(radius = radius)) %>%
         highcharter::hc_tooltip( pointFormat = "{point.value}", headerFormat = "") %>%
-         highcharter::hc_xAxis(title = list(text = "Log10 Mean Normalized Counts"), gridLineWidth = 1, tickLength = 0, startOnTick = "true", endOnTick = "true") %>%
+         highcharter::hc_xAxis(title = list(text = "Log10 Mean Normalized Counts"),
+              gridLineWidth = 1, tickLength = 0, startOnTick = "true", endOnTick = "true") %>%
          highcharter::hc_yAxis(title = list(text = "Log2 Fold Change")) %>%
          highcharter::hc_chart(zoomType = "xy", ...) %>%
          highcharter::hc_exporting(enabled=TRUE, filename = "MA-plot")

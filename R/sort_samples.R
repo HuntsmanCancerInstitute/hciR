@@ -1,7 +1,6 @@
 #' Sort sample names
 #'
-#' Sort character vectors by removing non-numeric characters.  This works for very simple names,
-#'  try \code{mixedsort} in \code{ggtools} for more complicated examples
+#' Sort samples names using the first and last run of numbers in a string
 #'
 #' @param samples a vector of sample names
 #'
@@ -10,7 +9,7 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#'  ids <- c("135X1", "135X21", "135X2", "135X10")
+#'  ids <- c("135X1", "135X21", "135X2", "135X10", "81X5", "81X15")
 #'  sort(ids)
 #'  sort_samples(ids)
 #' @export
@@ -22,5 +21,8 @@ sort_samples <- function(samples){
 #' @describeIn sort_samples Order sample names
 #' @export
 order_samples <- function( samples ){
-    order(as.numeric(gsub("[^0-9]", "",  samples )))
+     ## number [Character] number
+     n1 <- gsub("[A-Za-z].*", "",  samples )
+     n2 <-  gsub(".*[A-Za-z]", "", samples )
+    order( as.numeric(paste0(n1,sprintf("%06s", n2))) )
 }

@@ -36,6 +36,13 @@ plot_volcano <- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200
          stop("Results should be a tibble")
       }
    }
+   ## limma top_tibble?
+   n <- match(c("Gene.Symbol", "logFC", "adj.P.Val"), names(res))
+   if( !any(is.na(n))){
+      names(res)[n] <- c("gene_name", "log2FoldChange", "padj")
+      res$gene_name <- gsub(", .*", "", res$gene_name)
+   }
+
    x <- dplyr::filter(res, !is.na(padj))
    ## center at zero...
    fc <- max(abs(x$log2FoldChange), na.rm=TRUE)

@@ -24,7 +24,10 @@
 #' @export
 
  plot_dist <-   function( rld, intgroup, output="pheatmap", palette="RdYlBu", reverse_pal = FALSE, diagNA = TRUE, border=NA, fontsize=10, ...){
-     if(class(rld)[1] == "DESeqTransform"){
+    if(class(rld)[1] == "ExpressionSet"){
+      rld <- SummarizedExperiment::makeSummarizedExperimentFromExpressionSet(rld)
+   }
+     if(class(rld)[1] !="matrix"){
         d1 <- stats::dist(t( SummarizedExperiment::assay(rld) ))
      }else{
         d1 <- stats::dist(t(rld))

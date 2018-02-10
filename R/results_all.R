@@ -45,7 +45,9 @@ results_all <- function( object, biomart,  vs= "all", vs2= TRUE, relevel, alpha 
  add_columns, other_columns, lfcShrink= TRUE, simplify=TRUE,  ...){
    message("Using adjusted p-value < ", alpha)
    n <- as.character( DESeq2::design(object))
-   ## [1] "~"   "condition"
+   ## [1] "~"   "trt"
+   # drop intercept if "0 + trt"?
+      n[2] <- gsub("^0 \\+ ", "", n[2])
    if(grepl(" + ", n[2], fixed=TRUE)){
       # message("The design has multiple variables and only the first variable will be used")
       n[2] <- gsub(" \\+.*", "", n[2])
