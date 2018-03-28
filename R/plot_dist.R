@@ -23,7 +23,8 @@
 #' plot_dist(pasilla$rlog, output = "d3")
 #' @export
 
- plot_dist <-   function( rld, intgroup, output="pheatmap", palette="RdYlBu", reverse_pal = FALSE, diagNA = TRUE, border=NA, fontsize=10, ...){
+ plot_dist <-   function( rld, intgroup, output="pheatmap", palette="RdYlBu", reverse_pal = FALSE,
+      diagNA = TRUE, border=NA, fontsize=10, ...){
     if(class(rld)[1] == "ExpressionSet"){
       rld <- SummarizedExperiment::makeSummarizedExperimentFromExpressionSet(rld)
    }
@@ -33,6 +34,7 @@
         d1 <- stats::dist(t(rld))
      }
      sample_dist <- as.matrix(d1)
+
      ## coloring the diagonal often skews the color scale
      if(diagNA) diag(sample_dist) <- NA
      ## clrs

@@ -16,8 +16,7 @@ order_samples(samples)
 A vector
 }
 \description{
-Sort character vectors by removing non-numeric characters.  This works for very simple names,
- try \code{mixedsort} in \code{ggtools} for more complicated examples
+Sort samples names using the first and last run of numbers in a string
 }
 \section{Functions}{
 \itemize{
@@ -25,7 +24,7 @@ Sort character vectors by removing non-numeric characters.  This works for very 
 }}
 
 \examples{
- ids <- c("135X1", "135X21", "135X2", "135X10")
+ ids <- c("135X1", "135X21", "135X2", "135X10", "81X5", "81X15")
  sort(ids)
  sort_samples(ids)
 }

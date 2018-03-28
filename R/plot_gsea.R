@@ -6,7 +6,7 @@
 #' @param trim trim long set names, default more than 70 characters
 #' @param n_sets display contrasts sharing n or more sets for n > 1.  If n = 1,
 #' then only plot unique sets.  If missing, then plots all sets, default.
-#' @param nes plot NES, default ES
+#' @param nes plot NES (or ES if FALSE)
 #' @param \dots other options passed to \code{pheatmap}
 #' @author Chris Stubben
 #' @examples
@@ -16,7 +16,7 @@
 #'   plot_gage(x)
 #'  }
 
-plot_gsea <- function(x, trim=70, n_sets, nes=FALSE, ...){
+plot_gsea <- function(x, trim=70, n_sets, nes=TRUE, ...){
    if(is.data.frame(x)) stop("A list of read_gsea tables is required")
    y <- dplyr::bind_rows(x, .id = "contrast")
    ## order columns by order in list (or alphabetical)

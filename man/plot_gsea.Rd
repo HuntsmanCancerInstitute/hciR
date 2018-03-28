@@ -4,7 +4,7 @@
 \alias{plot_gsea}
 \title{Plot GSEA output}
 \usage{
-plot_gsea(x, trim = 70, n_sets, nes = FALSE, ...)
+plot_gsea(x, trim = 70, n_sets, nes = TRUE, ...)
 }
 \arguments{
 \item{x}{list with two or more \code{link{read_gsea}} tables}
@@ -14,7 +14,7 @@ plot_gsea(x, trim = 70, n_sets, nes = FALSE, ...)
 \item{n_sets}{display contrasts sharing n or more sets for n > 1.  If n = 1,
 then only plot unique sets.  If missing, then plots all sets, default.}
 
-\item{nes}{plot NES, default ES}
+\item{nes}{plot NES (or ES if FALSE)}
 
 \item{\dots}{other options passed to \code{pheatmap}}
 }

@@ -2,6 +2,9 @@
 #'
 #' Plot fold changes and adjusted p-values in an interactive volcano plot or ggplot
 #'
+#' For ggplot, the results should not be sorted by p-value or fold change to avoid stacking close overlapping
+#' points.  Labels are added using \code{ggrepel}, so avoid labeling too many points (200 is the limit).
+#'
 #' @param res Annotated DESeq results table from results_all.
 #' @param pvalue_cutoff label points above this cutoff on a -10 log10 y-axis scale, the default is 1.3 (padj = 0.05)
 #' for highcharts and no labels for ggplot
@@ -12,10 +15,6 @@
 #' @param ggplot plot ggplot version
 #' @param palette RColorBrewer palette name, vector of colors, or "RdGn" for ggplot
 #' @param \dots other options like width passed to \code{hc_chart}
-#'
-#' @notes For ggplot, the results should not be sorted by p-value or fold change to avoid stacking close overlapping
-#' points (and then only black outlines are displayed in the center of the plot).  Labels are added using \code{ggrepel},
-#' so avoid labeling too many points (200 is the limit).
 #'
 #' @return A highchart or ggplot.
 #'
@@ -37,10 +36,15 @@ plot_volcano <- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200
       }
    }
    ## limma top_tibble?
-   n <- match(c("Gene.Symbol", "logFC", "adj.P.Val"), names(res))
+   n <- match(c("logFC", "adj.P.Val"), names(res))
    if( !any(is.na(n))){
-      names(res)[n] <- c("gene_name", "log2FoldChange", "padj")
-      res$gene_name <- gsub(", .*", "", res$gene_name)
+      names(res)[n] <- c("log2FoldChange", "padj")
+      # Symbol, Gene.Symbol, others
+      n <- which( names(res) %in% c("Symbol", "Gene.Symbol"))
+      if(length(n)==1){
+         names(res)[n] <- "gene_name"
+         res$gene_name <- gsub(", .*", "", res$gene_name)
+      }
    }
 
    x <- dplyr::filter(res, !is.na(padj))
@@ -73,7 +77,11 @@ plot_volcano <- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200
        ## add labels
        if(!missing(pvalue_cutoff) || !missing(foldchange_cutoff)){
            if(missing(foldchange_cutoff)){
-               y <- filter(x, padj < 1/10^pvalue_cutoff )
+              if(length(pvalue_cutoff)==2){
+                 y <- filter(x, padj < 1/10^pvalue_cutoff[1] & log2FoldChange<0 | padj < 1/10^pvalue_cutoff[2] & log2FoldChange>0 )
+              }else{
+                 y <- filter(x, padj < 1/10^pvalue_cutoff )
+              }
             }else if(missing(pvalue_cutoff)){
                ### if vector with 2 values
                if(length(foldchange_cutoff)==2){
@@ -81,6 +89,7 @@ plot_volcano <- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200
                }else{
                    y <- filter(x, abs(log2FoldChange) > foldchange_cutoff)
                 }
+           ### TO DO add code for 2 pvalue cutoffs!
             }else{
                if(length(foldchange_cutoff)==2){
                     y <- filter(x, padj < 1/10^pvalue_cutoff | log2FoldChange < foldchange_cutoff[1] | log2FoldChange > foldchange_cutoff[2])

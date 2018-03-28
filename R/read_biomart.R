@@ -12,7 +12,7 @@
 #' @param \dots additional options passed to \code{getBM} or \code{listAttributes}
 #'
 #' @note The version option in \code{useEnsembl} no longer works, so this was replaced with host on Jan 2, 2018.
-#  Many attributes like entrezgene have a 0 to many relationship with ensembl_gene_id
+#' Many attributes like entrezgene have a 0 to many relationship with ensembl_gene_id
 #' causing duplicate ensembl ids to be added.  The default returns a 10 column table where
 #' entrezgene is grouped into a comma-separated list so ensembl id is unique.
 #'
@@ -35,7 +35,7 @@
 #'    "hsapiens_homolog_perc_id"))
 #' # Download version 87
 #' listEnsemblArchives()
-#  mmu87 <- read_biomart("mouse", host = "http://Dec2016.archive.ensembl.org")
+#'  mmu87 <- read_biomart("mouse", host = "http://Dec2016.archive.ensembl.org")
 #'  # Human genes with SignalP
 #'  x2 <- read_biomart("human", list= "filters")
 #'  filter(x2, grepl("signal", name))

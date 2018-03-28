@@ -32,6 +32,10 @@ A highchart or ggplot.
 \description{
 Plot fold changes and adjusted p-values in an interactive volcano plot or ggplot
 }
+\details{
+For ggplot, the results should not be sorted by p-value or fold change to avoid stacking close overlapping
+points.  Labels are added using \code{ggrepel}, so avoid labeling too many points (200 is the limit).
+}
 \examples{
 \dontrun{
 plot_volcano(res, ggplot=TRUE, pvalue=10)

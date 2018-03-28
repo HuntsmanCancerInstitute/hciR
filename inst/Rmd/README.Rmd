@@ -56,7 +56,7 @@ This guide describes the steps used to run [STAR] alignments on the FASTQ files 
 ###1. Create reference
 
 Download the `r params$database` FASTA and GTF file from the [Ensembl] release
-`r release` and run [STAR] with the `databaseGenerate` option to create the
+`r release` and run [STAR] with the `genomeGenerate` option to create the
 reference database.  The `sjdbGTFfile` option extracts splice junctions from the
 GTF file with a maximum possible overhang of `r params$length - 1` bases (for `r params$length`
 bp reads).
@@ -66,7 +66,7 @@ cat(paste0("wget ", ftp, "fasta/",  tolower(name), "/dna/", fasta, ".gz" ))
 cat(paste0("wget ", ftp, "gtf/",  tolower(name), "/", gtf, ".gz"  ))
 cat("gunzip *.gz")
 
-cat(paste0("STAR --runMode databaseGenerate \
+cat(paste0("STAR --runMode genomeGenerate \
      --databaseDir star", params$length , " \
      --runThreadN 16 \
      --databaseFastaFiles ", fasta, " \
