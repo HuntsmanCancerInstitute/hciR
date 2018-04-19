@@ -135,7 +135,7 @@ plot_volcano <- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200
 
     highcharter::hchart(x, "scatter", highcharter::hcaes(log2FoldChange,  -log10(padj),
                  group = sig, value = gene_name), color = 'rgba(0,0,255,0.3)',
-             enableMouseTracking = c(FALSE, TRUE), showInLegend=FALSE, marker = list(radius = radius)) %>%
+             enableMouseTracking = c(FALSE, TRUE), showInLegend=FALSE, marker = list(radius = radius, lineColor="blue")) %>%
         highcharter::hc_tooltip( pointFormat = "{point.value}", headerFormat = "") %>%
          highcharter::hc_xAxis(title = list(text = "Log2 Fold Change"), gridLineWidth = 1, tickLength = 0, startOnTick = "true", endOnTick = "true" , min= -fc, max=fc) %>%
          highcharter::hc_yAxis(title = list(text = "-Log10 Adjusted P-value")) %>%

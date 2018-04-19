@@ -60,8 +60,11 @@ write_deseq <- function(result_all, dds, rld, biomart, fpkm,
 
    # sample data in colData ... drop replaceable
    samp1 <- as.data.frame(SummarizedExperiment::colData(dds))
-   # treatments is a list is TCGA biolinks
+   # TCGAbiolinks has list columns!
     samp1 <- samp1[, colnames(samp1) != "treatments"]
+    n <- which(sapply(samp1, class) == "AsIs")
+    for (i in n) samp1[[i]] <- unlist(samp1[[i]])
+
     samp1$replaceable <- NULL
 
   Counts <-    list(

@@ -20,12 +20,16 @@
 #' @export
 
 sort_counts <- function(count_tbl, sample_tbl, id=1){
+   cname <- deparse(substitute(count_tbl))
    orig_count_tbl <- count_tbl
-   if( class(count_tbl)[1] != "matrix") count_tbl <- as_matrix(count_tbl)
-
+   if( class(count_tbl)[1] != "matrix"){
+        count_tbl <- as_matrix(count_tbl)
+        if( !is.numeric(count_tbl)) stop("Count table is not numeric.
+  Counts should be the first option and you used ", shQuote(cname))
+   }
    # match first column in sample data by default
    if( ncol(count_tbl) !=  nrow(sample_tbl) ){
-         stop("count_tbl should have same number of columns as sample_tbl rows")
+         stop("count_tbl should have one more column than sample_tbl rows")
    }
    n <- match(sample_tbl[[id]], colnames(count_tbl ) )
    if(any(is.na(n))) stop( "Column names in count_tbl do not match sample names in column ", id)

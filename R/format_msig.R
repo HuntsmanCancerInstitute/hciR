@@ -10,7 +10,7 @@
 
 format_msig <- function( name ){
    name <- stringr::str_to_title(gsub("_", " ", name))
-   CAPs <- c(Dna= "DNA", Rna = "RNA", Trna="tRNA",  Mrna="mRNA", Tca="TCA", Abc = "ABC", Ecm = "ECM",
+   CAPs <- c(Dna= "DNA", Rna = "RNA", Trna="tRNA",  Mrna="mRNA", Tca="TCA", Abc = "ABC", Ecm = "ECM", Ppar="PPAR",
    ` Als` = " ALS",  ` And `=" and ", ` In ` = " in ", ` Of ` = " of ", ` The `= " the ", ` By ` = " by ",
       ` To `= " to ", ` For ` = " for ", ` From `= " from ", ` Or `= " or ", ` An `=" an ",
       ` Is ` = " is ", ` Ii `= " II ",  Iii = "III",  ` Iga ` = " IGA ", ` Ri ` = " RI "  )

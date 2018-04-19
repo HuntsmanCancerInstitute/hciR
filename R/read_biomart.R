@@ -7,7 +7,7 @@
 #' @param attributes vector of column names to pass to \code{getBM}, default ensembl_gene_id,
 #'  external_gene_name, gene_biotype, chromosome_name, start_position, end_position, strand,
 #'  description, transcript_count, and entrezgene
-#' @param host URL from \code{listEnsemblArchives()} to download previous versions
+#' @param host URL from \code{listEnsemblArchives} to download previous versions
 #' @param list return a list of either datasets, attributes or filters only.
 #' @param \dots additional options passed to \code{getBM} or \code{listAttributes}
 #'
@@ -44,9 +44,7 @@
 #'        filter="with_signalp", values=TRUE)
 #' }
 #' @export
-
-
-read_biomart <- function( dataset="human", attributes, host="www.ensembl.org",
+read_biomart <- function(dataset="human", attributes, host="www.ensembl.org",
    list = NULL, ...){
    common <- c(human = "hsapiens",
                mouse = "mmusculus",
@@ -58,7 +56,6 @@ read_biomart <- function( dataset="human", attributes, host="www.ensembl.org",
                yeast = "scerevisiae")
    if( tolower(dataset) %in% names(common))  dataset <- common[[tolower(dataset)]]
    if( !grepl("gene_ensembl$", dataset) )  dataset <- paste0(dataset, "_gene_ensembl")
-
   ## LIST
    if(!is.null(list)){
       if(tolower(list) == "datasets"){

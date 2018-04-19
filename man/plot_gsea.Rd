@@ -24,8 +24,8 @@ Plot heatmap with enrichment scores by contrast
 \examples{
 \dontrun{
   data(msig)
-  x <- gage_all(res, msig$KEGG)
-  plot_gage(x)
+  x <- list( X1= read_gsea("gsea1.txt"), X2 = read_gsea("gsea2.txt") )
+  plot_gsea(x)
  }
 }
 \author{

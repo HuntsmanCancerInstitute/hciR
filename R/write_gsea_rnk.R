@@ -5,7 +5,7 @@
 #' absolute fold change value are removed.
 #'
 #' @param res a list of DESeq results
-#' @param write write a file (default) or return a list of tables
+#' @param write write a file (default) or return a list of named vectors
 #'
 #' @return Tab-delimited file with gene name and log2 fold change
 #'
@@ -27,6 +27,7 @@ write_gsea_rnk <- function(res, write=TRUE){
    ## add check for mouse or human
    n <- length(res)
    rnk <- vector("list", n)
+   names(rnk) <- names(res)
    for(i in 1:n){
       y <- res[[i]]
       vs <- gsub( "\\.* ", "_", names(res[i]))
@@ -52,11 +53,14 @@ write_gsea_rnk <- function(res, write=TRUE){
           message("Saving ", outfile)
           readr::write_tsv(x, outfile, col_names=FALSE)
       }else{
-         rnk[[i]] <- x
+         # named vector
+         y <- x[[2]]
+         names(y) <- x[[1]]
+         rnk[[i]] <- y
       }
    }
    if(!write){
-      if(length(rnk)==1)  rnk <- rnk[[1]]
+     #  if(length(rnk)==1)  rnk <- rnk[[1]]
       rnk
    }
 }

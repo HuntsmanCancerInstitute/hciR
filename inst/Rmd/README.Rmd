@@ -15,10 +15,10 @@ params:
 ```{r setup, include=FALSE}
 ## Parameterized Markdown file for RNA-seq pipeline at HCI
 knitr::opts_chunk$set(warning=FALSE, comment="", collapse=TRUE)
-## GNomEx file links
+## GNomEx file links - option to add YEAR???
 analysis_dir <- paste0( "DownloadAnalysisSingleFileServlet.gx?idAnalysis=",
                       substring(params$analysis, 2),
-                     "&view=Y&fileName=/Repository/AnalysisData/2017/", params$analysis)
+                     "&view=Y&fileName=/Repository/AnalysisData/2018/", params$analysis)
 ## Parts of fasta and gtf file names - add as option?
 release <- params$version
 ftp <- paste0( "ftp://ftp.ensembl.org/pub/release-", release, "/")

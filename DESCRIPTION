@@ -29,7 +29,9 @@ Imports:
     dendsort,
     stringr,
     ggrepel,
-    ggplot2
+    ggplot2,
+    limma,
+    fgsea
 Suggests:
     flexdashboard,
     crosstalk,
