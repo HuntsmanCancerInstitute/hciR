@@ -4,13 +4,15 @@
 \alias{plot_dist}
 \title{Plot heatmap of sample distances}
 \usage{
-plot_dist(rld, intgroup, output = "pheatmap", palette = "RdYlBu",
+plot_dist(rld, intgroup, colname, output = "pheatmap", palette = "RdYlBu",
   reverse_pal = FALSE, diagNA = TRUE, border = NA, fontsize = 10, ...)
 }
 \arguments{
 \item{rld}{a matrix or DESeqTransform with assay slot}
 
 \item{intgroup}{one or more column names in colData(rld) for pheatmap \code{annotation_col}}
+
+\item{colname}{Column name in `colData(rld)` for labels, default is sample IDs in colnames(rld)}
 
 \item{output}{pheatmap or d3heatmap}
 

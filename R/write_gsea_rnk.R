@@ -1,11 +1,14 @@
 #' Write DESeq results to GSEA rank file
 #'
 #' Writes gene name (or human homolog) and log2 fold change sorted in
-#' descending order to tab-delimited file.  Duplicate gene name with the lowest
-#' absolute fold change value are removed.
+#' descending order to a list of vectors or tab-delimited file.
+#' Duplicate gene name with the lowest absolute fold change are removed.
 #'
 #' @param res a list of DESeq results
 #' @param write write a file (default) or return a list of named vectors
+#' @param protein_coding only write protein_coding genes
+#' @param na_pvalue remove genes with NA p-values (extreme count outliers and
+#' low mean normalized counts)
 #'
 #' @return Tab-delimited file with gene name and log2 fold change
 #'
@@ -17,7 +20,7 @@
 #' }
 #' @export
 
-write_gsea_rnk <- function(res, write=TRUE){
+write_gsea_rnk <- function(res, write=TRUE, protein_coding = TRUE, na_pvalue = FALSE){
    # needs list as input
    if(is.data.frame(res) ){
       n <- attr(res, "contrast")
@@ -34,13 +37,20 @@ write_gsea_rnk <- function(res, write=TRUE){
       vs <- gsub("_+_", "_", vs, fixed=TRUE)
       ## add txt for GNomEx
       outfile <- paste0( gsub("/", "", vs), ".rnk")
+
+      if(protein_coding && names(y) %in% "biotype")  y <- filter(y, biotype == "protein_coding")
+      if(na_pvalue)  y <- filter(y, !is.na(padj))
+
       if("human_homolog" %in% colnames(y)){
-          x <- dplyr::filter( y, !is.na(padj), human_homolog != "") %>%
+          ## include NAs?  extreme outliers and low mean normalized count
+          x <- dplyr::filter( y, human_homolog != "") %>%
                 dplyr::select(human_homolog, log2FoldChange)
           names(x)[1] <- "gene_name"
+          ## split comma-separated lists!
+          x <- tidyr::separate_rows(x, gene_name, sep=",")
       }
       else{
-          x <- dplyr::filter( y, !is.na(padj), gene_name != "") %>%
+          x <- dplyr::filter( y, gene_name != "") %>%
                 dplyr::select(gene_name, log2FoldChange)
       }
       ## remove duplicates

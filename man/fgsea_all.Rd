@@ -4,12 +4,12 @@
 \alias{fgsea_all}
 \title{Run fgsea on all DESeq2 result tables}
 \usage{
-fgsea_all(fc, gsets, FDR = 0.1, nperm = 10000, ...)
+fgsea_all(res, gsets, FDR = 0.1, nperm = 10000, ...)
 }
 \arguments{
-\item{fc}{A list of ranked fold changes from \code{write_gsea_rnk}}
+\item{res}{A list of DESeq results}
 
-\item{gsets}{gene set}
+\item{gsets}{Gene sets}
 
 \item{FDR}{FDR cutoff, default 0.1}
 

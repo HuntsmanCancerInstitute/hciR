@@ -4,20 +4,26 @@
 \alias{write_gsea_rnk}
 \title{Write DESeq results to GSEA rank file}
 \usage{
-write_gsea_rnk(res, write = TRUE)
+write_gsea_rnk(res, write = TRUE, protein_coding = TRUE,
+  na_pvalue = FALSE)
 }
 \arguments{
 \item{res}{a list of DESeq results}
 
 \item{write}{write a file (default) or return a list of named vectors}
+
+\item{protein_coding}{only write protein_coding genes}
+
+\item{na_pvalue}{remove genes with NA p-values (extreme count outliers and
+low mean normalized counts)}
 }
 \value{
 Tab-delimited file with gene name and log2 fold change
 }
 \description{
 Writes gene name (or human homolog) and log2 fold change sorted in
-descending order to tab-delimited file.  Duplicate gene name with the lowest
-absolute fold change value are removed.
+descending order to a list of vectors or tab-delimited file.
+Duplicate gene name with the lowest absolute fold change are removed.
 }
 \examples{
 \dontrun{

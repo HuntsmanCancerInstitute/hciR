@@ -5,8 +5,7 @@
 \title{Extract and annotate all results from a DESeq analysis}
 \usage{
 results_all(object, biomart, vs = "all", vs2 = TRUE, relevel,
-  alpha = 0.05, add_columns, other_columns, lfcShrink = TRUE,
-  simplify = TRUE, ...)
+  alpha = 0.05, add_columns, lfcShrink = TRUE, simplify = TRUE, ...)
 }
 \arguments{
 \item{object}{a DESeqDataSet}
@@ -22,9 +21,7 @@ results_all(object, biomart, vs = "all", vs2 = TRUE, relevel,
 \item{alpha}{the significance cutoff for the adjusted p-value cutoff (FDR)}
 
 \item{add_columns}{a vector of biomart columns to add to result table, default
-gene_name, biotype, chromosome and description}
-
-\item{other_columns}{a vector of additional columns in biomart table}
+gene_name, biotype, chromosome, description and human_homolog if present}
 
 \item{lfcShrink}{shrink fold changes using \code{lfcShrink} for DESeq2 version >= 1.16}
 

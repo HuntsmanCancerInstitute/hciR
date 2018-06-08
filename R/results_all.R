@@ -13,8 +13,7 @@
 #' @param relevel Levels to compare, if missing then levels(dds$trt)
 #' @param alpha the significance cutoff for the adjusted p-value cutoff (FDR)
 #' @param add_columns a vector of biomart columns to add to result table, default
-#'        gene_name, biotype, chromosome and description
-#' @param other_columns a vector of additional columns in biomart table
+#'        gene_name, biotype, chromosome, description and human_homolog if present
 #' @param lfcShrink  shrink fold changes using \code{lfcShrink} for DESeq2 version >= 1.16
 #' @param simplify return a tibble if only 1 contrast present
 #' @param \dots additional options passed to \code{results}
@@ -42,7 +41,7 @@
 #' @export
 
 results_all <- function( object, biomart,  vs= "all", vs2= TRUE, relevel, alpha = 0.05,
- add_columns, other_columns, lfcShrink= TRUE, simplify=TRUE,  ...){
+ add_columns, lfcShrink= TRUE, simplify=TRUE,  ...){
    message("Using adjusted p-value < ", alpha)
    n <- as.character( DESeq2::design(object))
    ## [1] "~"   "trt"
@@ -79,11 +78,11 @@ if(length(vs)==0) stop("No contrasts found")
    ## padded for message
    vs1 <- sprintf(paste0("%-", max(nchar(vs))+2, "s"), paste0(vs, ":") )
 
-   if(missing(add_columns)) add_columns <- c("gene_name", "biotype", "chromosome", "description")
-   # add one extra to defaults...
-   if(!missing(other_columns)) add_columns <- c(add_columns, other_columns)
+   if(missing(add_columns)){
+        add_columns <- c("gene_name", "biotype", "chromosome", "description")
+        if("human_homolog" %in% names(biomart)) add_columns <- c(add_columns, "human_homolog")
+   }
    if(lfcShrink)  message("Adding shrunken fold changes to log2FoldChange")
-
    for(i in seq_along( vs )){
        res1 <- DESeq2::results(object, contrast = c( trt, contrast[1,i], contrast[2,i] ), alpha = alpha, ...)
       if(lfcShrink){
@@ -94,7 +93,7 @@ if(length(vs)==0) stop("No contrasts found")
        x <- suppressMessages( summary_deseq(res1) )
        message(i, ". ", vs1[i], x[1,2], " up and ", x[2,2], " down regulated" )
        if(!missing(biomart)){
-           # suppress messages  like 70 rows in results are missing from biomart table and print once
+           # suppress messages like 70 rows in results are missing from biomart table and print once
            res1 <- suppressMessages( annotate_results( res1, biomart, add_columns) )
            attr(res1, "contrast") <- vs[i]
            attr(res1, "alpha") <- alpha

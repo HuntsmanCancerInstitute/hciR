@@ -1,11 +1,11 @@
 Package: hciR
 Title: RNA-seq workflows at HCI
-Version: 1.2.3
-Date: 2018-03-28
+Version: 1.2.4
+Date: 2018-06-08
 Author: Chris Stubben
 Maintainer: Chris Stubben <chris.stubben@hci.utah.edu>
 Depends:
-    R (>= 3.3.2),
+    R (>= 3.4.2),
     dplyr
 Imports:
     readr,

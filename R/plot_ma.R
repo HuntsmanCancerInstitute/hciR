@@ -54,7 +54,7 @@ plot_ma <- function(res, baseMean = 10000 , foldchange = 2, radius=3, ggplot=FAL
   }else{
    ### Grouping column for enableMouseTracking
    if( "AveExpr" %in% names(res)) stop("Only ggplot=TRUE for limma top table")
-   x$sig = ifelse( x$baseMean > baseMean | abs(x$log2FoldChange) > log2FoldChange, "Y", "N")
+   x$sig = ifelse( x$baseMean > baseMean | abs(x$log2FoldChange) > foldchange, "Y", "N")
    n <- sum(x$sig == "Y")
    if(n ==0) stop("No points above cutoffs, need to fix hchart to plot this case")
     message("Adding mouseover labels to ", n, " genes (",  round( n/nrow(x)*100, 1), "%)")
