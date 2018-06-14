@@ -7,14 +7,14 @@
 fisher_barplot(x, top = 10, ylab = "Significant genes in pathway")
 }
 \arguments{
-\item{res}{A list of DESeq results}
+\item{x}{output from \code{\link{fisher_all}}}
 
-\item{gsets}{Gene sets}
+\item{top}{number of top genes}
 
-\item{padj}{Adjusted p-value cutoff for significant genes}
+\item{ylab}{y-axis label}
 }
 \value{
-a tibble with gene sets intersections and pvalue from \code{fisher.test}
+a ggplot
 }
 \description{
 Gene set enrichment using \code{fisher.test}.

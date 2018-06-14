@@ -36,7 +36,7 @@ fgsea_all <- function(res, gsets, FDR = 0.1, nperm=10000, ...){
    names(fgsea_res) <-  vs
    ## padded for message
    vs1 <- sprintf(paste0("%-", max(nchar(vs))+2, "s"), paste0(vs, ":") )
-   message( "Using FDR < ", FDR)
+   # message( "Using FDR < ", FDR)
    for(i in 1:n){
       f1 <- fgsea::fgsea(pathways = gsets,
                         stats = fc[[i]],

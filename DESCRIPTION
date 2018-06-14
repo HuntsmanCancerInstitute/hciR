@@ -1,7 +1,7 @@
 Package: hciR
 Title: RNA-seq workflows at HCI
-Version: 1.2.4
-Date: 2018-06-08
+Version: 1.2.5
+Date: 2018-06-14
 Author: Chris Stubben
 Maintainer: Chris Stubben <chris.stubben@hci.utah.edu>
 Depends:
@@ -30,6 +30,7 @@ Imports:
     stringr,
     ggrepel,
     ggplot2,
+    scales,
     limma,
     fgsea
 Suggests:

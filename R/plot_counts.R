@@ -1,33 +1,40 @@
-#' Plot count matrix to check filter cutoff
+#' Plot counts for a single gene
 #'
-#' Plot the total number of features removed from count matrix using different low count cutoffs
-#' for both maximum and total reads
+#' @param rld rlog or other counts in DESeqTransform object
+#' @param gene gene id, should match rownames in rld
+#' @param intgroups one or two names in colData(rld) to use for grouping
+#' @param ylab y-axis label
+#' @param title ggplot title, use NULL for no title
 #'
-#' @param x count matrix, data.frame or tibble
-#' @param n maximum cutoff, default is to display 0 to 20
+#' @note See \code{link{plot_interactions}} to plot many genes.
 #'
-#' @return A plot
+#' @return A ggplot
 #'
 #' @author Chris Stubben
 #'
 #' @examples
 #' \dontrun{
-#'  plot_counts(counts)
+#'  DESeq2::plotCounts(dds, "ENSG00000075624",  "time")
+#'  plot_counts(rld, "ENSG00000075624",  "time")
+#'  # interaction plot
+#'  plot_counts(rld, "ENSG00000075624",  c("time", "trt"), title = "ACTB")
 #' }
 #' @export
 
-
-plot_counts <- function(x, n =20){
-   if(dplyr::is.tbl(x)) x <- as_matrix(x)
-   n1 <- rowSums(x)
-   n2 <- apply( x, 1, max, na.rm=TRUE)
-   x1 <- table( factor( n1[n1 <= n], levels = 0:n))
-   x2 <- table( factor( n2[n2 <= n], levels = 0:n))
-
-   y <- cbind( x1, x2)
-   z <- apply(y, 2, cumsum)
-   graphics::matplot(rownames(z), z, pch=c(17, 19), col=c("red", "blue"),
-      xlab="Count cutoff",  ylab="Total features removed")
-   graphics::legend("bottomright", c("max", "total"), pch=c(19,17), col=c("blue", "red"),
-      bty="n", inset=0.1, title="Filter")
+plot_counts <- function(rld, gene, intgroups, ylab="count", title){
+   if(!class(rld) == "DESeqTransform") stop("rld shoud be a DESeqTransform")
+   if(length(gene) > 1) gene <- gene[1]
+   if(!gene %in% rownames(rld)) stop(gene, " is not found in rld, check rownames(rld) for valid input")
+   if(missing(title)) title <- gene
+   x <- data.frame( colData(rld)[, intgroups, drop=FALSE])
+   x$gene <- as.vector( assay( rld[gene,]))
+   if(length(intgroups) == 1){
+       ggplot(x, aes_string(x=intgroups, y="gene")) + geom_point() +
+        stat_summary(aes(y=gene, group=1), fun.y="mean", geom="line") +
+         ylab(ylab) + ggtitle(title)
+    }else{
+       ggplot(x, aes_string(x=intgroups[1], y="gene", color=intgroups[2])) + geom_point() +
+        stat_summary(aes_string(y="gene", group=intgroups[2]), fun.y="mean", geom="line") +
+         ylab(ylab) + ggtitle(title)
+   }
 }

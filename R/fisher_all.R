@@ -24,7 +24,7 @@
 #' }
 #' @export
 
-fisher_all <- function(res, sets,  deseq.padj = 0.05, min =2){
+fisher_all <- function(res, gsets, deseq.padj = 0.05, min =2){
    ##  if results are a tibble (since simplify=TRUE by default)
    if( class(res)[1] != "list"){
          n <- attr(res, "contrast")
@@ -57,29 +57,29 @@ fisher_all <- function(res, sets,  deseq.padj = 0.05, min =2){
       message( i, ". ", vs[[i]])
       message("   Found ", length(sig_genes), " significant genes (", length(not_sig_genes), " not signficant)")
       ## CREATE contigency table.   This is slower than intersect
-      # tbls <- lapply(sets, function(x) rbind( table(factor(sig_genes %in% x, levels=c(FALSE, TRUE))),
+      # tbls <- lapply(gsets, function(x) rbind( table(factor(sig_genes %in% x, levels=c(FALSE, TRUE))),
       #                                     table(factor(not_sig_genes %in% x, levels=c(FALSE, TRUE)) )))
-      n1 <- sapply(sets, function(x) length( dplyr::intersect(sig_genes, x) ))
+      n1 <- sapply(gsets, function(x) length( dplyr::intersect(sig_genes, x) ))
       dropN <- n1 < min
-      message("    Dropping ", sum(dropN), " sets with < ", min, " hits")
+      message("    Dropping ", sum(dropN), " gsets with < ", min, " hits")
       n1 <- n1[!dropN]
-      sets1 <- sets[!dropN]
+      gsets1 <- gsets[!dropN]
 
-      n2 <- sapply(sets1, function(x) length( dplyr::intersect(not_sig_genes, x) ))
+      n2 <- sapply(gsets1, function(x) length( dplyr::intersect(not_sig_genes, x) ))
       x <- cbind( x1 = length(sig_genes) - n1,  x2 = length(not_sig_genes) - n2, n1, n2)
       tbls <- lapply( split(x, 1:nrow(x)), matrix, ncol=2)
 
       pvalue <- sapply(tbls, function(x) stats::fisher.test(x, alt="less")$p.value)
       # count up-regulated genes in set for barplots...
-      up <- sapply(sets1, function(x) length( dplyr::intersect(up_reg_genes, x) ))
+      up <- sapply(gsets1, function(x) length( dplyr::intersect(up_reg_genes, x) ))
       ### set size or sig+ns?
-      set_size <- sapply(sets1, length)
-      x <- tibble::data_frame(term = names(sets1), total= n1+n2, signif = n1, up = up, down = n1-up, pvalue = pvalue)
+      set_size <- sapply(gsets1, length)
+      x <- tibble::data_frame(term = names(gsets1), total= n1+n2, signif = n1, up = up, down = n1-up, pvalue = pvalue)
       x <- dplyr::mutate(x, percent = round( signif/total*100,1))
-      ## drop sets with no overlapping genes?
-      x <- filter(x, signif > 1) %>% arrange(pvalue)
+      ## drop gsets with no overlapping genes?
+      x <- dplyr::filter(x, signif > 1) %>% dplyr::arrange(pvalue)
       genes_res[[i]]  <- x
-      message( "   ", nrow(x), " sets with ", min, " or more genes (", sum(x$pvalue < 0.05), " with Fisher p-value < 0.05)" )
+      message( "   ", nrow(x), " gsets with ", min, " or more genes (", sum(x$pvalue < 0.05), " with Fisher p-value < 0.05)" )
 
    }
    if(length(genes_res) == 1) genes_res <- genes_res[[1]]

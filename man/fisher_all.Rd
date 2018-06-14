@@ -4,16 +4,16 @@
 \alias{fisher_all}
 \title{Run Fisher's test on all DESeq2 result tables}
 \usage{
-fisher_all(res, sets, deseq.padj = 0.05, min = 2)
+fisher_all(res, gsets, deseq.padj = 0.05, min = 2)
 }
 \arguments{
 \item{res}{A list of DESeq results}
 
+\item{gsets}{Gene sets}
+
 \item{deseq.padj}{Adjusted p-value cutoff for significant genes, default 0.05}
 
 \item{min}{Minimum number of overlaps, default 2}
-
-\item{gsets}{Gene sets}
 }
 \value{
 a tibble with gene sets intersections and pvalue from \code{fisher.test}.

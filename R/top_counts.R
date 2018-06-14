@@ -61,12 +61,15 @@ top_counts <- function(res, rld, by="id",  filter = TRUE, col_names, row_names="
         message("Getting means by ", collapse)
         x1 <- as_matrix( mat)
       if(!collapse %in% names(colx)) stop("No columns matching ", collapse, " in colData(rld)")
-        t1 <- as.vector( unlist(colx[collapse]))
+        t1 <-  colx[[collapse]]
         x1 <- split.data.frame(t(x1), t1)
         x2 <-  sapply(x1, colMeans)
         ## as_tibble
         mat <- tibble::as_tibble( cbind( mat[,1], x2))
-        attr(mat, "colData") <- data.frame( trt=colnames(x2), row.names = colnames(x2) )
+        ## collapse coldata
+        c1 <- data.frame( colx[!duplicated(colx[collapse]),])
+        rownames(c1) <- c1[[collapse]]
+        attr(mat, "colData") <- c1
    }
    mat
 }

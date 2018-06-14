@@ -2,25 +2,36 @@
 % Please edit documentation in R/plot_counts.R
 \name{plot_counts}
 \alias{plot_counts}
-\title{Plot count matrix to check filter cutoff}
+\title{Plot counts for a single gene}
 \usage{
-plot_counts(x, n = 20)
+plot_counts(rld, gene, intgroups, ylab = "count", title)
 }
 \arguments{
-\item{x}{count matrix, data.frame or tibble}
+\item{rld}{rlog or other counts in DESeqTransform object}
 
-\item{n}{maximum cutoff, default is to display 0 to 20}
+\item{gene}{gene id, should match rownames in rld}
+
+\item{intgroups}{one or two names in colData(rld) to use for grouping}
+
+\item{ylab}{y-axis label}
+
+\item{title}{ggplot title, use NULL for no title}
 }
 \value{
-A plot
+A ggplot
 }
 \description{
-Plot the total number of features removed from count matrix using different low count cutoffs
-for both maximum and total reads
+Plot counts for a single gene
+}
+\note{
+See \code{link{plot_interactions}} to plot many genes.
 }
 \examples{
 \dontrun{
- plot_counts(counts)
+ DESeq2::plotCounts(dds, "ENSG00000075624",  "time")
+ plot_counts(rld, "ENSG00000075624",  "time")
+ # interaction plot
+ plot_counts(rld, "ENSG00000075624",  c("time", "trt"), title = "ACTB")
 }
 }
 \author{
