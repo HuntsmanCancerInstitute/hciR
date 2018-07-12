@@ -22,11 +22,18 @@
 #' @export
 
 deseq_from_tibble <- function( counts, samples, run_deseq = TRUE, ...){
+   c1 <- deparse(substitute(counts))
+   ## check counts...
+   NAs <- is.na(counts[[1]])
+   if(any(NAs)) stop(sum(NAs), " gene ids are NA. Try '", c1, " <- filter(", c1, ", !is.na(", names(counts)[1], "))' and re-run.")
+   Dups <- duplicated(counts[[1]])
+   if(any(Dups)) message("Note: ", sum(Dups), " gene ids are duplicates")
+
    counts <- sort_counts(counts, samples)
    ## use hciR::as_matrix to convert to matrix
    counts <- as_matrix(counts)
    ## round for RSEM?
-   if (any(round(counts[1:10,]) != counts[1:10,])) {
+   if (any(round(counts[1:20,]) != counts[1:20,])) {
      message("Rounding counts (from RSEM?)")
      counts <- round( counts, 0)
    }

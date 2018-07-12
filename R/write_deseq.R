@@ -8,6 +8,7 @@
 #' @param biomart annotations from \code{read_biomart}
 #' @param fpkm matrix of fpkm values, optional
 #' @param text_files write results to separate txt files, mainly for IPA input
+#' @param cutoff if text_files is TRUE, only write genes below this p-value cutoff
 #' @param file file name
 #' @param \dots additional options passed to \code{annotate_results}
 #'
@@ -22,7 +23,7 @@
 #' @export
 
 write_deseq <- function(result_all, dds, rld, biomart, fpkm,
-   text_files = FALSE, file = "DESeq.xlsx", ...){
+   text_files = FALSE, cutoff, file = "DESeq.xlsx", ...){
 
    ##  if results are a tibble (since simplify=TRUE by default)
    if(!class(result_all)[1] == "list"){
@@ -39,6 +40,7 @@ write_deseq <- function(result_all, dds, rld, biomart, fpkm,
          vs <- gsub("_+_", "_", vs, fixed=TRUE)
          vs <- paste0(vs, ".txt")
          message( "Saving ",  vs)
+         if(!missing(cutoff))  res[[i]] <- filter(res[[i]], padj < cutoff)
          readr::write_tsv(res[[i]], vs)
       }
    }else{

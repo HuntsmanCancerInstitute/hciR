@@ -14,6 +14,7 @@
 #' @param alpha the significance cutoff for the adjusted p-value cutoff (FDR)
 #' @param add_columns a vector of biomart columns to add to result table, default
 #'        gene_name, biotype, chromosome, description and human_homolog if present
+#' @param trt Compare groups within trt group, default is first term in the design formula
 #' @param lfcShrink  shrink fold changes using \code{lfcShrink} for DESeq2 version >= 1.16
 #' @param simplify return a tibble if only 1 contrast present
 #' @param \dots additional options passed to \code{results}
@@ -41,17 +42,19 @@
 #' @export
 
 results_all <- function( object, biomart,  vs= "all", vs2= TRUE, relevel, alpha = 0.05,
- add_columns, lfcShrink= TRUE, simplify=TRUE,  ...){
+ add_columns, trt, lfcShrink= TRUE, simplify=TRUE,  ...){
    message("Using adjusted p-value < ", alpha)
-   n <- as.character( DESeq2::design(object))
-   ## [1] "~"   "trt"
-   # drop intercept if "0 + trt"?
+   if(missing(trt)){
+      n <- as.character( DESeq2::design(object))
+      ## [1] "~"   "trt"
+      # drop intercept if "0 + trt"?
       n[2] <- gsub("^0 \\+ ", "", n[2])
-   if(grepl(" + ", n[2], fixed=TRUE)){
-      # message("The design has multiple variables and only the first variable will be used")
-      n[2] <- gsub(" \\+.*", "", n[2])
+      ## multiple terms in design formula  ~ trt + mouse
+      if(grepl(" + ", n[2], fixed=TRUE)){
+         n[2] <- gsub(" \\+.*", "", n[2])
+      }
+      trt <- n[2]
    }
-   trt <- n[2]
    if(missing(relevel)){
        n <- levels(object[[trt]])
     }else{

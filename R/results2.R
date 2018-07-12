@@ -28,7 +28,7 @@ results2 <- function(dds, biomart, exp, ref, trt="trt", alpha =0.05, lfcShrink=T
       if(lfcShrink) res1 <- DESeq2::lfcShrink(dds, contrast = c(trt, exp, ref), res = res1)
       ft <- S4Vectors::metadata(res1)$filterThreshold
       Columns <- c("gene_name", "biotype", "chromosome",  "description")
-     if(grepl("^mmu", deparse(substitute(biomart)))) Columns <- c(Columns, "human_homolog")
+      if("human_homolog" %in% names(biomart)) Columns <- c(Columns, "human_homolog")
       res1 <- annotate_results(res1, biomart, Columns)
        x <- suppressMessages(summary_deseq(res1))
       message(vs, ": ", x[1, 2], " up and ", x[2, 2],  " down regulated")
