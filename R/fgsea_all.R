@@ -14,9 +14,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' data(msig)
+#' library(hciRdata)
 #' fc <- write_gsea_rnk(res, write=FALSE)
-#' x <- fgsea_all(fc, gsets=msig$KEGG)
+#' x <- fgsea_all(fc, gsets=msig_pathways$KEGG)
 #' }
 #'
 #' @export
@@ -38,9 +38,10 @@ fgsea_all <- function(res, gsets, FDR = 0.1, nperm=10000, ...){
    vs1 <- sprintf(paste0("%-", max(nchar(vs))+2, "s"), paste0(vs, ":") )
    # message( "Using FDR < ", FDR)
    for(i in 1:n){
-      f1 <- fgsea::fgsea(pathways = gsets,
+      ## suppress warnings... There are ties in the preranked stats (0.82% of the list).
+      f1 <- suppressWarnings( fgsea::fgsea(pathways = gsets,
                         stats = fc[[i]],
-                        nperm=nperm, ...)
+                        nperm=nperm, ...))
       f1 <- tibble::as_tibble(f1)
       f1 <- dplyr::filter(f1, padj < FDR)
       if(nrow(f1) == 0){

@@ -25,9 +25,9 @@ A wrapper for fgsea to convert ouput into tibbles
 }
 \examples{
 \dontrun{
-data(msig)
+library(hciRdata)
 fc <- write_gsea_rnk(res, write=FALSE)
-x <- fgsea_all(fc, gsets=msig$KEGG)
+x <- fgsea_all(fc, gsets=msig_pathways$KEGG)
 }
 
 }

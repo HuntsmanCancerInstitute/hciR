@@ -23,8 +23,8 @@ Plot heatmap with enrichment scores by contrast and gene set from \code{\link{ga
 }
 \examples{
 \dontrun{
-  data(msig)
-  x <- gage_all(res, msig$KEGG)
+  library(hciRdata)
+  x <- gage_all(res, msig_pathways$KEGG)
   plot_gage(x)
  }
 }

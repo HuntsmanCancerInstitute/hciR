@@ -17,7 +17,7 @@
 gene_intersect <- function(genes, sets, min=2){
 message("Comparing ", length(genes), " genes to ", length(sets), " sets")
    n <- sapply(sets, function(x) length( dplyr::intersect(genes, x) ))
-   y <- tibble(term = names(sets), size= sapply(sets, length), overlap=n)
-   y <- mutate(y, percent = round( overlap/size*100,1))
-   filter(y, overlap>=2) %>% arrange(desc(percent))
+   y <- tibble::tibble(term = names(sets), size= sapply(sets, length), overlap=n)
+   y <- dplyr::mutate(y, percent = round( overlap/size*100,1))
+   dplyr::filter(y, overlap >= 2) %>% dplyr::arrange(dplyr::desc(percent))
 }

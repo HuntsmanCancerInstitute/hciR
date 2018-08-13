@@ -45,7 +45,5 @@ read_gsea_file <- function(gsea_file){
    names(x) <- c("name", "size", "es", "nes", "p", "fdr", "fwer", "rank")
    # split set from name: KEGG_,  REACTOME_ , etc
    x <- tidyr::separate(x, name, into=c("set", "name"), sep="_", extra="merge")
-   ## replace ALL CAPS
-   x$name <- format_msig( x$name)
    x
 }

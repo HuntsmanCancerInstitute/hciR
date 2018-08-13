@@ -4,7 +4,8 @@
 \alias{plot_interactions}
 \title{Plot counts for many genes}
 \usage{
-plot_interactions(x, intgroups, ylab = "count", scaled = TRUE, n = 40)
+plot_interactions(x, intgroups, ylab = "count", scaled = TRUE, n = 40,
+  reorder)
 }
 \arguments{
 \item{x}{a tibble from \code{\link{top_counts}}}
@@ -16,6 +17,8 @@ plot_interactions(x, intgroups, ylab = "count", scaled = TRUE, n = 40)
 \item{scaled}{scale counts}
 
 \item{n}{total number of genes to plot}
+
+\item{reorder}{level names to reorder factor levels on x-axis}
 }
 \value{
 A ggplot

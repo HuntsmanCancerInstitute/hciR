@@ -13,8 +13,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' data(msig)
-#' x <- gage_all(res, gsets=msig$KEGG)
+#' library(hciRdata)
+#' x <- gage_all(res, gsets=msig_pathways$KEGG)
 #' }
 #'
 #' @importFrom dplyr filter
@@ -50,11 +50,9 @@ gage_all <- function(res, gsets, FDR = 0.1, ...){
       if(nrow(x) == 0){
           message( i, ". ", vs1[[i]], " No enriched sets found")
       }else{
-         ## fix names in all CAPS
-         x$name <- format_msig( x$name)
          x$enriched[x$enriched == "less"] <- "negative"
          x$enriched[x$enriched == "greater"] <- "positive"
-         
+
       message( i, ". ", vs1[[i]], " ", nrow(x), " enriched sets (",
          sum(x$enriched=="positive"), " positive, ", sum(x$enriched=="negative"), " negative)")
       }

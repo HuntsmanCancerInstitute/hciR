@@ -1,11 +1,10 @@
 Package: hciR
 Title: RNA-seq workflows at HCI
 Version: 1.2.5
-Date: 2018-06-14
+Date: 2018-07-26
 Author: Chris Stubben
 Maintainer: Chris Stubben <chris.stubben@hci.utah.edu>
 Depends:
-    R (>= 3.4.2),
     dplyr
 Imports:
     readr,
@@ -18,10 +17,10 @@ Imports:
     Biobase,
     S4Vectors,
     DT,
+    highcharter,
     d3heatmap,
     pheatmap,
     RColorBrewer,
-    highcharter,
     htmlwidgets,
     openxlsx,
     biomaRt,
@@ -33,12 +32,7 @@ Imports:
     scales,
     limma,
     fgsea
-Suggests:
-    flexdashboard,
-    crosstalk,
-    d3scatter
 License: GPL-3
-Description: This package loads output from RNA-seq workflows and includes Rmarkdown files
-    and Rscripts to create interactive graphics and reports.
+Description: This package loads output from RNA-seq workflows to create interactive graphics and reports.
 biocViews: Software
 RoxygenNote: 6.0.1

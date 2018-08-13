@@ -4,7 +4,7 @@
 \alias{write_deseq}
 \title{Write DESeq results}
 \usage{
-write_deseq(result_all, dds, rld, biomart, fpkm, text_files = FALSE,
+write_deseq(result_all, dds, rld, biomart, fpkm, text_files = FALSE, cutoff,
   file = "DESeq.xlsx", ...)
 }
 \arguments{
@@ -19,6 +19,8 @@ write_deseq(result_all, dds, rld, biomart, fpkm, text_files = FALSE,
 \item{fpkm}{matrix of fpkm values, optional}
 
 \item{text_files}{write results to separate txt files, mainly for IPA input}
+
+\item{cutoff}{if text_files is TRUE, only write genes below this p-value cutoff}
 
 \item{file}{file name}
 

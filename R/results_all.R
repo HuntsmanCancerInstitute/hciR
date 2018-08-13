@@ -10,6 +10,7 @@
 #' @param biomart annotations from \code{read_biomart} with column 1 matching row names in results
 #' @param vs either compare all vs. all (default) or all vs specific treatment, or see note.
 #' @param vs2 position of specific treatment in contrast vector, set FALSE for specific treatment vs all
+#' @param subset index to subset all pairwise comparisons, try \code{combn(sort(samples$trt),2)}
 #' @param relevel Levels to compare, if missing then levels(dds$trt)
 #' @param alpha the significance cutoff for the adjusted p-value cutoff (FDR)
 #' @param add_columns a vector of biomart columns to add to result table, default
@@ -41,7 +42,7 @@
 #' }
 #' @export
 
-results_all <- function( object, biomart,  vs= "all", vs2= TRUE, relevel, alpha = 0.05,
+results_all <- function( object, biomart,  vs= "all", vs2= TRUE, subset, relevel, alpha = 0.05,
  add_columns, trt, lfcShrink= TRUE, simplify=TRUE,  ...){
    message("Using adjusted p-value < ", alpha)
    if(missing(trt)){
@@ -74,7 +75,8 @@ results_all <- function( object, biomart,  vs= "all", vs2= TRUE, relevel, alpha 
       }
     }
       vs <- apply(contrast, 2, paste, collapse = " vs. ")
-if(length(vs)==0) stop("No contrasts found")
+    if(length(vs)==0) stop("No contrasts found")
+    if(!missing(subset)) vs <- vs[subset]
       res <- vector("list", length(vs))
       names(res) <- vs
 

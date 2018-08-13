@@ -4,8 +4,8 @@
 \alias{results_all}
 \title{Extract and annotate all results from a DESeq analysis}
 \usage{
-results_all(object, biomart, vs = "all", vs2 = TRUE, relevel,
-  alpha = 0.05, add_columns, lfcShrink = TRUE, simplify = TRUE, ...)
+results_all(object, biomart, vs = "all", vs2 = TRUE, subset, relevel,
+  alpha = 0.05, add_columns, trt, lfcShrink = TRUE, simplify = TRUE, ...)
 }
 \arguments{
 \item{object}{a DESeqDataSet}
@@ -16,12 +16,16 @@ results_all(object, biomart, vs = "all", vs2 = TRUE, relevel,
 
 \item{vs2}{position of specific treatment in contrast vector, set FALSE for specific treatment vs all}
 
+\item{subset}{index to subset all pairwise comparisons, try \code{combn(sort(samples$trt),2)}}
+
 \item{relevel}{Levels to compare, if missing then levels(dds$trt)}
 
 \item{alpha}{the significance cutoff for the adjusted p-value cutoff (FDR)}
 
 \item{add_columns}{a vector of biomart columns to add to result table, default
 gene_name, biotype, chromosome, description and human_homolog if present}
+
+\item{trt}{Compare groups within trt group, default is first term in the design formula}
 
 \item{lfcShrink}{shrink fold changes using \code{lfcShrink} for DESeq2 version >= 1.16}
 

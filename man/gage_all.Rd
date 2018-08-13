@@ -23,8 +23,8 @@ A wrapper for gage to convert ouput into tibbles
 }
 \examples{
 \dontrun{
-data(msig)
-x <- gage_all(res, gsets=msig$KEGG)
+library(hciRdata)
+x <- gage_all(res, gsets=msig_pathways$KEGG)
 }
 
 }

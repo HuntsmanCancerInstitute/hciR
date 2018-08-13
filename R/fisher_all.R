@@ -19,8 +19,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' data(msig)
-#' fisher_all(res, msig$KEGG)
+#' library(hciRdata)
+#' fisher_all(res, msig_pathways$KEGG)
 #' }
 #' @export
 
