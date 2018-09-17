@@ -20,7 +20,7 @@
 #' }
 #' @export
 
-write_gsea_rnk <- function(res, write=TRUE, protein_coding = TRUE, na_pvalue = FALSE){
+write_gsea_rnk <- function(res, write=TRUE, protein_coding = TRUE, na_pvalue = TRUE){
    # needs list as input
    if(is.data.frame(res) ){
       n <- attr(res, "contrast")
@@ -39,8 +39,10 @@ write_gsea_rnk <- function(res, write=TRUE, protein_coding = TRUE, na_pvalue = F
       outfile <- paste0( gsub("/", "", vs), ".rnk")
 
       if(protein_coding && names(y) %in% "biotype")  y <- filter(y, biotype == "protein_coding")
-      if(na_pvalue)  y <- filter(y, !is.na(padj))
-
+      if(na_pvalue){
+          message("Removing ", sum(is.na(y$padj)),  " genes with NA p-values (extreme count outliers)")
+           y <- filter(y, !is.na(padj))
+      }
       if("human_homolog" %in% colnames(y)){
           ## include NAs?  extreme outliers and low mean normalized count
           x <- dplyr::filter( y, human_homolog != "") %>%

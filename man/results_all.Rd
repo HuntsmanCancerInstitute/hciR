@@ -5,7 +5,8 @@
 \title{Extract and annotate all results from a DESeq analysis}
 \usage{
 results_all(object, biomart, vs = "all", vs2 = TRUE, subset, relevel,
-  alpha = 0.05, add_columns, trt, lfcShrink = TRUE, simplify = TRUE, ...)
+  alpha = 0.05, add_columns, trt, lfcShrink = TRUE, simplify = TRUE,
+  ...)
 }
 \arguments{
 \item{object}{a DESeqDataSet}

@@ -4,8 +4,8 @@
 \alias{write_deseq}
 \title{Write DESeq results}
 \usage{
-write_deseq(result_all, dds, rld, biomart, fpkm, text_files = FALSE, cutoff,
-  file = "DESeq.xlsx", ...)
+write_deseq(result_all, dds, rld, biomart, fpkm, text_files = FALSE,
+  cutoff, file = "DESeq.xlsx", ...)
 }
 \arguments{
 \item{result_all}{a list from \code{results_all}}

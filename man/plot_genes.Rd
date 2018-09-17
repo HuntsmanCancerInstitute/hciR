@@ -5,8 +5,8 @@
 \title{Plot heatmap of top genes}
 \usage{
 plot_genes(x, intgroup, output = "pheatmap", palette = "RdBu",
-  dendsort = TRUE, scale = "diff", midpoint0 = TRUE, max_scale = NA,
-  border = NA, ...)
+  dendsort = TRUE, scale = "diff", midpoint0 = TRUE,
+  max_scale = NA, border = NA, ...)
 }
 \arguments{
 \item{x}{a tibble from \code{\link{top_counts}}}

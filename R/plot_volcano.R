@@ -11,7 +11,7 @@
 #' @param foldchange_cutoff absolute value of log2 fold change cutoff for labeling highchart points, default 2
 #' @param max_pvalue y-axis limit, maximum value on a -10 log10 y-axis scale,  the default is
 #' 200 (padj < 1e-200), so genes below this cutoff are assigned the maximum p-value.
-#' @param radius highchart point size, default 4
+#' @param radius point size, default 3
 #' @param ggplot plot ggplot version
 #' @param palette RColorBrewer palette name, vector of colors, or "RdGn" for ggplot
 #' @param \dots other options like width passed to \code{hc_chart}
@@ -26,7 +26,7 @@
 #' }
 #' @export
 
-plot_volcano <- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200, radius=4, ggplot=FALSE, palette="RdBu", ...){
+plot_volcano <- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200, radius=3, ggplot=FALSE, palette="RdBu", ...){
    if(!tibble::is_tibble(res)){
       if(is.list(res)){
         message("Plotting the first table in the list")
@@ -69,7 +69,7 @@ plot_volcano <- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200
       clrs <- palette
       if(length(clrs)==1) clrs <- palette255(clrs, ramp=FALSE)
       p1 <- ggplot2::ggplot(data=x, ggplot2::aes(x=log2FoldChange, y= -log10(padj) )) +
-        ggplot2::geom_point(ggplot2::aes(fill = log2FoldChange), color="gray20", shape = 21, size=3) +
+        ggplot2::geom_point(ggplot2::aes(fill = log2FoldChange), color="gray20", shape = 21, size=radius) +
         ggplot2::xlim( -fc, fc) + ggplot2::theme_light() +
         ggplot2::xlab("Log2 Fold Change") +
         ggplot2::ylab("-Log10 Adjusted P-value") +

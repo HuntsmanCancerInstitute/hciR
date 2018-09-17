@@ -40,9 +40,10 @@ plot_fgsea <- function(x, trim=70, sets, nes=TRUE, cluster_row=FALSE, ...){
         z <- filter(z, n >= sets)
      }
    }
-   clrs <- grDevices::colorRampPalette(rev(RColorBrewer::brewer.pal(n = 11, name = "RdYlBu")))(255)
+   clrs <- grDevices::colorRampPalette(rev(RColorBrewer::brewer.pal(n = 11, name = "RdBu")))(255)
    ## too many NAs to cluster
    z <- as_matrix(z)
+   z[is.na(z)] <- 0
    message(nrow(z) , " total sets")
    n1 <- max(abs(z), na.rm=TRUE)
    brks <- seq(-n1, n1, length = 255)

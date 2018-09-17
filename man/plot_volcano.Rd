@@ -5,7 +5,7 @@
 \title{Volcano plot}
 \usage{
 plot_volcano(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
-  radius = 4, ggplot = FALSE, palette = "RdBu", ...)
+  radius = 3, ggplot = FALSE, palette = "RdBu", ...)
 }
 \arguments{
 \item{res}{Annotated DESeq results table from results_all.}
@@ -18,7 +18,7 @@ for highcharts and no labels for ggplot}
 \item{max_pvalue}{y-axis limit, maximum value on a -10 log10 y-axis scale,  the default is
 200 (padj < 1e-200), so genes below this cutoff are assigned the maximum p-value.}
 
-\item{radius}{highchart point size, default 4}
+\item{radius}{point size, default 3}
 
 \item{ggplot}{plot ggplot version}
 
