@@ -76,7 +76,10 @@ results_all <- function( object, biomart,  vs= "all", vs2= TRUE, subset, relevel
     }
       vs <- apply(contrast, 2, paste, collapse = " vs. ")
     if(length(vs)==0) stop("No contrasts found")
-    if(!missing(subset)) vs <- vs[subset]
+    if(!missing(subset)){
+          vs <- vs[subset]
+          contrast <- contrast[, subset]
+       }
       res <- vector("list", length(vs))
       names(res) <- vs
 
