@@ -15,6 +15,7 @@
 #'   x <- gage_all(res, msig_pathways$KEGG)
 #'   plot_gage(x)
 #'  }
+#' @export
 
 plot_gage <- function(x, trim=70, n_sets, cluster_cols=FALSE, ...){
    y <- dplyr::bind_rows(x, .id = "contrast")

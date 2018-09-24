@@ -21,7 +21,7 @@
 #' @export
 
 gdc_coldata <- function(gdc){
-   x <- as.data.frame( SummarizedExperiment::colData(gdc))
+   x <- as.data.frame(SummarizedExperiment::colData(gdc))
    # treatments is a list of dataframes
    x <- x[, colnames(x) != "treatments"]
    # Fix other AsIs columns... disease_type, primary_site

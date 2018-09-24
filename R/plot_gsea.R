@@ -15,6 +15,7 @@
 #'   x <- list( X1= read_gsea("gsea1.txt"), X2 = read_gsea("gsea2.txt") )
 #'   plot_gsea(x)
 #'  }
+#' @export
 
 plot_gsea <- function(x, trim=70, n_sets, nes=TRUE, ...){
    if(is.data.frame(x)) stop("A list of read_gsea tables is required")

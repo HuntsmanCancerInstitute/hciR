@@ -18,7 +18,6 @@
 #' fc <- write_gsea_rnk(res, write=FALSE)
 #' x <- fgsea_all(fc, gsets=msig_pathways$KEGG)
 #' }
-#'
 #' @export
 
 fgsea_all <- function(res, gsets, FDR = 0.1, nperm=10000, ...){

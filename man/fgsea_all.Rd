@@ -29,7 +29,6 @@ library(hciRdata)
 fc <- write_gsea_rnk(res, write=FALSE)
 x <- fgsea_all(fc, gsets=msig_pathways$KEGG)
 }
-
 }
 \author{
 Chris Stubben

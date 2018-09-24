@@ -17,6 +17,7 @@
 #'   x <- fgsea_all(fc, msig_pathways$KEGG, FDR= 0.25)
 #'   plot_fgsea(x)
 #'  }
+#' @export
 
 plot_fgsea <- function(x, trim=70, sets, nes=TRUE, cluster_row=FALSE, ...){
    if(is.data.frame(x)) stop("A list of read_gsea tables is required")

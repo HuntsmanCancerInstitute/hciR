@@ -14,7 +14,6 @@
 #' \dontrun{
 #' x <- read_gsea("~/gsea_home/output/dec15/my_analysis.GseaPreranked.1513361740375")
 #' }
-#'
 #' @export
 
 read_gsea <-function( gsea_dir, FDR = 0.1){
