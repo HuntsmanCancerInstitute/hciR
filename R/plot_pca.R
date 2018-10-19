@@ -7,6 +7,7 @@
 #' @param tooltip a character vector of names in pData(x) or colData(x) for tooltip display,
 #'       default displays the object column names
 #' @param ntop number of top variable genes to use for principal components
+#' @param relevel reorder intgroup levels, default is alphabetical
 #' @param pc a vector of components to plot, default 1st and 2nd
 #' @param scale option to scale variables in prcomp, default FALSE
 #' @param ggplot plot ggplot version
@@ -22,7 +23,7 @@
 #' plot_pca(pasilla$rlog, c("condition", "type"))
 #' @export
 
-plot_pca <- function(object, intgroup="trt", tooltip, ntop = 500, pc=c(1,2), scale=FALSE, ggplot=FALSE, ...){
+plot_pca <- function(object, intgroup="trt", tooltip, ntop = 500, relevel, pc=c(1,2), scale=FALSE, ggplot=FALSE, ...){
    if(length(pc) != 2) stop( "pc should be a vector of length 2")
    if( class(object)[1] == "matrix"){
        group <- colnames(object)  # or no key?
@@ -44,6 +45,13 @@ plot_pca <- function(object, intgroup="trt", tooltip, ntop = 500, pc=c(1,2), sca
    }
    pca <- stats::prcomp(t(x), scale.=scale)
    percentVar <- round(pca$sdev^2/sum(pca$sdev^2) * 100, 1)
+   if(!missing(relevel)){
+      if(all( unique(group) %in% relevel)){
+          group <- factor(group, levels = relevel)
+      }else{
+         message("Levels do not match group names, skipping relevel")
+      }
+   }
    d <- data.frame( PC1 = pca$x[, pc[1] ], PC2 = pca$x[, pc[2] ], INTGRP = group,
          COLNAMES = colnames(object), colMetadata )
 

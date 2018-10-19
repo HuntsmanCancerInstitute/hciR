@@ -5,7 +5,7 @@
 \title{Highchart version of MA-plot}
 \usage{
 plot_ma(res, baseMean = 10000, foldchange = 2, radius = 3,
-  ggplot = FALSE, ...)
+  size = 1, alpha = 0.3, ggplot = FALSE, ...)
 }
 \arguments{
 \item{res}{Annotated DESeq results table from results_all}
@@ -15,6 +15,10 @@ plot_ma(res, baseMean = 10000, foldchange = 2, radius = 3,
 \item{foldchange}{absolute value of log2 fold change cutoff for labeling points, default 2}
 
 \item{radius}{highchart point size, default 3}
+
+\item{size}{ggplot point size, default 1}
+
+\item{alpha}{ggplot alpha transparency, default 0.3}
 
 \item{ggplot}{plot ggplot version}
 

@@ -5,7 +5,7 @@
 \title{Read biomart annotations}
 \usage{
 read_biomart(dataset = "human", attributes, host = "www.ensembl.org",
-  list = NULL, ...)
+  version = NULL, patch = FALSE, list = NULL, ...)
 }
 \arguments{
 \item{dataset}{The first letter of genus and full species name like btaurus, ecaballus, sscrofa from \code{listEnsembl}.
@@ -15,7 +15,11 @@ A few common names are accepted for human, mouse, rat, fruitfly, yeast and zebra
 external_gene_name, gene_biotype, chromosome_name, start_position, end_position, strand,
 description, transcript_count, and entrezgene}
 
-\item{host}{URL from \code{listEnsemblArchives} to download previous versions}
+\item{host}{host for connection, default www.ensembl.org}
+
+\item{version}{Ensembl version for previous releases}
+
+\item{patch}{Keep features on patches starting with CHR_, default FALSE}
 
 \item{list}{return a list of either datasets, attributes or filters only.}
 
@@ -46,9 +50,6 @@ x1
  mmu_homologs <- read_biomart("mouse",  attributes = c("ensembl_gene_id",
    "hsapiens_homolog_ensembl_gene", "hsapiens_homolog_associated_gene_name",
    "hsapiens_homolog_perc_id"))
-# Download version 87
-listEnsemblArchives()
- mmu87 <- read_biomart("mouse", host = "http://Dec2016.archive.ensembl.org")
  # Human genes with SignalP
  x2 <- read_biomart("human", list= "filters")
  filter(x2, grepl("signal", name))

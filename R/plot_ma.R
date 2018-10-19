@@ -6,6 +6,8 @@
 #' @param  baseMean normalized count cutoff for labeling points, default 10000
 #' @param foldchange absolute value of log2 fold change cutoff for labeling points, default 2
 #' @param radius highchart point size, default 3
+#' @param size ggplot point size, default 1
+#' @param alpha ggplot alpha transparency, default 0.3
 #' @param ggplot plot ggplot version
 #' @param \dots other options like width passed to \code{hc_chart}
 #'
@@ -19,7 +21,7 @@
 #' }
 #' @export
 
-plot_ma <- function(res, baseMean = 10000 , foldchange = 2, radius=3, ggplot=FALSE, ...){
+plot_ma <- function(res, baseMean = 10000 , foldchange = 2, radius=3, size = 1, alpha = 0.3, ggplot=FALSE, ...){
    if(!tibble::is_tibble(res)){
       if(is.list(res)){
         message("Plotting the first table in the list")
@@ -49,7 +51,7 @@ plot_ma <- function(res, baseMean = 10000 , foldchange = 2, radius=3, ggplot=FAL
    }
       # TO DO - label genes
    ggplot2::ggplot(data=x, ggplot2::aes(x= x1, y= log2FoldChange )) +
-        ggplot2::geom_point(color="blue", alpha=0.3, size=1) +
+        ggplot2::geom_point(color="blue", alpha=alpha, size= size) +
         ggplot2::xlab( xlab1) + ggplot2::ylab("Log2 Fold Change") + ggplot2::theme_light()
   }else{
    ### Grouping column for enableMouseTracking

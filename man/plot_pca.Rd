@@ -4,8 +4,8 @@
 \alias{plot_pca}
 \title{Highchart version of plotPCA in DESeq2}
 \usage{
-plot_pca(object, intgroup = "trt", tooltip, ntop = 500, pc = c(1, 2),
-  scale = FALSE, ggplot = FALSE, ...)
+plot_pca(object, intgroup = "trt", tooltip, ntop = 500, relevel,
+  pc = c(1, 2), scale = FALSE, ggplot = FALSE, ...)
 }
 \arguments{
 \item{object}{a matrix, ExpressionSet or DESeqTransform object}
@@ -16,6 +16,8 @@ plot_pca(object, intgroup = "trt", tooltip, ntop = 500, pc = c(1, 2),
 default displays the object column names}
 
 \item{ntop}{number of top variable genes to use for principal components}
+
+\item{relevel}{reorder intgroup levels, default is alphabetical}
 
 \item{pc}{a vector of components to plot, default 1st and 2nd}
 
