@@ -45,14 +45,18 @@
 #' @export
 read_biomart <- function(dataset="human", attributes, host="www.ensembl.org",
    version=NULL, patch=FALSE, list=NULL, ...){
-   common <- c(human = "hsapiens",
-               mouse = "mmusculus",
-               rat = "rnorvegicus",
-               zebrafish = "drerio",
-               fly = "dmelanogaster",
-               fruitfly = "dmelanogaster",
-               pig = "sscrofa",
-               yeast = "scerevisiae")
+      common <- c(human = "hsapiens",
+                  mouse = "mmusculus",
+                  rat = "rnorvegicus",
+                  zebrafish = "drerio",
+                  fly = "dmelanogaster",
+                  fruitfly = "dmelanogaster",
+                  pig = "sscrofa",
+                  sheep = "oaries",
+                  rabbit = "ocuniculus",
+                  roundworm = "celegans",
+                  worm = "celegans",
+                  yeast = "scerevisiae")
    if( tolower(dataset) %in% names(common))  dataset <- common[[tolower(dataset)]]
    if( !grepl("gene_ensembl$", dataset) )  dataset <- paste0(dataset, "_gene_ensembl")
    release <- version
@@ -97,6 +101,8 @@ read_biomart <- function(dataset="human", attributes, host="www.ensembl.org",
            # white space in version 92
           bm$description <- trimws(bm$description)
           bm <- dplyr::arrange(bm, id)
+
+
       }else{
          bm <- biomaRt::getBM(attributes= attributes, mart = ensembl, ...)
       }
@@ -105,7 +111,7 @@ read_biomart <- function(dataset="human", attributes, host="www.ensembl.org",
    }
    # will also drop the grouped_df class
    bm <- tibble::as_data_frame(bm)
-   if(!patch){
+   if(!patch & missing(attributes)){
        bm <- dplyr::filter(bm, substr(chromosome,1,4) != "CHR_")
        if(n1 != nrow(bm)) message("Removed ", n1 - nrow(bm), " features on patch CHR_*")
   }

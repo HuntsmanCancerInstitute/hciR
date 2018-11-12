@@ -88,7 +88,9 @@ results_all <- function( object, biomart,  vs= "all", vs2= TRUE, subset, relevel
 
    if(missing(add_columns)){
         add_columns <- c("gene_name", "biotype", "chromosome", "description")
-        if("human_homolog" %in% names(biomart)) add_columns <- c(add_columns, "human_homolog")
+        if(!missing(biomart)){
+           if("human_homolog" %in% names(biomart)) add_columns <- c(add_columns, "human_homolog")
+        }
    }
    if(lfcShrink)  message("Adding shrunken fold changes to log2FoldChange")
    for(i in seq_along( vs )){
@@ -103,10 +105,13 @@ results_all <- function( object, biomart,  vs= "all", vs2= TRUE, subset, relevel
        if(!missing(biomart)){
            # suppress messages like 70 rows in results are missing from biomart table and print once
            res1 <- suppressMessages( annotate_results( res1, biomart, add_columns) )
-           attr(res1, "contrast") <- vs[i]
-           attr(res1, "alpha") <- alpha
-           attr(res1, "filterThreshold") <- ft
+       }else{
+          ## gene_name or id?
+          res1 <- tibble::as_tibble(tibble::rownames_to_column(data.frame(res1), var="id"))
        }
+       attr(res1, "contrast") <- vs[i]
+       attr(res1, "alpha") <- alpha
+       attr(res1, "filterThreshold") <- ft
        res[[i]] <- res1
    }
    n1 <-is.na(res[[1]][[3]])

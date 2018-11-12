@@ -18,8 +18,7 @@ top_genes(res, top = 40, padjust = 0.05, basemean, log2FC,
 
 \item{log2FC}{absolute value log2 fold change cutoff}
 
-\item{sort_fc}{Sort by fold changes and get top n/2 up and down-regulated,
-default is to sort by adjusted p-value}
+\item{sort_fc}{Get the top n/2 up and down-regulated genes sorted by adjusted p-value}
 }
 \value{
 A tibble of top genes

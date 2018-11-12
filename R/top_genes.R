@@ -7,8 +7,7 @@
 #' @param padjust Adjusted p-value cutoff
 #' @param basemean basemean cutoff
 #' @param log2FC absolute value log2 fold change cutoff
-#' @param sort_fc Sort by fold changes and get top n/2 up and down-regulated,
-#'  default is to sort by adjusted p-value
+#' @param sort_fc Get the top n/2 up and down-regulated genes sorted by adjusted p-value
 #'
 #' @return A tibble of top genes
 #'
