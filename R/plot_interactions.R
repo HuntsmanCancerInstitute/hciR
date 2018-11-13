@@ -33,8 +33,8 @@ plot_interactions <- function(x, intgroups, ylab = "scaled rlog", scaled = TRUE,
        x1 <- x1[, 1:n]
    }
 
-   y <- data.frame(s1[, intgroup], x1)
-   z <- tidyr::gather(y, -intgroup, key="gene", value = "rlog")
+   y <- data.frame(s1[, intgroups], x1)
+   z <- tidyr::gather(y, -intgroups, key="gene", value = "rlog")
     ## reorder?
     if(!missing(reorder)) z[[1]] <- factor(z[[1]], levels = reorder)
   ## add option to drop geom_poins (only fitted line)
