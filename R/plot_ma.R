@@ -8,6 +8,7 @@
 #' @param radius highchart point size, default 3
 #' @param size ggplot point size, default 1
 #' @param alpha ggplot alpha transparency, default 0.3
+#' @param ylab y-axis label
 #' @param ggplot plot ggplot version
 #' @param \dots other options like width passed to \code{hc_chart}
 #'
@@ -21,7 +22,7 @@
 #' }
 #' @export
 
-plot_ma <- function(res, baseMean = 10000 , foldchange = 2, radius=3, size = 1, alpha = 0.3, ggplot=FALSE, ...){
+plot_ma <- function(res, baseMean = 10000 , foldchange = 2, radius=3, size = 1, alpha = 0.3, ylab = "Log2 Fold Change", ggplot=FALSE, ...){
    if(!tibble::is_tibble(res)){
       if(is.list(res)){
         message("Plotting the first table in the list")
@@ -52,7 +53,7 @@ plot_ma <- function(res, baseMean = 10000 , foldchange = 2, radius=3, size = 1, 
       # TO DO - label genes
    ggplot2::ggplot(data=x, ggplot2::aes(x= x1, y= log2FoldChange )) +
         ggplot2::geom_point(color="blue", alpha=alpha, size= size) +
-        ggplot2::xlab( xlab1) + ggplot2::ylab("Log2 Fold Change") + ggplot2::theme_light()
+        ggplot2::xlab( xlab1) + ggplot2::ylab(ylab) + ggplot2::theme_light()
   }else{
    ### Grouping column for enableMouseTracking
    if( "AveExpr" %in% names(res)) stop("Only ggplot=TRUE for limma top table")
@@ -72,7 +73,7 @@ plot_ma <- function(res, baseMean = 10000 , foldchange = 2, radius=3, size = 1, 
         highcharter::hc_tooltip( pointFormat = "{point.value}", headerFormat = "") %>%
          highcharter::hc_xAxis(title = list(text = "Log10 Mean Normalized Counts"),
               gridLineWidth = 1, tickLength = 0, startOnTick = "true", endOnTick = "true") %>%
-         highcharter::hc_yAxis(title = list(text = "Log2 Fold Change")) %>%
+         highcharter::hc_yAxis(title = list(text = ylab)) %>%
          highcharter::hc_chart(zoomType = "xy", ...) %>%
          highcharter::hc_exporting(enabled=TRUE, filename = "MA-plot")
    }

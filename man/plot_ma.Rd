@@ -5,7 +5,8 @@
 \title{Highchart version of MA-plot}
 \usage{
 plot_ma(res, baseMean = 10000, foldchange = 2, radius = 3,
-  size = 1, alpha = 0.3, ggplot = FALSE, ...)
+  size = 1, alpha = 0.3, ylab = "Log2 Fold Change", ggplot = FALSE,
+  ...)
 }
 \arguments{
 \item{res}{Annotated DESeq results table from results_all}
@@ -19,6 +20,8 @@ plot_ma(res, baseMean = 10000, foldchange = 2, radius = 3,
 \item{size}{ggplot point size, default 1}
 
 \item{alpha}{ggplot alpha transparency, default 0.3}
+
+\item{ylab}{y-axis label}
 
 \item{ggplot}{plot ggplot version}
 

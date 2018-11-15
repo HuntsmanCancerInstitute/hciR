@@ -40,7 +40,7 @@ plot_interactions <- function(x, intgroups, ylab = "scaled rlog", scaled = TRUE,
       group =intgroups[2], shape =intgroups[2], color=intgroups[2])) +
      ggplot2::geom_point() +
      #ggplot2::geom_smooth(method="loess", se=se, lwd=0.5)  +          # if 2 groups
-       stat_summary( fun.y="mean", geom="line") +
+       ggplot2::stat_summary( fun.y="mean", geom="line") +
         ggplot2::facet_wrap(~gene) + ggplot2::ylab( ylab)
 
 }

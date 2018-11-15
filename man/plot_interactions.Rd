@@ -4,7 +4,7 @@
 \alias{plot_interactions}
 \title{Plot counts for many genes}
 \usage{
-plot_interactions(x, intgroups, ylab = "count", scaled = TRUE,
+plot_interactions(x, intgroups, ylab = "scaled rlog", scaled = TRUE,
   n = 40, reorder)
 }
 \arguments{
@@ -29,7 +29,7 @@ Plot counts for many genes
 \examples{
 \dontrun{
  x <- top_counts( res, rld, top=25)
- plot_interactions(x,  c("time", "trt"), ylab = "scaled rlog")
+ plot_interactions(x,  c("time", "trt"))
 }
 }
 \author{

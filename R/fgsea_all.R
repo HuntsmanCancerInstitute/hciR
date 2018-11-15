@@ -48,7 +48,8 @@ fgsea_all <- function(res, gsets, FDR = 0.1, nperm=10000, ...){
       }else{
          f1$enriched <- "negative"
          f1$enriched[f1$ES>0] <- "positive"
-         f1 <- dplyr::arrange(f1, enriched, padj, dplyr::desc( abs(NES) ))
+         # f1 <- dplyr::arrange(f1, enriched, padj, dplyr::desc( abs(NES) ))
+         f1 <- dplyr::arrange(f1, enriched,  dplyr::desc( abs(NES) ), padj )
       message( i, ". ", vs1[[i]], " ", nrow(f1), " enriched sets (",
          sum(f1$enriched=="positive"), " positive, ", sum(f1$enriched=="negative"), " negative)")
       }
