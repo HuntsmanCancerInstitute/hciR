@@ -5,7 +5,7 @@
 #' @param res  A list of DESeq results
 #' @param gsets Gene sets
 #' @param deseq.padj Adjusted p-value cutoff for significant genes, default 0.05
-#' @param min Minimum number of overlaps, default 2
+#' @param min_set Minimum number of overlaps, default 2
 #'
 #' @return a tibble with gene sets intersections and pvalue from \code{fisher.test}.
 #' Sets with no intersecting genes are dropped.
@@ -24,7 +24,7 @@
 #' }
 #' @export
 
-fisher_all <- function(res, gsets, deseq.padj = 0.05, min =2){
+fisher_all <- function(res, gsets, deseq.padj = 0.05, min_set =2){
    ##  if results are a tibble (since simplify=TRUE by default)
    if( class(res)[1] != "list"){
          n <- attr(res, "contrast")
@@ -60,8 +60,8 @@ fisher_all <- function(res, gsets, deseq.padj = 0.05, min =2){
       # tbls <- lapply(gsets, function(x) rbind( table(factor(sig_genes %in% x, levels=c(FALSE, TRUE))),
       #                                     table(factor(not_sig_genes %in% x, levels=c(FALSE, TRUE)) )))
       n1 <- sapply(gsets, function(x) length( dplyr::intersect(sig_genes, x) ))
-      dropN <- n1 < min
-      message("    Dropping ", sum(dropN), " gsets with < ", min, " hits")
+      dropN <- n1 < min_set
+      message("    Dropping ", sum(dropN), " gsets with < ", min_set, " hits")
       n1 <- n1[!dropN]
       gsets1 <- gsets[!dropN]
 
@@ -77,9 +77,9 @@ fisher_all <- function(res, gsets, deseq.padj = 0.05, min =2){
       x <- tibble::data_frame(term = names(gsets1), total= n1+n2, signif = n1, up = up, down = n1-up, pvalue = pvalue)
       x <- dplyr::mutate(x, percent = round( signif/total*100,1))
       ## drop gsets with no overlapping genes?
-      x <- dplyr::filter(x, signif > 1) %>% dplyr::arrange(pvalue)
+      x <- dplyr::filter(x, signif > 0) %>% dplyr::arrange(pvalue)
       genes_res[[i]]  <- x
-      message( "   ", nrow(x), " gsets with ", min, " or more genes (", sum(x$pvalue < 0.05), " with Fisher p-value < 0.05)" )
+      message( "   ", nrow(x), " gsets with ", min_set, " or more genes (", sum(x$pvalue < 0.05), " with Fisher p-value < 0.05)" )
 
    }
    if(length(genes_res) == 1) genes_res <- genes_res[[1]]

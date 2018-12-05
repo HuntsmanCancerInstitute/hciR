@@ -38,7 +38,7 @@
        for(i in 1:ncol(df)){
              # hack to fix right margin by padding with spaces
             if(is.character(df[,i])) df[, i] <- as.factor(df[, i])
-            if(is.factor(df[,i])) levels(df[, 1]) <- paste0(levels(df[, 1]), "    ")
+            if(is.factor(df[,i])) levels(df[, i]) <- paste0(levels(df[, i]), "    ")
        }
     }
    ## convert tibble to matrix

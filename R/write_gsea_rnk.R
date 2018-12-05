@@ -41,7 +41,7 @@ write_gsea_rnk <- function(res, write=TRUE, protein_coding = TRUE, na_pvalue = T
       if(protein_coding && names(y) %in% "biotype")  y <- filter(y, biotype == "protein_coding")
       nna <- sum(is.na(y$padj))
       if(na_pvalue & nna>0){
-          message("Removing ", nna,  " genes with NA p-values (extreme count outliers)")
+          message("Removing ", nna,  " genes with NA p-values")
            y <- filter(y, !is.na(padj))
       }
       if("human_homolog" %in% colnames(y)){

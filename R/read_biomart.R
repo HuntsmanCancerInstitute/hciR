@@ -101,20 +101,25 @@ read_biomart <- function(dataset="human", attributes, host="www.ensembl.org",
            # white space in version 92
           bm$description <- trimws(bm$description)
           bm <- dplyr::arrange(bm, id)
-
-
+          if(!patch){
+              n1 <- nrow(bm)
+              bm <- dplyr::filter(bm, substr(chromosome,1,4) != "CHR_")
+              if(n1 != nrow(bm)) message("Removed ", n1 - nrow(bm), " features on patch CHR_*")
+         }
       }else{
          bm <- biomaRt::getBM(attributes= attributes, mart = ensembl, ...)
+         if(!patch){
+            if("chromosome_name" %in% colnames(bm)){
+              n1 <- nrow(bm)
+              bm <- dplyr::filter(bm, substr(chromosome_name,1,4) != "CHR_")
+              if(n1 != nrow(bm)) message("Removed ", n1 - nrow(bm), " features on patch CHR_*")
+          }
+        }
       }
-      n1 <- nrow(bm)
-      message("Downloaded ", n1, " features")
+      message("Downloaded ", nrow(bm), " features")
    }
    # will also drop the grouped_df class
    bm <- tibble::as_data_frame(bm)
-   if(!patch & missing(attributes)){
-       bm <- dplyr::filter(bm, substr(chromosome,1,4) != "CHR_")
-       if(n1 != nrow(bm)) message("Removed ", n1 - nrow(bm), " features on patch CHR_*")
-  }
    attr(bm, "downloaded") <- Sys.Date()
    attr(bm, "version") <- release
    bm
