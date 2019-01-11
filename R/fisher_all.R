@@ -6,14 +6,17 @@
 #' @param gsets Gene sets
 #' @param deseq.padj Adjusted p-value cutoff for significant genes, default 0.05
 #' @param min_set Minimum number of overlaps, default 2
+#' @param protein_coding compare protein coding genes only
+#' @param na_pvalue remove genes with NA p-values (extreme count outliers and
+#' low mean normalized counts), default FALSE
 #'
 #' @return a tibble with gene sets intersections and pvalue from \code{fisher.test}.
 #' Sets with no intersecting genes are dropped.
 #'
 #' @note This functions removes non-coding genes in results and creates a 2 x 2
 #' contingency table with significant and non-significant genes in each gene set.
-#' A one-sided \code{fisher.test} returns p-values for all sets with at least
-#' the minimum number of overlapping genes.
+#' P-value is returned from a one-sided \code{fisher.test}
+#'
 #'
 #' @author Chris Stubben
 #'
@@ -24,7 +27,7 @@
 #' }
 #' @export
 
-fisher_all <- function(res, gsets, deseq.padj = 0.05, min_set =2){
+fisher_all <- function(res, gsets, deseq.padj = 0.05, logFC, min_set =2, protein_coding = TRUE, na_pvalue = FALSE){
    ##  if results are a tibble (since simplify=TRUE by default)
    if( class(res)[1] != "list"){
          n <- attr(res, "contrast")
@@ -36,12 +39,34 @@ fisher_all <- function(res, gsets, deseq.padj = 0.05, min_set =2){
    genes_res <- vector("list", n)
    vs <- names(res)
    names(genes_res) <-  vs
-   message( "Using padj < ", deseq.padj, " to find significant genes")
+   if(!missing(logFC)){
+         message( "Using padj < ", deseq.padj, " AND abs(log2FoldChange) > ", logFC, " to find significant genes")
+   }else{
+      message( "Using padj < ", deseq.padj, " to find significant genes")
+   }
    for(i in 1:n){
-       r1 <- filter(res[[i]], biotype == "protein_coding")
+
+       r1 <- res[[i]]
+       if(na_pvalue){
+          message("Dropping ", sum(is.na(r1$padj)), " low count genes with missing adjusted p-values")
+          not_sig <-  filter( r1, padj > deseq.padj)
+       }else{
+          not_sig <-  filter( r1, padj > deseq.padj  | is.na(padj) )
+       }
+       if(protein_coding){
+          if(i ==1) message("Dropping ", sum(r1$biotype!= "protein_coding" ), " non-coding genes")
+           r1 <- filter(r1, biotype == "protein_coding")
+       }
+
+
        sig <- filter( r1, padj <= deseq.padj)
+       if( !missing(logFC)){
+           not_sig <- bind_rows(not_sig, filter(sig, abs(log2FoldChange) < logFC) )
+           sig <- filter(sig, abs(log2FoldChange) >= logFC)
+       }
+
        if(nrow(sig)==0) stop("No significant genes")
-       not_sig <-  filter( r1, padj > deseq.padj)
+
        up_reg <- filter( sig, log2FoldChange>0)
 
        if( "human_homolog" %in% colnames(sig)){
@@ -54,14 +79,14 @@ fisher_all <- function(res, gsets, deseq.padj = 0.05, min_set =2){
             not_sig_genes <- unique(not_sig$gene_name)
             up_reg_genes  <- unique(up_reg$gene_name)
        }
-      message( i, ". ", vs[[i]])
+     message( i, ". ", vs[[i]])
       message("   Found ", length(sig_genes), " significant genes (", length(not_sig_genes), " not signficant)")
       ## CREATE contigency table.   This is slower than intersect
       # tbls <- lapply(gsets, function(x) rbind( table(factor(sig_genes %in% x, levels=c(FALSE, TRUE))),
       #                                     table(factor(not_sig_genes %in% x, levels=c(FALSE, TRUE)) )))
       n1 <- sapply(gsets, function(x) length( dplyr::intersect(sig_genes, x) ))
       dropN <- n1 < min_set
-      message("    Dropping ", sum(dropN), " gsets with < ", min_set, " hits")
+   #   if(sum(dropN)>0) message("    Dropping ", sum(dropN), " gsets with < ", min_set, " hits")
       n1 <- n1[!dropN]
       gsets1 <- gsets[!dropN]
 
@@ -74,12 +99,13 @@ fisher_all <- function(res, gsets, deseq.padj = 0.05, min_set =2){
       up <- sapply(gsets1, function(x) length( dplyr::intersect(up_reg_genes, x) ))
       ### set size or sig+ns?
       set_size <- sapply(gsets1, length)
-      x <- tibble::data_frame(term = names(gsets1), total= n1+n2, signif = n1, up = up, down = n1-up, pvalue = pvalue)
-      x <- dplyr::mutate(x, percent = round( signif/total*100,1))
-      ## drop gsets with no overlapping genes?
-      x <- dplyr::filter(x, signif > 0) %>% dplyr::arrange(pvalue)
+      x <- tibble::data_frame(term = names(gsets1), size= set_size, overlap = n1+n2, signif = n1, up = up, down = n1-up, pvalue = pvalue)
+      x <- dplyr::mutate(x, percent = round( signif/overlap*100,1))
+      ## arrange by p-value?
+      x <-  dplyr::arrange(x, pvalue)
+
       genes_res[[i]]  <- x
-      message( "   ", nrow(x), " gsets with ", min_set, " or more genes (", sum(x$pvalue < 0.05), " with Fisher p-value < 0.05)" )
+      message( "   Saved ", nrow(x), " gsets with ", min_set, " or more genes (", sum(x$pvalue < 0.05), " with Fisher p-value < 0.05)" )
 
    }
    if(length(genes_res) == 1) genes_res <- genes_res[[1]]
