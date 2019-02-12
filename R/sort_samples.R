@@ -21,12 +21,17 @@ sort_samples <- function(samples){
 #' @describeIn sort_samples Order sample names
 #' @export
 order_samples <- function( samples ){
-     ## number [Character] number
-     n1 <-  gsub("[A-Za-z].*", "",  samples )
-     n2 <-  gsub(".*[A-Za-z]", "", samples )
-     ## check for _ or other characters
-      n1 <- gsub("[^0-9]", "", n2)
-     n2 <- gsub("[^0-9]", "", n2)
-    #  sprintf("%06s", n2) will pad zeros on Mac and blank on Linux
-    order( as.numeric(paste0(n1,sprintf("%06d", as.numeric(n2)))) )
+     ## check if number [Character] number
+     need_to_sort <- all(grepl("^[0-9]+[A-Za-z]+[0-9]+$", samples))
+     if(need_to_sort){
+       n1 <-  gsub("[A-Za-z]+.*", "",  samples )
+       n2 <-  gsub(".*[A-Za-z]+", "", samples )
+       ## check for _ or other characters
+       n1 <- as.numeric(gsub("[^0-9]", "", n1))
+       n2 <- as.numeric( gsub("[^0-9]", "", n2))
+       n <-  order( n1,n2 )
+   }else{
+      n <- order(samples)
+   }
+   n
 }

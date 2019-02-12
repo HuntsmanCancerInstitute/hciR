@@ -5,7 +5,7 @@
 \title{Plot counts for many genes}
 \usage{
 plot_interactions(x, intgroups, ylab = "scaled rlog", scaled = TRUE,
-  n = 40, reorder)
+  n = 40, reorder, ...)
 }
 \arguments{
 \item{x}{a tibble from \code{\link{top_counts}}}
@@ -19,6 +19,8 @@ plot_interactions(x, intgroups, ylab = "scaled rlog", scaled = TRUE,
 \item{n}{total number of genes to plot}
 
 \item{reorder}{level names to reorder factor levels on x-axis}
+
+\item{\dots}{additional options like ncol or nrow passed to facet_wrap}
 }
 \value{
 A ggplot
