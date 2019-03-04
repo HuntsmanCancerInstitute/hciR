@@ -27,7 +27,8 @@ gdc_coldata <- function(gdc){
    # Fix other AsIs columns... disease_type, primary_site
    ## table( sapply(x, class))
    n <- which(sapply(x, class)=="AsIs")
-   for(i in n) x[[i]] <- unlist(x[[i]])
+   #for(i in n) x[[i]] <- unlist(x[[i]])
+   for(i in n) x[[i]] <- sapply( x[[i]], paste, collapse=",")
    ## some columns with all values =  Not reported
    x[x == "not reported"] <- NA
    x <- tibble::as_tibble(x)  %>% dplyr::mutate_if(is.factor, as.character)

@@ -43,11 +43,11 @@ plot_ma <- function(res, baseMean = 10000 , foldchange = 2, radius=3, size = 1, 
 
    if(ggplot){
     # limma top tibble
-    if( "AveExpr" %in% names(res)){
-        x1 <- res$AveExpr
+    if( "AveExpr" %in% names(x)){
+        x$x1 <- x$AveExpr
         xlab1 <- "Average Expression"
    }else{
-       x1 <- log10( res$baseMean)
+       x$x1 <- log10( x$baseMean)
        xlab1 <- "Log10 Mean Normalized Counts"
    }
       # TO DO - label genes

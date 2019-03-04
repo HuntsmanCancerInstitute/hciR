@@ -53,7 +53,7 @@ fisher_all <- function(res, gsets, deseq.padj = 0.05, logFC, min_set =2, protein
            r1 <- filter(r1, biotype == "protein_coding")
        }
        ## use first gene name in comma-separated lists of human homologs?
-       if( "human_homolog" %in% colnames(sig)){
+       if( "human_homolog" %in% colnames(r1)){
            r1$human_homolog <- gsub(",.*", "", r1$human_homolog)
        }
        sig <- filter( r1, padj <= deseq.padj)
@@ -67,7 +67,7 @@ fisher_all <- function(res, gsets, deseq.padj = 0.05, logFC, min_set =2, protein
        up_reg <- filter( sig, log2FoldChange > 0)
 
       # get unique genes??
-       if( "human_homolog" %in% colnames(sig)){
+       if( "human_homolog" %in% colnames(r1)){
             sig_genes     <- sig$human_homolog
             up_reg_genes  <- up_reg$human_homolog
             not_sig_genes <- not_sig$human_homolog
@@ -102,7 +102,7 @@ fisher_all <- function(res, gsets, deseq.padj = 0.05, logFC, min_set =2, protein
       up <- sapply(gsets1, function(x) sum( up_reg_genes %in% x) )
       ### set size or sig+ns?
       set_size <- sapply(gsets1, length)
-      x <- tibble::data_frame(term = names(gsets1), size= set_size, overlap = n1+n2, signif = n1, up = up, down = n1-up, pvalue = pvalue)
+      x <- tibble::tibble(term = names(gsets1), size= set_size, overlap = n1+n2, signif = n1, up = up, down = n1-up, pvalue = pvalue)
       x <- dplyr::mutate(x, percent = round( signif/overlap*100,1))
       ## arrange by p-value?
       x <-  dplyr::arrange(x, pvalue)

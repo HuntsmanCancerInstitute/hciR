@@ -36,4 +36,4 @@ License: GPL-3
 Encoding: UTF-8
 Description: This package loads output from RNA-seq workflows to create interactive graphics and reports.
 biocViews: Software
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1

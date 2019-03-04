@@ -4,9 +4,8 @@
 \alias{results_all}
 \title{Extract and annotate all results from a DESeq analysis}
 \usage{
-results_all(object, biomart, vs = "all", vs2 = TRUE, subset, relevel,
-  alpha = 0.05, add_columns, trt, lfcShrink = TRUE, simplify = TRUE,
-  ...)
+results_all(object, biomart, vs = "all", subset, relevel, alpha = 0.05,
+  add_columns, trt, lfcShrink = TRUE, simplify = TRUE, ...)
 }
 \arguments{
 \item{object}{a DESeqDataSet}
@@ -14,8 +13,6 @@ results_all(object, biomart, vs = "all", vs2 = TRUE, subset, relevel,
 \item{biomart}{annotations from \code{read_biomart} with column 1 matching row names in results}
 
 \item{vs}{either compare all vs. all (default) or all vs specific treatment, or see note.}
-
-\item{vs2}{position of specific treatment in contrast vector, set FALSE for specific treatment vs all}
 
 \item{subset}{index to subset all pairwise comparisons, try \code{combn(sort(samples$trt),2)}}
 
