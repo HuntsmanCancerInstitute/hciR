@@ -9,11 +9,14 @@ annotate_results(result, biomart, add, id = 1)
 \arguments{
 \item{result}{a DESeqResults object with Ensembl IDs as row names}
 
-\item{biomart}{annotations from \code{read_biomart} with id column matching row names in results}
+\item{biomart}{annotations from \code{read_biomart} with id column matching
+row names in results}
 
-\item{add}{a vector of biomart columns to add to result table, default gene_name, biotype and description}
+\item{add}{a vector of biomart columns to add to result table, default
+gene_name, biotype and description}
 
-\item{id}{position or name of column in biomart that matches rows names in the DESeq results}
+\item{id}{position or name of column in biomart that matches rows names in
+the DESeq results}
 }
 \value{
 A tibble

@@ -5,6 +5,7 @@
 #' @param res  A list of DESeq results
 #' @param gsets Gene sets with human gene names.
 #' @param deseq.padj Adjusted p-value cutoff for significant genes, default 0.05
+#' @param logFC absolute fold change cutoff
 #' @param min_set Minimum number of overlaps, default 2
 #' @param protein_coding compare protein coding genes only, default TRUE
 #'
@@ -93,11 +94,13 @@ fisher_all <- function(res, gsets, deseq.padj = 0.05, logFC, min_set =2, protein
       gsets1 <- gsets[!dropN]
 
       n2 <- sapply(gsets1, function(x) sum( not_sig_genes %in% x) )
-
-      x <- cbind( x1 = length(sig_genes) - n1,  x2 = length(not_sig_genes) - n2, n1, n2)
+      x <- cbind( n1, n2, x1 = length(sig_genes) - n1,  x2 = length(not_sig_genes) - n2)
       tbls <- lapply( split(x, 1:nrow(x)), matrix, ncol=2)
-
-      pvalue <- sapply(tbls, function(x) stats::fisher.test(x, alt="less")$p.value)
+      ## Create a matrix with total = number of expressed genes
+            ## set others
+       # sig   49  2787
+       #  ns   74 11467
+      pvalue <- sapply(tbls, function(x) stats::fisher.test(x, alt="greater")$p.value)
       # count up-regulated genes in set for barplots...
       up <- sapply(gsets1, function(x) sum( up_reg_genes %in% x) )
       ### set size or sig+ns?

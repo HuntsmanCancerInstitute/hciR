@@ -27,6 +27,7 @@ If you combine factors of interest into a single group following section 3.3 in 
  # check_contrasts( samples$trt)
  trt <- c("heart", "lung", "control")
  check_contrasts(trt)
+ data.frame( vs=check_contrasts(trt))
  check_contrasts(trt, vs = "control")
  check_contrasts(trt, vs = "control", vs2=FALSE)
  check_contrasts(factor(trt, levels = trt)  )

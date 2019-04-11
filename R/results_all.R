@@ -95,7 +95,7 @@ results_all <- function( object, biomart,  vs= "all", subset, relevel, alpha = 0
        res1 <- DESeq2::results(object, contrast = c( trt, contrast[1,i], contrast[2,i] ), alpha = alpha, ...)
       if(lfcShrink){
         ## GET shrunken fold change - requires DESeq2 version >= 1.16
-         res1 <-  DESeq2::lfcShrink(object, contrast=c( trt, contrast[1,i], contrast[2,i] ), res=res1)
+         res1 <-  DESeq2::lfcShrink(object, contrast=c( trt, contrast[1,i], contrast[2,i] ), res=res1, quiet=TRUE)
       }
        ft <- S4Vectors::metadata(res1)$filterThreshold
        x <- suppressMessages( summary_deseq(res1) )
