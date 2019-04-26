@@ -11,20 +11,24 @@ plot_genes(x, intgroup, output = "pheatmap", palette = "RdBu",
 \arguments{
 \item{x}{a tibble from \code{\link{top_counts}}}
 
-\item{intgroup}{one or more column names for pheatmap \code{annotation_col} bar}
+\item{intgroup}{one or more column names for pheatmap \code{annotation_col}
+bar}
 
 \item{output}{pheatmap or d3heatmap}
 
-\item{palette}{RColorBrewer palette name, vector of colors, or "RdGn" for Red-Green color scale.}
+\item{palette}{RColorBrewer palette name, vector of colors, or "RdGn" for
+Red-Green color scale.}
 
 \item{dendsort}{reorder branches using \code{dendsort} package}
 
-\item{scale}{scale values, default diff will substract the row mean from each value.
-Other options are none, row and column as described in \code{heatmap}}
+\item{scale}{scale values, default diff will substract the row mean from
+each value. Other options are none, row and column as described in
+\code{heatmap}}
 
 \item{midpoint0}{if scale = diff, then center color scale at zero}
 
-\item{max_scale}{if scale = diff, then max value for color scale, default is max(abs(range(x)))}
+\item{max_scale}{if scale = diff, then max value for color scale, default is
+max(abs(range(x)))}
 
 \item{border}{pheatmap border color, default NA}
 
@@ -34,7 +38,8 @@ Other options are none, row and column as described in \code{heatmap}}
 A pheatmap or d3heatmap
 }
 \description{
-Plot heatmap of top genes with annoation bars, reordered branches, and color scale midpoint at zero.
+Plot heatmap of top genes with annoation bars, reordered branches, and color
+scale midpoint at zero.
 }
 \examples{
 data(pasilla)

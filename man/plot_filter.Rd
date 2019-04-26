@@ -15,8 +15,8 @@ plot_filter(x, n = 20)
 A plot
 }
 \description{
-Plot the total number of features removed from count matrix using different low count cutoffs
-for both maximum and total reads
+Plot the total number of features removed from count matrix using different
+low count cutoffs for both maximum and total reads
 }
 \examples{
 \dontrun{

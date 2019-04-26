@@ -1,6 +1,7 @@
 #' Regularized log transformation
 #'
-#' This is a wrapper for \code{rlog} and avoids loading the DESeq2 package for basic workflows.
+#' This is a wrapper for \code{rlog} and avoids loading the DESeq2 package for
+#' simple workflows
 #'
 #' @param dds a DESeqDataSet
 #' @param \dots additional options passed to \code{rlog}
@@ -15,7 +16,7 @@
 #' }
 #' @export
 
-r_log <- function( dds,  ...){
+r_log <- function(dds,  ...){
    rld <- DESeq2::rlog(dds, ...)
    rld
 }

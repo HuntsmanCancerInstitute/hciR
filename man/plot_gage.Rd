@@ -19,7 +19,8 @@ then only plot unique sets.  If missing, then plots all sets, default.}
 \item{\dots}{other options passed to \code{pheatmap}}
 }
 \description{
-Plot heatmap with enrichment scores by contrast and gene set from \code{\link{gage_all}}
+Plot heatmap with enrichment scores by contrast and gene set from
+\code{\link{gage_all}}
 }
 \examples{
 \dontrun{

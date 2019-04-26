@@ -10,7 +10,8 @@ plot_interactions(x, intgroups, ylab = "scaled rlog", scaled = TRUE,
 \arguments{
 \item{x}{a tibble from \code{\link{top_counts}}}
 
-\item{intgroups}{two column names in \code{attr(x, "colData")} to use for grouping}
+\item{intgroups}{two column names in \code{attr(x, "colData")} to use for
+grouping}
 
 \item{ylab}{y-axis label}
 

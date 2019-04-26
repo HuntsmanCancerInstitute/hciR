@@ -8,12 +8,14 @@ read_biomart(dataset = "human", attributes, host = "www.ensembl.org",
   version = NULL, patch = FALSE, list = NULL, ...)
 }
 \arguments{
-\item{dataset}{The first letter of genus and full species name like btaurus, ecaballus, sscrofa from \code{listEnsembl}.
-A few common names are accepted for human, mouse, rat, fruitfly, yeast and zebrafish.}
+\item{dataset}{The first letter of genus and full species name like btaurus,
+ecaballus, sscrofa from \code{listEnsembl}. A few common names are accepted
+for human, mouse, rat, fruitfly, yeast and zebrafish.}
 
-\item{attributes}{vector of column names to pass to \code{getBM}, default ensembl_gene_id,
-external_gene_name, gene_biotype, chromosome_name, start_position, end_position, strand,
-description, transcript_count, and entrezgene}
+\item{attributes}{vector of column names to pass to \code{getBM}, default
+ensembl_gene_id, external_gene_name, gene_biotype, chromosome_name,
+start_position, end_position, strand, description, transcript_count, and
+entrezgene}
 
 \item{host}{host for connection, default www.ensembl.org}
 
@@ -23,7 +25,8 @@ description, transcript_count, and entrezgene}
 
 \item{list}{return a list of either datasets, attributes or filters only.}
 
-\item{\dots}{additional options passed to \code{getBM} or \code{listAttributes}}
+\item{\dots}{additional options passed to \code{getBM} or
+\code{listAttributes}}
 }
 \value{
 A tibble
@@ -32,10 +35,8 @@ A tibble
 Read Ensembl annotations using \code{biomaRt} library
 }
 \note{
-The version option in \code{useEnsembl} no longer works, so this was replaced with host on Jan 2, 2018.
-Many attributes like entrezgene have a 0 to many relationship with ensembl_gene_id
-causing duplicate ensembl ids to be added.  The default returns a 10 column table where
-entrezgene is grouped into a comma-separated list so ensembl id is unique.
+Many attributes like entrezgene have a 0 to many relationship with
+ensembl_gene_id causing duplicate ensembl ids to be added.
 }
 \examples{
 \dontrun{
@@ -53,9 +54,9 @@ x1
  # Human genes with SignalP
  x2 <- read_biomart("human", list= "filters")
  filter(x2, grepl("signal", name))
- hsa_signalp  <- read_biomart("human", attributes = c("ensembl_transcript_id",
-       "ensembl_gene_id",  "external_gene_name", "signalp_start",  "signalp_end"),
-       filter="with_signalp", values=TRUE)
+ hsa_signalp <- read_biomart("human", attributes = c("ensembl_transcript_id",
+  "ensembl_gene_id",  "external_gene_name", "signalp_start",  "signalp_end"),
+  filter="with_signalp", values=TRUE)
 }
 }
 \author{

@@ -10,19 +10,23 @@ plot_volcano(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
 \arguments{
 \item{res}{Annotated DESeq results table from results_all.}
 
-\item{pvalue_cutoff}{label points above this cutoff on a -10 log10 y-axis scale, the default is 1.3 (padj = 0.05)
-for highcharts and no labels for ggplot}
+\item{pvalue_cutoff}{label points above this cutoff on a -10 log10 y-axis
+scale, the default is 1.3 (padj = 0.05) for highcharts and no labels for
+ggplot}
 
-\item{foldchange_cutoff}{absolute value of log2 fold change cutoff for labeling highchart points, default 2}
+\item{foldchange_cutoff}{absolute value of log2 fold change cutoff for
+labeling highchart points, default 2}
 
-\item{max_pvalue}{y-axis limit, maximum value on a -10 log10 y-axis scale,  the default is
-200 (padj < 1e-200), so genes below this cutoff are assigned the maximum p-value.}
+\item{max_pvalue}{y-axis limit, maximum value on a -10 log10 y-axis scale,
+the default is 200 (padj < 1e-200), so genes below this cutoff are assigned
+the maximum p-value.}
 
 \item{radius}{point size, default 3}
 
 \item{ggplot}{plot ggplot version}
 
-\item{palette}{RColorBrewer palette name, vector of colors, or "RdGn" for ggplot}
+\item{palette}{RColorBrewer palette name, vector of colors, or "RdGn" for
+ggplot}
 
 \item{\dots}{other options like width passed to \code{hc_chart}}
 }
@@ -30,11 +34,13 @@ for highcharts and no labels for ggplot}
 A highchart or ggplot.
 }
 \description{
-Plot fold changes and adjusted p-values in an interactive volcano plot or ggplot
+Plot fold changes and adjusted p-values in an interactive volcano plot or
+ggplot
 }
 \details{
-For ggplot, the results should not be sorted by p-value or fold change to avoid stacking close overlapping
-points.  Labels are added using \code{ggrepel}, so avoid labeling too many points (200 is the limit).
+For ggplot, the results should not be sorted by p-value or fold change to
+avoid stacking close overlapping points.  Labels are added using
+\code{ggrepel}, so avoid labeling too many points (200 is the limit).
 }
 \examples{
 \dontrun{

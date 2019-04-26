@@ -2,21 +2,22 @@
 #'
 #' Read Ensembl annotations using \code{biomaRt} library
 #'
-#' @param dataset The first letter of genus and full species name like btaurus, ecaballus, sscrofa from \code{listEnsembl}.
-#' A few common names are accepted for human, mouse, rat, fruitfly, yeast and zebrafish.
-#' @param attributes vector of column names to pass to \code{getBM}, default ensembl_gene_id,
-#'  external_gene_name, gene_biotype, chromosome_name, start_position, end_position, strand,
-#'  description, transcript_count, and entrezgene
+#' @param dataset The first letter of genus and full species name like btaurus,
+#' ecaballus, sscrofa from \code{listEnsembl}. A few common names are accepted
+#' for human, mouse, rat, fruitfly, yeast and zebrafish.
+#' @param attributes vector of column names to pass to \code{getBM}, default
+#' ensembl_gene_id, external_gene_name, gene_biotype, chromosome_name,
+#' start_position, end_position, strand, description, transcript_count, and
+#' entrezgene
 #' @param host host for connection, default www.ensembl.org
 #' @param version Ensembl version for previous releases
 #' @param patch Keep features on patches starting with CHR_, default FALSE
 #' @param list return a list of either datasets, attributes or filters only.
-#' @param \dots additional options passed to \code{getBM} or \code{listAttributes}
+#' @param \dots additional options passed to \code{getBM} or
+#' \code{listAttributes}
 #'
-#' @note The version option in \code{useEnsembl} no longer works, so this was replaced with host on Jan 2, 2018.
-#' Many attributes like entrezgene have a 0 to many relationship with ensembl_gene_id
-#' causing duplicate ensembl ids to be added.  The default returns a 10 column table where
-#' entrezgene is grouped into a comma-separated list so ensembl id is unique.
+#' @note Many attributes like entrezgene have a 0 to many relationship with
+#' ensembl_gene_id causing duplicate ensembl ids to be added.
 #'
 #' @return A tibble
 #'
@@ -38,25 +39,25 @@
 #'  # Human genes with SignalP
 #'  x2 <- read_biomart("human", list= "filters")
 #'  filter(x2, grepl("signal", name))
-#'  hsa_signalp  <- read_biomart("human", attributes = c("ensembl_transcript_id",
-#'        "ensembl_gene_id",  "external_gene_name", "signalp_start",  "signalp_end"),
-#'        filter="with_signalp", values=TRUE)
+#'  hsa_signalp <- read_biomart("human", attributes = c("ensembl_transcript_id",
+#'   "ensembl_gene_id",  "external_gene_name", "signalp_start",  "signalp_end"),
+#'   filter="with_signalp", values=TRUE)
 #' }
 #' @export
 read_biomart <- function(dataset="human", attributes, host="www.ensembl.org",
    version=NULL, patch=FALSE, list=NULL, ...){
-      common <- c(human = "hsapiens",
-                  mouse = "mmusculus",
-                  rat = "rnorvegicus",
+      common <- c(human     = "hsapiens",
+                  mouse     = "mmusculus",
+                  rat       = "rnorvegicus",
                   zebrafish = "drerio",
-                  fly = "dmelanogaster",
-                  fruitfly = "dmelanogaster",
-                  pig = "sscrofa",
-                  sheep = "oaries",
-                  rabbit = "ocuniculus",
+                  fly       = "dmelanogaster",
+                  fruitfly  = "dmelanogaster",
+                  pig       = "sscrofa",
+                  sheep     = "oaries",
+                  rabbit    = "ocuniculus",
                   roundworm = "celegans",
-                  worm = "celegans",
-                  yeast = "scerevisiae")
+                  worm      = "celegans",
+                  yeast     = "scerevisiae")
    if( tolower(dataset) %in% names(common))  dataset <- common[[tolower(dataset)]]
    if( !grepl("gene_ensembl$", dataset) )  dataset <- paste0(dataset, "_gene_ensembl")
    release <- version

@@ -14,6 +14,8 @@ fisher_all(res, gsets, deseq.padj = 0.05, logFC, min_set = 2,
 
 \item{deseq.padj}{Adjusted p-value cutoff for significant genes, default 0.05}
 
+\item{logFC}{absolute fold change cutoff}
+
 \item{min_set}{Minimum number of overlaps, default 2}
 
 \item{protein_coding}{compare protein coding genes only, default TRUE}

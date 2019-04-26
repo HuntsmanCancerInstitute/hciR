@@ -44,7 +44,8 @@ plot_biotypes <- function(x, n = 12, group = FALSE, stack = "percent",
       `MT rRNA`='Mt_rRNA',
       `MT tRNA`='Mt_tRNA',
       rRNA='rRNA',
-      `small RNA`=c('miRNA', 'scRNA', 'snRNA', 'snoRNA', 'sRNA', 'scaRNA', 'vaultRNA'),
+      `small RNA`=c('miRNA', 'scRNA', 'snRNA', 'snoRNA', 'sRNA', 'scaRNA',
+         'vaultRNA'),
       `other ncRNA`=c('misc_RNA', 'ribozyme', 'non_coding', 'sense_intronic',
          'sense_overlapping', 'known_ncrna'),
       pseudogene=c('pseudogene', 'processed_pseudogene',
@@ -58,12 +59,16 @@ plot_biotypes <- function(x, n = 12, group = FALSE, stack = "percent",
       'snoRNA_pseudogene', 'snRNA_pseudogene', 'scRNA_pseudogene',
       'rRNA_pseudogene', 'misc_RNA_pseudogene', 'miRNA_pseudogene'),
       lincRNA=c('lincRNA', 'macro_lncRNA', 'bidirectional_promoter_lncRNA'),
-      other=c('TEC', 'artifact', '3prime_overlapping_ncRNA', 'nonsense_mediated_decay',
-         'non_stop_decay', 'retained_intron',  'disrupted_domain', 'ambiguous_orf'))
-      y <- dplyr::bind_rows(lapply(biotypes, function(x) tibble::tibble(name=x)), .id="feature")
+      other=c('TEC', 'artifact', '3prime_overlapping_ncRNA',
+      'nonsense_mediated_decay', 'non_stop_decay', 'retained_intron',
+      'disrupted_domain', 'ambiguous_orf'))
+      y <- dplyr::bind_rows(lapply(biotypes,
+                 function(x) tibble::tibble(name=x)), .id="feature")
       ## combine with biotypes and sum
-      z <- dplyr::inner_join(y, x, by=c(name="feature")) %>% dplyr::select(-name) %>%
-          dplyr::group_by(feature) %>% dplyr::summarise_all(sum)
+      z <- dplyr::inner_join(y, x, by=c(name="feature")) %>%
+            dplyr::select(-name) %>%
+             dplyr::group_by(feature) %>%
+              dplyr::summarise_all(sum)
       df <- tidyr::gather(z, "sample", "count", -feature)
    }
    # PLOT percent or total

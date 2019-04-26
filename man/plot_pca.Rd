@@ -10,10 +10,11 @@ plot_pca(object, intgroup = "trt", tooltip, ntop = 500, relevel,
 \arguments{
 \item{object}{a matrix, ExpressionSet or DESeqTransform object}
 
-\item{intgroup}{a character vector of names in pData(x) or colData(x) for grouping, default 'trt'}
+\item{intgroup}{a character vector of names in pData(x) or colData(x) for
+grouping, default 'trt'}
 
-\item{tooltip}{a character vector of names in pData(x) or colData(x) for tooltip display,
-default displays the object column names}
+\item{tooltip}{a character vector of names in pData(x) or colData(x) for
+tooltip display, default displays the object column names}
 
 \item{ntop}{number of top variable genes to use for principal components}
 

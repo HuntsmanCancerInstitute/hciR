@@ -15,7 +15,8 @@ r_log(dds, ...)
 A DESeqTransform object
 }
 \description{
-This is a wrapper for \code{rlog} and avoids loading the DESeq2 package for basic workflows.
+This is a wrapper for \code{rlog} and avoids loading the DESeq2 package for
+simple workflows
 }
 \examples{
 \dontrun{

@@ -1,16 +1,21 @@
 #' Plot heatmap of top genes
 #'
-#' Plot heatmap of top genes with annoation bars, reordered branches, and color scale midpoint at zero.
+#' Plot heatmap of top genes with annoation bars, reordered branches, and color
+#' scale midpoint at zero.
 #'
 #' @param x a tibble from \code{\link{top_counts}}
-#' @param intgroup one or more column names for pheatmap \code{annotation_col} bar
+#' @param intgroup one or more column names for pheatmap \code{annotation_col}
+#' bar
 #' @param output  pheatmap or d3heatmap
-#' @param palette RColorBrewer palette name, vector of colors, or "RdGn" for Red-Green color scale.
+#' @param palette RColorBrewer palette name, vector of colors, or "RdGn" for
+#' Red-Green color scale.
 #' @param dendsort reorder branches using \code{dendsort} package
-#' @param scale  scale values, default diff will substract the row mean from each value.
-#'   Other options are none, row and column as described in \code{heatmap}
+#' @param scale  scale values, default diff will substract the row mean from
+#' each value. Other options are none, row and column as described in
+#' \code{heatmap}
 #' @param midpoint0 if scale = diff, then center color scale at zero
-#' @param max_scale if scale = diff, then max value for color scale, default is max(abs(range(x)))
+#' @param max_scale if scale = diff, then max value for color scale, default is
+#' max(abs(range(x)))
 #' @param border pheatmap border color, default NA
 #' @param \dots additional options passed to \code{pheatmap} or \code{d3heatmap}
 #'
@@ -27,18 +32,20 @@
 #' plot_genes(top_counts(pasilla$results, pasilla$rlog, top=200), output = "d3")
 #' @export
 
- plot_genes <-  function( x, intgroup, output="pheatmap", palette="RdBu", dendsort=TRUE,
-      scale="diff", midpoint0 = TRUE, max_scale = NA, border=NA,    ...){
-     clrs <- palette
-     if(length(clrs)==1) clrs <- palette255(clrs)
-
+plot_genes <-  function( x, intgroup, output="pheatmap", palette="RdBu",
+  dendsort=TRUE, scale="diff", midpoint0 = TRUE, max_scale = NA, border=NA,
+  ...){
+   clrs <- palette
+   if(length(clrs)==1) clrs <- palette255(clrs)
    df <- NA
    if(!missing( intgroup)){
        df <- attr(x, "colData")[, intgroup, drop=FALSE]
        for(i in 1:ncol(df)){
              # hack to fix right margin by padding with spaces
             if(is.character(df[,i])) df[, i] <- as.factor(df[, i])
-            if(is.factor(df[,i])) levels(df[, i]) <- paste0(levels(df[, i]), "    ")
+            if(is.factor(df[,i])){
+                levels(df[, i]) <- paste0(levels(df[, i]), "    ")
+            }
        }
     }
    ## convert tibble to matrix
@@ -57,17 +64,19 @@
    if(output == "pheatmap"){
       ## use  dendsort to reorder branches
       if(dendsort){
-         callback <- function(hc, ...){ dendsort::dendsort(hc)  }
-         pheatmap::pheatmap(x, clrs, clustering_callback = callback, annotation_col=df,
-               scale=scale, breaks=brks, border_color=border,  ...)
+         callback <- function(hc, ...){ dendsort::dendsort(hc) }
+         pheatmap::pheatmap(x, clrs, clustering_callback=callback, scale=scale,
+            annotation_col=df, breaks=brks, border_color=border, ...)
       }else{
-         pheatmap::pheatmap(x, clrs, annotation_col=df, scale=scale, breaks=brks, border_color=border,  ...)
+         pheatmap::pheatmap(x, clrs, annotation_col=df, scale=scale,
+             breaks=brks, border_color=border,  ...)
       }
    }else{
       ## Breaks for d3heatmap ?  or scale = "row"
       if(dendsort){
-          ##  need to flip rows to match pheatmap??
-          d3heatmap::d3heatmap(x, reorderfun= function(d,w) dendsort::dendsort(d), colors = clrs, scale=scale, ...)
+         ##  need to flip rows to match pheatmap??
+         d3heatmap::d3heatmap(x, reorderfun=function(d,w) dendsort::dendsort(d),
+             colors = clrs, scale=scale, ...)
       }else{
          d3heatmap::d3heatmap(x, colors = clrs, scale=scale, ...)
       }

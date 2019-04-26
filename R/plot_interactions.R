@@ -1,7 +1,8 @@
 #' Plot counts for many genes
 #'
 #' @param x a tibble from \code{\link{top_counts}}
-#' @param intgroups two column names in \code{attr(x, "colData")} to use for grouping
+#' @param intgroups two column names in \code{attr(x, "colData")} to use for
+#' grouping
 #' @param ylab y-axis label
 #' @param scaled scale counts
 #' @param n total number of genes to plot
@@ -19,12 +20,15 @@
 #' }
 #' @export
 
-plot_interactions <- function(x, intgroups, ylab = "scaled rlog", scaled = TRUE, n=40, reorder, ...){
-   if(length(intgroups) != 2) stop( "intgroups should be a vector of two column names")
+plot_interactions <- function(x, intgroups, ylab = "scaled rlog", scaled = TRUE,
+ n=40, reorder, ...){
+   if(length(intgroups) != 2) stop( "intgroups should be a vector of two names")
    if(!tibble::is_tibble(x)) stop("x should be a tibble from top_counts")
    s1  <- attr(x, "colData")
    if(is.null(s1)) stop("x should be a tibble from top_counts")
-   if(!all( intgroups %in% names(s1))) stop('intgroups are missing from attr(x, "colData")')
+   if(!all( intgroups %in% names(s1))){
+       stop('intgroups are missing from attr(x, "colData")')
+   }
    x1 <- t( as_matrix(x))
    if(scaled) x1 <- scale(x1)
    if(ncol(x1) > n){
@@ -40,7 +44,6 @@ plot_interactions <- function(x, intgroups, ylab = "scaled rlog", scaled = TRUE,
    ggplot2::ggplot(z, ggplot2::aes_string(x = intgroups[1], y = "rlog",
       group =intgroups[2], shape =intgroups[2], color=intgroups[2])) +
      ggplot2::geom_point() +
-     #ggplot2::geom_smooth(method="loess", se=se, lwd=0.5)  +          # if 2 groups
        ggplot2::stat_summary( fun.y="mean", geom="line") +
         ggplot2::facet_wrap(~gene, ...) + ggplot2::ylab( ylab)
 

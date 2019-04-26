@@ -24,19 +24,23 @@
 plot_counts <- function(rld, gene, intgroups, ylab="count", title){
    if(!class(rld) == "DESeqTransform") stop("rld shoud be a DESeqTransform")
    if(length(gene) > 1) gene <- gene[1]
-   if(!gene %in% rownames(rld)) stop(gene, " is not found in rld, check rownames(rld) for valid input")
+   if(!gene %in% rownames(rld)){
+       stop(gene, " is not found in rld, check rownames(rld) for valid input")
+   }
    if(missing(title)) title <- gene
    x <- data.frame( SummarizedExperiment::colData(rld)[, intgroups, drop=FALSE])
    x$gene <- as.vector( SummarizedExperiment::assay( rld[gene,]))
    if(length(intgroups) == 1){
-       ggplot2::ggplot(x, ggplot2::aes_string(x=intgroups, y="gene")) +
+      ggplot2::ggplot(x, ggplot2::aes_string(x=intgroups, y="gene")) +
        ggplot2::geom_point() +
-        ggplot2::stat_summary(ggplot2::aes(y=gene, group=1), fun.y="mean", geom="line") +
-         ggplot2::ylab(ylab) + ggplot2::ggtitle(title)
+        ggplot2::stat_summary(ggplot2::aes(y=gene, group=1), fun.y="mean",
+          geom="line") + ggplot2::ylab(ylab) +
+           ggplot2::ggtitle(title)
     }else{
-       ggplot2::ggplot(x, ggplot2::aes_string(x=intgroups[1], y="gene", color=intgroups[2])) +
-        ggplot2::geom_point() +
-        ggplot2::stat_summary(ggplot2::aes_string(y="gene", group=intgroups[2]), fun.y="mean", geom="line") +
-         ggplot2::ylab(ylab) + ggplot2::ggtitle(title)
+       ggplot2::ggplot(x, ggplot2::aes_string(x=intgroups[1], y="gene",
+        color=intgroups[2])) + ggplot2::geom_point() +
+         ggplot2::stat_summary(ggplot2::aes_string(y="gene", 
+                   group=intgroups[2]), fun.y="mean", geom="line") +
+          ggplot2::ylab(ylab) + ggplot2::ggtitle(title)
    }
 }

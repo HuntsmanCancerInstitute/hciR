@@ -22,7 +22,8 @@ plot_gsea <- function(x, trim=70, n_sets, nes=TRUE, ...){
    y <- dplyr::bind_rows(x, .id = "contrast")
    ## order columns by order in list (or alphabetical)
    y$contrast <- factor(y$contrast, levels= names(x))
-   y$name <- ifelse(nchar(y$name) > trim, paste0(substr(y$name, 1, trim-2), "..."), y$name)
+   y$name <- ifelse(nchar(y$name) > trim,
+                 paste0(substr(y$name, 1, trim-2), "..."), y$name)
    ## ES or NES ?
    if(nes){
    z <- dplyr::select(y, contrast, name, nes) %>%
@@ -39,11 +40,13 @@ plot_gsea <- function(x, trim=70, n_sets, nes=TRUE, ...){
         z <- filter(z, n >= n_sets)
      }
    }
-   clrs <- grDevices::colorRampPalette(rev(RColorBrewer::brewer.pal(n = 11, name = "RdYlBu")))(255)
+   clrs <- grDevices::colorRampPalette(rev(
+               RColorBrewer::brewer.pal(n = 11, name = "RdYlBu")))(255)
    ## too many NAs to cluster
    z <- as_matrix(z)
    message(nrow(z) , " total sets")
    n1 <- max(abs(z), na.rm=TRUE)
    brks <- seq(-n1, n1, length = 255)
-   pheatmap::pheatmap(z, color = clrs, breaks = brks, cluster_cols=FALSE, cluster_rows=FALSE, ...)
+   pheatmap::pheatmap(z, color = clrs, breaks = brks, cluster_cols=FALSE,
+      cluster_rows=FALSE, ...)
 }

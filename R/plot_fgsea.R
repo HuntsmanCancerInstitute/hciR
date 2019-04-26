@@ -24,7 +24,8 @@ plot_fgsea <- function(x, trim=70, sets, nes=TRUE, cluster_row=FALSE, ...){
    y <- dplyr::bind_rows(x, .id = "contrast")
    ## order columns by order in list (or alphabetical)
    y$contrast <- factor(y$contrast, levels= names(x))
-   y$pathway <- ifelse(nchar(y$pathway) > trim, paste0(substr(y$pathway, 1, trim-2), "..."), y$pathway)
+   y$pathway <- ifelse(nchar(y$pathway) > trim,
+                   paste0(substr(y$pathway, 1, trim-2), "..."), y$pathway)
    ## ES or NES ?
    if(nes){
    z <- dplyr::select(y, contrast, pathway, NES) %>%
@@ -41,12 +42,14 @@ plot_fgsea <- function(x, trim=70, sets, nes=TRUE, cluster_row=FALSE, ...){
         z <- filter(z, n >= sets)
      }
    }
-   clrs <- grDevices::colorRampPalette(rev(RColorBrewer::brewer.pal(n = 11, name = "RdBu")))(255)
+   clrs <- grDevices::colorRampPalette(
+               rev(RColorBrewer::brewer.pal(n = 11, name = "RdBu")))(255)
    ## too many NAs to cluster
    z <- as_matrix(z)
    z[is.na(z)] <- 0
    message(nrow(z) , " total sets")
    n1 <- max(abs(z), na.rm=TRUE)
    brks <- seq(-n1, n1, length = 255)
-   pheatmap::pheatmap(z, color = clrs, breaks = brks, cluster_cols=FALSE, cluster_rows=cluster_row, ...)
+   pheatmap::pheatmap(z, color = clrs, breaks = brks, cluster_cols=FALSE,
+       cluster_rows=cluster_row, ...)
 }
