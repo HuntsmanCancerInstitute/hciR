@@ -3,8 +3,18 @@
 Use `devtools` to install the package from GitHub.
 
 ```r
-devtools::install_github("HuntsmanCancerInstitute/hciR")
+library(devtools)
+install_github("HuntsmanCancerInstitute/hciR")
 ```
+
+If you do not have the very latest R version 3.6, you may get an error about the `fpc`
+package since it now requires version 3.6.  One option is to install an earlier `fpc` version and
+then install hciR. 
+
+```r
+install_version("fpc", version = "2.1-11", repos = "http://cran.us.r-project.org")
+```
+
 
 This package is intended to simplify code in [R Markdown] reports and includes functions
 to read [featureCounts], [RSEM] and other count tables, run DESeq2 using sample and
