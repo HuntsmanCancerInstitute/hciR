@@ -40,12 +40,16 @@ fisher_all <- function(res, gsets, deseq.padj = 0.05, logFC, min_set =2, protein
    n <- length(res)
    genes_res <- vector("list", n)
    vs <- names(res)
+   ## padded for message
+   vs1 <- sprintf(paste0("%-", max(nchar(vs))+2, "s"), paste0(vs, ":") )
    names(genes_res) <-  vs
    if(!missing(logFC)){
          message( "Using padj < ", deseq.padj, " AND abs(log2FoldChange) > ", logFC, " to find significant genes")
    }else{
       message( "Using padj < ", deseq.padj, " to find significant genes")
    }
+   message("Note: Sets with < ", min_set, " overlapping genes are removed")
+
    for(i in 1:n){
 
        r1 <- res[[i]]
@@ -55,6 +59,8 @@ fisher_all <- function(res, gsets, deseq.padj = 0.05, logFC, min_set =2, protein
        }
        ## use first gene name in comma-separated lists of human homologs?
        if( "human_homolog" %in% colnames(r1)){
+           # drop genes without homolog???
+           r1 <- filter(r1, !is.na(human_homolog))
            r1$human_homolog <- gsub(",.*", "", r1$human_homolog)
        }
        sig <- filter( r1, padj <= deseq.padj)
@@ -77,8 +83,7 @@ fisher_all <- function(res, gsets, deseq.padj = 0.05, logFC, min_set =2, protein
             up_reg_genes  <- up_reg$gene_name
             not_sig_genes <- not_sig$gene_name
        }
-     message( i, ". ", vs[[i]])
-      message("   Found ", length(sig_genes), " significant genes (", length(not_sig_genes), " not signficant)")
+
       ## CREATE contigency table.   This is slower than intersect
       # tbls <- lapply(gsets, function(x) rbind( table(factor(sig_genes %in% x, levels=c(FALSE, TRUE))),
       #                                     table(factor(not_sig_genes %in% x, levels=c(FALSE, TRUE)) )))
@@ -111,7 +116,8 @@ fisher_all <- function(res, gsets, deseq.padj = 0.05, logFC, min_set =2, protein
       x <-  dplyr::arrange(x, pvalue)
 
       genes_res[[i]]  <- x
-      message( "   Saved ", nrow(x), " gsets with ", min_set, " or more genes (", sum(x$pvalue < 0.05), " with Fisher p-value < 0.05)" )
+   #   message( i, ". ", vs1[[i]], sum(x$pvalue < 0.05), " signficant sets (", nrow(x), " total, ", length(sig_genes), " genes)")
+     message( i, ". ", vs1[[i]], sum(x$pvalue < 0.05), " signficant sets (", nrow(x), " total)")
 
    }
    if(length(genes_res) == 1) genes_res <- genes_res[[1]]

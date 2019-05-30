@@ -28,8 +28,8 @@ plot_pca <- function(object, intgroup="trt", tooltip, ntop = 500, relevel,
  pc=c(1,2), scale=FALSE, ggplot=FALSE, ...){
    if(length(pc) != 2) stop( "pc should be a vector of length 2")
    if( class(object)[1] == "matrix"){
-       group <- colnames(object)  # or no key?
-      colMetadata <- data.frame(id= colnames(object))
+      colMetadata <- data.frame(id= colnames(object), trt="sample")
+       group <- colMetadata$trt  # or no key?    
       n  <- apply(object, 1, stats::var)
       x <- utils::head(object[ order(n, decreasing=TRUE),], ntop)
    }else if( class(object)[1] == "ExpressionSet"){
