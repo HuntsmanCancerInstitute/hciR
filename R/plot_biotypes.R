@@ -4,7 +4,7 @@
 #' @param n number of top features to plot, default 12
 #' @param group plot all features in 12 groups, default FALSE
 #' @param stack, plot percent or total reads (percent or normal)
-#' @param width bar width, default 15
+#' @param barwidth bar width, default null
 #' @param \dots additional options passed to \code{hc_size}
 #'
 #' @return A highchart
@@ -19,7 +19,7 @@
 #' @export
 
 plot_biotypes <- function(x, n = 12, group = FALSE, stack = "percent",
- width = 15, ...){
+ barwidth = NULL, ...){
    names(x)[1] <- "feature"
    if(stack == "percent"){
        ylab <- "Percent"
@@ -75,7 +75,7 @@ plot_biotypes <- function(x, n = 12, group = FALSE, stack = "percent",
    highcharter::hchart(df, "bar",
       highcharter::hcaes(x=sample, y= count, group = feature)) %>%
    highcharter::hc_plotOptions(series = list(stacking = stack),
-      bar=list(pointWidth=width)) %>%
+      bar=list(pointWidth=barwidth)) %>%
    highcharter::hc_yAxis(title=list(text=ylab), reversedStacks=FALSE) %>%
    highcharter::hc_xAxis(title=list(text="")) %>%
    highcharter::hc_size(...) %>%

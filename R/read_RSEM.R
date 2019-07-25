@@ -30,17 +30,16 @@
 
 read_RSEM <- function(path = ".", gene = TRUE, value="expected_count", reshape = TRUE, stats = FALSE){
    if(!stats){
-      if(gene){
-          pattern <- "genes.results$"
-          id_col <- "gene_id"
-       }else{
-          pattern <- "isoforms.results$"
-              id_col <- "transcript_id"
-       }
+      pattern <- ifelse(gene, "genes.results$", "isoforms.results$" )
+      if(!value %in% c("expected_count", "TPM", "FPKM")) stop("value not found")
       res1 <- read_sample_files(path, pattern)
+      if(gene){
+         res1 <- dplyr::select_(res1, "sample", "gene_id", value)
+      } else {
+         res1 <- dplyr::select_(res1, "sample", "gene_id", "transcript_id", value)
+      }
       if(reshape){
-          if(!value %in% c("expected_count", "TPM", "FPKM")) stop("value not found")
-         res1 <- dplyr::select_(res1, "sample", id_col, value) %>% tidyr::spread_("sample", value)
+          res1 <- tidyr::spread_(res1, "sample", value)
            #  sort HCI samples as X1, X2, ..., X10, X11
           res1  <-  res1[, c(1, order_samples(colnames(res1)[-1])+1) ]
        }
