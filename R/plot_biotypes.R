@@ -71,6 +71,7 @@ plot_biotypes <- function(x, n = 12, group = FALSE, stack = "percent",
               dplyr::summarise_all(sum)
       df <- tidyr::gather(z, "sample", "count", -feature)
    }
+
    # PLOT percent or total
    highcharter::hchart(df, "bar",
       highcharter::hcaes(x=sample, y= count, group = feature)) %>%

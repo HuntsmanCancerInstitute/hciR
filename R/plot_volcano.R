@@ -33,7 +33,7 @@
 #' @export
 
 plot_volcano<- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
- radius=3, ggplot=FALSE, palette="RdBu", ...){
+ radius=3, ggplot=TRUE, palette="RdBu", ...){
    if(!tibble::is_tibble(res)){
       if(is.list(res)){
         message("Plotting the first table in the list")

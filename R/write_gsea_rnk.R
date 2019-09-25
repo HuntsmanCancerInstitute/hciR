@@ -37,13 +37,16 @@ write_gsea_rnk <- function(res, write=TRUE, protein_coding = TRUE, na_pvalue = T
       vs <- gsub("_+_", "_", vs, fixed=TRUE)
       ## add txt for GNomEx
       outfile <- paste0( gsub("/", "", vs), ".rnk")
-
-      if(protein_coding && names(y) %in% "biotype")  y <- filter(y, biotype == "protein_coding")
-      nna <- sum(is.na(y$padj))
-      if(na_pvalue & nna>0){
+      if(protein_coding && "biotype" %in% names(y)){
+           y <- filter(y, biotype == "protein_coding")
+      }
+      if("padj" %in% names(y) ){
+         nna <- sum(is.na(y$padj))
+         if(na_pvalue & nna>0){
            message("Removing ", nna,  " genes with NA p-values")
            y <- filter(y, !is.na(padj))
-      }
+        }
+     }
       if("human_homolog" %in% colnames(y)){
           ## include NAs?  extreme outliers and low mean normalized count
           x <- dplyr::filter( y, human_homolog != "") %>%

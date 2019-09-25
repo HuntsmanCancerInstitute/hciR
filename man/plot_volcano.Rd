@@ -5,7 +5,7 @@
 \title{Volcano plot}
 \usage{
 plot_volcano(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
-  radius = 3, ggplot = FALSE, palette = "RdBu", ...)
+  radius = 3, ggplot = TRUE, palette = "RdBu", ...)
 }
 \arguments{
 \item{res}{Annotated DESeq results table from results_all.}

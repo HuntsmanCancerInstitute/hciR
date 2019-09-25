@@ -5,6 +5,8 @@
 #' @param counts a count table with feature ids in row 1
 #' @param samples a sample table with names matching count table column names in row 1
 #' @param run_deseq Run \code{\link{DESeq}}, default TRUE
+#' @param minReplicates minimum number of replicates required in order to use
+#' replaceOutliers on a sample, default 7. 
 #' @param \dots additional options like the design formula are passed to \code{DESeqDataSetFromMatrix}
 #' @return A DESeqDataSet object
 #'
@@ -21,7 +23,7 @@
 #' }
 #' @export
 
-deseq_from_tibble <- function( counts, samples, run_deseq = TRUE, ...){
+deseq_from_tibble <- function( counts, samples, run_deseq = TRUE, minReplicates =7, ...){
    c1 <- deparse(substitute(counts))
    ## check counts...
    NAs <- is.na(counts[[1]])
@@ -39,6 +41,6 @@ deseq_from_tibble <- function( counts, samples, run_deseq = TRUE, ...){
    }
    mode(counts) <- "integer"
    dds <- DESeq2::DESeqDataSetFromMatrix(counts, samples, ...)
-   if(run_deseq) dds <- DESeq2::DESeq(dds)
+   if(run_deseq) dds <- DESeq2::DESeq(dds, minReplicatesForReplace = minReplicates)
    dds
 }

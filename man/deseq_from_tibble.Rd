@@ -4,7 +4,8 @@
 \alias{deseq_from_tibble}
 \title{Run DESeq from tibbles}
 \usage{
-deseq_from_tibble(counts, samples, run_deseq = TRUE, ...)
+deseq_from_tibble(counts, samples, run_deseq = TRUE, minReplicates = 7,
+  ...)
 }
 \arguments{
 \item{counts}{a count table with feature ids in row 1}
@@ -12,6 +13,9 @@ deseq_from_tibble(counts, samples, run_deseq = TRUE, ...)
 \item{samples}{a sample table with names matching count table column names in row 1}
 
 \item{run_deseq}{Run \code{\link{DESeq}}, default TRUE}
+
+\item{minReplicates}{minimum number of replicates required in order to use
+replaceOutliers on a sample, default 7.}
 
 \item{\dots}{additional options like the design formula are passed to \code{DESeqDataSetFromMatrix}}
 }

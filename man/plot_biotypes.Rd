@@ -5,7 +5,7 @@
 \title{Plot reads assigned to biotypes}
 \usage{
 plot_biotypes(x, n = 12, group = FALSE, stack = "percent",
-  width = 15, ...)
+  barwidth = NULL, ...)
 }
 \arguments{
 \item{x}{count matrix from featureCounts with `-g gene_biotype`}
@@ -16,7 +16,7 @@ plot_biotypes(x, n = 12, group = FALSE, stack = "percent",
 
 \item{stack, }{plot percent or total reads (percent or normal)}
 
-\item{width}{bar width, default 15}
+\item{barwidth}{bar width, default null}
 
 \item{\dots}{additional options passed to \code{hc_size}}
 }

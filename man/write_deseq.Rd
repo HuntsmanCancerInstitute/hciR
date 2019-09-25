@@ -4,8 +4,8 @@
 \alias{write_deseq}
 \title{Write DESeq results}
 \usage{
-write_deseq(result_all, dds, rld, biomart, fpkm, text_files = FALSE,
-  cutoff, file = "DESeq.xlsx", ...)
+write_deseq(result_all, dds, rld, biomart, sets, fpkm,
+  text_files = FALSE, cutoff, file = "DESeq.xlsx", ...)
 }
 \arguments{
 \item{result_all}{a list from \code{results_all}}
@@ -15,6 +15,8 @@ write_deseq(result_all, dds, rld, biomart, fpkm, text_files = FALSE,
 \item{rld}{a DESeqTransform obect with rlog values}
 
 \item{biomart}{annotations from \code{read_biomart}}
+
+\item{sets}{table with set intersections, optional}
 
 \item{fpkm}{matrix of fpkm values, optional}
 

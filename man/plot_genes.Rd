@@ -5,8 +5,8 @@
 \title{Plot heatmap of top genes}
 \usage{
 plot_genes(x, intgroup, output = "pheatmap", palette = "RdBu",
-  dendsort = TRUE, scale = "diff", midpoint0 = TRUE,
-  max_scale = NA, border = NA, ...)
+  dendsort = TRUE, scale = "none", midpoint0 = TRUE,
+  max_scale = NA, border = NA, cluster_cols = TRUE, ...)
 }
 \arguments{
 \item{x}{a tibble from \code{\link{top_counts}}}
@@ -21,7 +21,7 @@ Red-Green color scale.}
 
 \item{dendsort}{reorder branches using \code{dendsort} package}
 
-\item{scale}{scale values, default diff will substract the row mean from
+\item{scale}{scale values, default none.  diff will substract the row mean from
 each value. Other options are none, row and column as described in
 \code{heatmap}}
 
@@ -31,6 +31,8 @@ each value. Other options are none, row and column as described in
 max(abs(range(x)))}
 
 \item{border}{pheatmap border color, default NA}
+
+\item{cluster_cols}{cluster columns}
 
 \item{\dots}{additional options passed to \code{pheatmap} or \code{d3heatmap}}
 }

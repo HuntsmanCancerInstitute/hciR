@@ -55,6 +55,7 @@ fgsea_all <- function(res, gsets, FDR = 0.1, nperm=10000, ...){
       }
       fgsea_res[[i]] <-  f1
    }
+   fgsea_res <- fgsea_res[sapply(fgsea_res, nrow) > 0]
    if(length( fgsea_res) == 1 ) fgsea_res <- fgsea_res[[1]]
    fgsea_res
 }

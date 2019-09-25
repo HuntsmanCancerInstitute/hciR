@@ -6,6 +6,7 @@
 #' @param dds a DESeqDataset object with count tables
 #' @param rld a DESeqTransform obect with rlog values
 #' @param biomart annotations from \code{read_biomart}
+#' @param sets table with set intersections, optional
 #' @param fpkm matrix of fpkm values, optional
 #' @param text_files write results to separate txt files, mainly for IPA input
 #' @param cutoff if text_files is TRUE, only write genes below this p-value cutoff
@@ -22,7 +23,7 @@
 #' }
 #' @export
 
-write_deseq <- function(result_all, dds, rld, biomart, fpkm,
+write_deseq <- function(result_all, dds, rld, biomart, sets, fpkm,
    text_files = FALSE, cutoff, file = "DESeq.xlsx", ...){
 
    ##  if results are a tibble (since simplify=TRUE by default)
@@ -74,7 +75,7 @@ write_deseq <- function(result_all, dds, rld, biomart, fpkm,
        "rlog"       = SummarizedExperiment::assay(rld))
 
      if(!missing(fpkm)){
-       if(is.list(fpkm)){
+       if(class(fpkm)[1] == "list"){
           Counts <- c( Counts, fpkm)
        }else{
           Counts <- c( Counts, list("fpkm"= fpkm))
@@ -88,6 +89,7 @@ write_deseq <- function(result_all, dds, rld, biomart, fpkm,
                 tibble::rownames_to_column( as.data.frame(y), "id"), by="id"))
    }
    DESeq_tables <-  c( sum1, res1, Counts, Meta)
+   if(!missing(sets)) DESeq_tables <-  c( sum1, res1, list(Sets=sets), Counts, Meta)
 
    message("Saving ", length(DESeq_tables), " worksheets to ", file)
   # DESeq_tables
