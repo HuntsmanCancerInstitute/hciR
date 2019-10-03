@@ -9,12 +9,11 @@ install_github("HuntsmanCancerInstitute/hciR")
 
 If you do not have the very latest R version 3.6, you may get an error about the `fpc`
 package since it now requires version 3.6.  One option is to install an earlier `fpc` version and
-then install hciR. 
+then install hciR.
 
 ```r
 install_version("fpc", version = "2.1-11", repos = "http://cran.us.r-project.org")
 ```
-
 
 This package is intended to simplify code in [R Markdown] reports and includes functions
 to read [featureCounts], [RSEM] and other count tables, run DESeq2 using sample and
@@ -29,8 +28,9 @@ The rendered output is in the [docs] directory, which are best viewed from the G
 3. [pasilla_flex.html] - Browse linked MA plot, volcano plot, and result table in a [Flex dashboard] using [Crosstalk].
 4. [GSE81784.html] - Load `featureCounts` and run DESeq2 for GSE81784 at HCI.
 
-A few functions are also included in [inst/Rscript] like `read_featureCounts.R` to run on the command line.  See the
-[R scripts for RNA-Seq at HCI] file for details.
+The [hciRscripts] package includes functions like `read_featureCounts.R` to run on the command line.  See the
+[R scripts] file for more details.
+
 
 [featureCounts]: http://bioinf.wehi.edu.au/featureCounts/
 [RSEM]: https://deweylab.github.io/RSEM/
@@ -52,4 +52,5 @@ A few functions are also included in [inst/Rscript] like `read_featureCounts.R` 
 [R Markdown]: http://rmarkdown.rstudio.com/
 [Flex dashboard]: http://rmarkdown.rstudio.com/flexdashboard/
 [Crosstalk]: https://rstudio.github.io/crosstalk/
-[R scripts for RNA-Seq at HCI]: https://huntsmancancerinstitute.github.io/hciR/hciR_scripts.html
+[R scripts]: https://huntsmancancerinstitute.github.io/hciRscripts/hciR_scripts.html
+[hciRscripts]: https://github.com/HuntsmanCancerInstitute/hciRscripts
