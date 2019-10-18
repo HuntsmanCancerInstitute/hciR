@@ -9,7 +9,7 @@ install_github("HuntsmanCancerInstitute/hciR")
 
 The `hciR` package works best with [tidyverse] packages (readr, dplyr, tibble,
 etc.) and simplifies the code in a differential expression analysis.  The
-package includes functions to run DESeq2 using sample and count tibbles as
+package includes functions to run [DESeq2] using sample and count tibbles as
 input, get annotated DESeq results for all pairwise combination and create
 interactive plots and other visualizations.
 
@@ -41,7 +41,7 @@ model and gene set enrichment.  The [Ensembl] file has details on loading annota
 The [hciRscripts] package wraps functions like `read_featureCounts` to run
 on the command line.  See the [hciR scripts] file for more details.
 
-
+[DESeq2]: https://bioconductor.org/packages/release/bioc/html/DESeq2.html
 [tidyverse]: http://tidyverse.org/
 [Ensembl]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/vignettes/Ensembl.md
 [Liver]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/vignettes/Liver.md
