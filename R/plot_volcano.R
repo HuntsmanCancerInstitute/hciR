@@ -109,7 +109,7 @@ plot_volcano<- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
             }
 		  }
 		  # combine cutoffs
-		  y <- bind_rows(y1, y2) %>% unique()
+		  y <- dplyr::bind_rows(y1, y2) %>% unique()
           if(nrow(y) > 0){
             if(nrow(y) > 200){
                message("Too many points for ggrepel to label (", nrow(y),
