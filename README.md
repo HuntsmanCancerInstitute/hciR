@@ -7,11 +7,13 @@ input, get annotated DESeq results for all pairwise combinations and create
 interactive plots and other visualizations.
 
 
-Use `devtools` to install the package from GitHub.
+Use `devtools` to install the package from GitHub plus the [hciRdata] package
+with Ensembl annotations.
 
 ```r
 library(devtools)
 install_github("HuntsmanCancerInstitute/hciR")
+install_github("HuntsmanCancerInstitute/hciRdata")
 ```
 
 
@@ -43,10 +45,11 @@ model and gene set enrichment.  The [Ensembl] file has details on loading annota
 The [hciRscripts] package wraps functions like `read_featureCounts` to run
 on the command line.  See the [hciR scripts] file for more details.
 
+[hciRdata]: https://github.com/HuntsmanCancerInstitute/hciRdata
 [DESeq2]: https://bioconductor.org/packages/release/bioc/html/DESeq2.html
 [tidyverse]: http://tidyverse.org/
 [Ensembl]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/vignettes/Ensembl.md
 [Liver]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/vignettes/Liver.md
 [Pasilla]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/vignettes/Pasilla.md
-[hciR  scripts]: https://huntsmancancerinstitute.github.io/hciRscripts/hciR_scripts.html
+[hciR scripts]: https://huntsmancancerinstitute.github.io/hciRscripts/hciR_scripts.html
 [hciRscripts]: https://github.com/HuntsmanCancerInstitute/hciRscripts
