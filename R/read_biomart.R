@@ -7,8 +7,7 @@
 #' for human, mouse, rat, fruitfly, yeast and zebrafish.
 #' @param attributes vector of column names to pass to \code{getBM}, default
 #' ensembl_gene_id, external_gene_name, gene_biotype, chromosome_name,
-#' start_position, end_position, strand, description, transcript_count, and
-#' entrezgene
+#' start_position, end_position, strand, description and transcript_count
 #' @param host host for connection, default www.ensembl.org
 #' @param version Ensembl version for previous releases
 #' @param patch Keep features on patches starting with CHR_, default FALSE

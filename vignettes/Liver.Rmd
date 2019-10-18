@@ -1,0 +1,322 @@
+---
+title: "DESeq analysis for mouse liver samples"
+date: '`r gsub("  ", " ", format(Sys.time(), "%B %e, %Y"))`'
+output: github_document
+---
+
+```{r global_options, include=FALSE}
+options(width=120)
+knitr::opts_chunk$set(warning=FALSE, comment="# ", collapse=TRUE)
+library(DT)
+```
+
+This guide follows the [Bioconductor RNA-Seq workflow] to find differentially expressed
+genes using [DESeq2] version `r gsub("‘’", "", packageVersion("DESeq2"))`.
+
+
+### Load samples and counts
+
+
+Load the sample table with treatment and diet in the `extdata` directory.
+
+
+```{r load_samples, message=FALSE}
+library(tidyverse)
+extdata <- system.file("extdata", package="hciR")
+samples <- read_tsv(paste(extdata, "liver_samples.tsv", sep="/"))
+samples
+```
+
+
+Load the combined [featureCounts] matrix.
+
+
+```{r read_count, message=FALSE}
+counts <- read_tsv(paste(extdata, "liver_counts.tsv", sep="/"))
+counts[, 1:8]
+```
+
+
+Remove 18059 features with zero counts and 16304 features with 5 or fewer reads
+in every sample to create a final count matrix with 19438 rows.
+
+
+```{r count_matrix}
+counts <- filter_counts(counts, n=5)
+```
+
+
+Load the mouse annotations from Ensembl 92 in [hciRdata] and check genes with
+the highest number of assigned reads.
+
+```{r topgenes, echo=-1}
+options(width=110)
+library(hciRdata)
+n1 <- rowMeans(as_matrix(counts))
+right_join( dplyr::select(mouse92, 1:4,8),
+ tibble(id= names(n1), mean_count = n1)) %>%
+ mutate(description=substr(description, 1, 40)) %>%
+ arrange(desc(mean_count))
+```
+
+
+
+Following the DESeq2 vignette on [interactions], there are a few ways to model the data.
+
+1.  Combine trt and diet into a single column and select the pairwise comparisons
+    of interest, for example Degs1-KO_NCD vs Control_NCD.
+2.  Test interactions using ~ trt * diet in the design formula
+3.  Analyze a subset of samples like those from NCD. See the DEseq2 [FAQ]
+	for more details on when to split the analysis into pairs of groups.
+
+
+## Model 1, combine factors
+
+Combine treatment and diet into a new column and order the factor levels.
+
+```{r addtrt}
+samples <- mutate(samples, trt_diet = gsub("Degs1_", "", paste(trt, diet, sep="_")))
+samples$trt_diet <- factor(samples$trt_diet,
+     levels = c("KO_HFD",  "KO_NCD", "Control_HFD", "Control_NCD"))
+```
+
+
+Run DESeq using the new trt_diet column in the design formula and get the regularized log
+(rlog) counts for sample visualizations.  These values are similar to the log2
+normalized counts except the variance in low count genes is reduced.
+
+```{r DESeq1, eval=FALSE}
+dds1 <- deseq_from_tibble(counts, samples, design = ~ trt_diet )
+rld1 <-  r_log(dds1)
+```
+
+
+
+Plot the first two principal components using the rlog values from the top 500
+variable genes.
+
+```{r pcaplot, fig.height=4.5, fig.width=6}
+# plot_pca(rld1, "trt_diet", tooltip=c("id", "name", "diet") , width=700)
+plot_pca(rld1, "trt_diet", ggplot=TRUE, label="name")
+```
+
+<br>
+
+Cluster all the rlog values using the R function `dist` to calculate the
+Euclidean distance between samples.
+
+
+```{r dist, fig.height=5.5, fig.width=6.75}
+plot_dist(rld1, c("trt", "diet"), na_col="white")
+```
+
+
+### Results
+
+Run `check_contrasts` to list the pairwise comparisons.
+
+
+```{r checkcontrasts}
+data.frame(vs=check_contrasts(dds1$trt_diet))
+```
+
+Use the `subset` option to skip the 3rd and 4th contrasts and
+compare the remaining rows using a 5% false discovery rate (FDR).
+
+
+```{r results1}
+res <- results_all(dds1, mouse92, subset=c(1,2,5,6) )
+```
+
+
+Plot fold changes and p-values from KO_HFD vs. KO_NCD in the first contrast in a volcano plot.
+
+
+```{r volcano, fig.width=7, fig.height=5.5}
+plot_volcano(res[[1]], pvalue=10)
+```
+
+<br>
+
+
+Cluster the rlog values from all 2859 significant genes and scale by rows, so
+values represent the number of standard deviations from the mean rlog value.
+
+```{r gene_heatmap2, fig.width=5.5, fig.height=7}
+x <- top_counts(res[[1]], rld1, top=3000)
+nrow(x)
+plot_genes(x, c("trt", "diet"), scale ="row", annotation_names_col=FALSE,
+ show_rownames=FALSE)
+```
+
+Find genes in the PPAR Signaling Pathway using the MSigDB pathways in [hciRdata]. Note
+the mouse annotations include human homologs from MGI.
+
+```{r ppar}
+p1 <- filter(res[[1]], human_homolog %in% msig_pathways$KEGG[["PPAR Signaling Pathway"]])
+dplyr::select(p1, 1:7,12)
+```
+
+Cluster the PPAR genes in a heatmap.  There are 70 expressed genes but only 24 are significant,
+so add `filter=FALSE` to plot all genes since `top_counts` will filter using
+an adjusted p-value < 0.05 by default.
+
+```{r gene_heatmap3, fig.width=6, fig.height=4.75}
+# x <- top_counts( p1, rld1, filter=FALSE)
+x <- top_counts( p1, rld1)
+plot_genes(x, c("trt", "diet"), fontsize_row=8, scale = "row")
+```
+
+
+
+## Model 2, interaction model
+
+Run `DESeq` using ~ trt * diet in the design formula.
+
+```{r run_DESeq, eval=FALSE}
+dds2 <- deseq_from_tibble(counts, samples, design = ~ trt * diet)
+rld2 <- r_log(dds2)
+```
+
+Check if the treatment effect differs across diets using  a 5% false discovery rate (FDR).
+There are 98 signfiicant interactions.
+
+```{r summary1}
+DESeq2::resultsNames(dds2)
+int <- DESeq2::results(dds2, name = "trtDegs1_KO.dietNCD", alpha = 0.05)
+DESeq2::summary.DESeqResults(int)
+```
+
+
+Add gene names and biotypes to the results.
+
+```{r add_annotations}
+int <- annotate_results(int, mouse92)
+```
+
+Create an interaction plot using the scaled rlog values from
+the top 25 genes sorted by adjusted p-value.
+
+```{r interactionPlot,  fig.width=7.5, fig.height=6}
+x <- top_counts( int, rld1, top=25)
+plot_interactions(x, c( "diet", "trt"), ylab="Z-score") + theme_bw()
+```
+
+
+### Save results
+
+Save the DESeq and interaction results, raw counts, normalized counts, regularized log counts
+and mouse annotations to a single Excel file in `DESeq.xlsx` and R objects to a
+binary data file to load into a new session.
+
+```{r write_results_to_Excel, eval=FALSE}
+res_all <- c(res, list(Interactions=int))
+write_deseq(res_all, dds, rld, mouse92)
+save(res, int, dds, rld, file="dds.rda")
+```
+
+
+## Pathway analysis
+
+
+There are a number of options for pathway analysis and most can be divided into
+one of two groups based on the input dataset.  Gene set enrichment methods like
+Broad's [GSEA] require **all** expressed genes sorted by fold change and
+calculate a running sum statistic to find pathways that are enriched with
+either up- or down-regulated genes.
+
+Over representation methods require a smaller subset of significant genes and
+use a Fisher's test to identify significant pathways. There are many online
+tools like [Enrichr] that accept a list of significant genes as input and return
+enriched sets.  To get a list of genes, just sort the DESeq results in the Excel
+file by adjusted p-value and copy and paste the gene names into the search box.
+
+
+
+### GSEA
+
+The [fgsea] package (fast gene set enrichment analysis) is similar to Broad's
+GSEA and finds pathways that are enriched with either up- or down-regulated
+human genes.  Load the KEGG pathways from [MSigDB] and  run `fgsea` using a 10% FDR.
+
+
+```{r kegg}
+set.seed(77)
+k1 <- fgsea_all(res, msig_pathways$KEGG)
+```
+
+Print the top pathways from KO_HFD vs. KO_NCD and check the GSEA [user guide] for details about the statistics.
+
+```{r top6, echo=-1}
+options(width=110)
+group_by(k1[[1]][, -8], enriched) %>% top_n(4, abs(NES)) %>% ungroup()
+```
+
+
+Get the fold change vector and create an enrichment plot for Ribosome.
+
+```{r enrich1, message=FALSE, fig.height=4}
+library(fgsea)
+fc <- write_gsea_rnk(res, write=FALSE)
+head(fc[[1]])
+plotEnrichment(msig_pathways$KEGG[["Ribosome"]],  fc[[1]]) +
+ggplot2::labs(title="Ribosome")
+```
+
+Compare to ECM Receptor Interaction with mostly up-regulated genes.
+
+```{r enrich2, fig.height=4}
+plotEnrichment(msig_pathways$KEGG[["ECM Receptor Interaction"]],  fc[[1]]) +
+ggplot2::labs(title="ECM Receptor Interaction")
+```
+
+
+Plot NES scores from significant pathways in two or more contrasts.
+
+```{r plotfgsea, fig.height=8, fig.width=3.75}
+plot_fgsea(k1, fontsize_row=7, sets =2)
+```
+
+Save the enriched pathways to an Excel file.
+
+```{r write2, eval=FALSE}
+openxlsx::write.xlsx(k1, file = "KEGG_pathways.xlsx")
+```
+
+<br>
+
+The genes from [MSigDB] are saved as a list of vectors and include
+hallmark, go, motifs, cancer, immunologic and oncogenic sets.
+
+
+```{r hallmark}
+lapply(msig_hallmark[1:3], head, 7)
+```
+
+Four datasets are a list of lists and include two or more groups, so select a list
+element like `msig_pathways$REACTOME` to return the sets.
+
+```{r msig2, echo=-1}
+options(width=110)
+names(msig_pathways)
+names(msig_go)
+names(msig_motifs)
+names(msig_cancer)
+```
+
+<br>
+
+
+[Correlation Engine]: https://hci.ussc.informatics.illumina.com/
+[Enrichr]: http://amp.pharm.mssm.edu/Enrichr/
+[user guide]: http://software.broadinstitute.org/gsea/doc/GSEAUserGuideFrame.html
+[GSEA]: http://software.broadinstitute.org/gsea/index.jsp
+[fgsea]: https://bioconductor.org/packages/release/bioc/html/fgsea.html
+[MSigDB]: http://software.broadinstitute.org/gsea/msigdb/collections.jsp
+[Interactions]: http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#interactions
+[FAQ]: http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#if-i-have-multiple-groups-should-i-run-all-together-or-split-into-pairs-of-groups
+[hciRdata]: https://github.com/HuntsmanCancerInstitute/hciRdata
+[Bioconductor RNA-Seq workflow]: http://master.bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html
+[DESeq2]: http://www.bioconductor.org/packages/release/bioc/html/DESeq2.html
+[featureCounts]: http://bioinf.wehi.edu.au/featureCounts/
+[hciR]: https://github.com/HuntsmanCancerInstitute/hciR

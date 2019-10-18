@@ -7,50 +7,43 @@ library(devtools)
 install_github("HuntsmanCancerInstitute/hciR")
 ```
 
-If you do not have the very latest R version 3.6, you may get an error about the `fpc`
-package since it now requires version 3.6.  One option is to install an earlier `fpc` version and
-then install hciR.
+The `hciR` package works best with [tidyverse] packages (readr, dplyr, tibble,
+etc.) and simplifies the code in a differential expression analysis.  The
+package includes functions to run DESeq2 using sample and count tibbles as
+input, get annotated DESeq results for all pairwise combination and create
+interactive plots and other visualizations.
+
+The basic workflow for a mouse experiment with three groups in a `trt` column is
+listed below.
 
 ```r
-install_version("fpc", version = "2.1-11", repos = "http://cran.us.r-project.org")
+library(hciR)
+samples <- read_tsv("samples.txt")
+counts <- read_tsv("counts.txt")
+counts <- filter_counts(counts, n = 5)
+dds <- deseq_from_tibble(counts, samples, design = ~ trt)
+rld <- r_log(dds)
+plot_pca(rld,  "trt", tooltip= c("id", "name"))
+plot_dist(rld, "trt", na_col="white")
+library(hciRdata)
+res <- results_all(dds, mouse98)
+plot_volcano(res[[1]])
+x <- top_counts(res[[1]], rld, top=40)
+plot_genes(x, "trt", scale ="row", annotation_names_col=FALSE)
+write_deseq(res, dds, rld, mouse98)
 ```
 
-This package is intended to simplify code in [R Markdown] reports and includes functions
-to read [featureCounts], [RSEM] and other count tables, run DESeq2 using sample and
-count tibbles as input, get annotated DESeq results and create interactive plots
-and heatmaps.
 
-To learn more about the package, check the [R Markdown] files in the [inst/Rmd] directory.
-The rendered output is in the [docs] directory, which are best viewed from the Github page links below.
+Check the vignettes directory to learn more about the package.  The [Pasilla] vignette
+runs through an analysis with a single contrast and [Liver] includes an interaction
+model and gene set enrichment.  The [Ensembl] file has details on loading annotations.
 
-1. [volcano.html] - Interactive volcano plots using [Plotly], [Highcharter] and [Crosstalk].
-2. [pasilla_DESeq.html] - Load pasilla count matrix and samples, run DESeq2, plot PCA and heatmaps.
-3. [pasilla_flex.html] - Browse linked MA plot, volcano plot, and result table in a [Flex dashboard] using [Crosstalk].
-4. [GSE81784.html] - Load `featureCounts` and run DESeq2 for GSE81784 at HCI.
-
-The [hciRscripts] package includes functions like `read_featureCounts.R` to run on the command line.  See the
-[R scripts] file for more details.
+The [hciRscripts] package wraps functions like `read_featureCounts` to run
+on the command line.  See the [hciR scripts] file for more details.
 
 
-[featureCounts]: http://bioinf.wehi.edu.au/featureCounts/
-[RSEM]: https://deweylab.github.io/RSEM/
-[Highcharter]: http://jkunst.com/highcharter/
-[Plotly]: https://plot.ly/r/
-[HCI]: http://healthcare.utah.edu/huntsmancancerinstitute/
-[RNA-seq workflows]: http://www.bioconductor.org/help/workflows/rnaseqGene/
-[tidyverse]: http://r4ds.had.co.nz/
-[DESeq2]: https://bioconductor.org/packages/release/bioc/html/DESeq2.html
-[Bioconductor]: https://bioconductor.org/
-[inst/Rmd]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/inst/Rmd
-[inst/Rscript]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/inst/Rscript
-[pasilla_flex.html]: https://huntsmancancerinstitute.github.io/hciR/pasilla_flex.html
-[volcano.html]: https://huntsmancancerinstitute.github.io/hciR/volcano.html
-[pasilla_DESeq.html]: https://huntsmancancerinstitute.github.io/hciR/pasilla_DESeq.html
-[GSE81784.html]: https://huntsmancancerinstitute.github.io/hciR/GSE81784.html
-[inst/Rmd]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/inst/Rmd
-[docs]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/docs
-[R Markdown]: http://rmarkdown.rstudio.com/
-[Flex dashboard]: http://rmarkdown.rstudio.com/flexdashboard/
-[Crosstalk]: https://rstudio.github.io/crosstalk/
-[R scripts]: https://huntsmancancerinstitute.github.io/hciRscripts/hciR_scripts.html
+[tidyverse]: http://tidyverse.org/
+[Ensembl]: https://github.com/HuntsmanCancerInstitute/hciR/vignettes/Ensembl.md
+[Pasilla]: https://github.com/HuntsmanCancerInstitute/hciR/vignettes/Pasilla.md
+[hciR  scripts]: https://huntsmancancerinstitute.github.io/hciRscripts/hciR_scripts.html
 [hciRscripts]: https://github.com/HuntsmanCancerInstitute/hciRscripts

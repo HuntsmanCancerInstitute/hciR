@@ -3,15 +3,16 @@
 #' Highchart version of sample PCA plot
 #'
 #' @param object a matrix, ExpressionSet or DESeqTransform object
-#' @param intgroup a character vector of names in pData(x) or colData(x) for
-#' grouping, default 'trt'
-#' @param tooltip a character vector of names in pData(x) or colData(x) for
-#' tooltip display, default displays the object column names
+#' @param intgroup a character vector of names from colData(object) or
+#' pData(object) for ExpressionSets for grouping, default 'trt'
+#' @param tooltip a character vector of names in colData(object) for tooltip
+#' display, default is id column
+#' @param label a name in colData(object) for ggplot labels
 #' @param ntop number of top variable genes to use for principal components
 #' @param relevel reorder intgroup levels, default is alphabetical
 #' @param pc a vector of components to plot, default 1st and 2nd
 #' @param scale option to scale variables in prcomp, default FALSE
-#' @param ggplot plot ggplot version
+#' @param ggplot plot ggplot version, default FALSE
 #' @param \dots additional options passed to \code{hc_chart}
 #'
 #' @return A highchart
@@ -19,17 +20,16 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#' data(pasilla)
 #' plot_pca(pasilla$rlog, "condition", tooltip=c("file", "type"))
 #' plot_pca(pasilla$rlog, c("condition", "type"))
 #' @export
 
-plot_pca <- function(object, intgroup="trt", tooltip, ntop = 500, relevel,
+plot_pca <- function(object, intgroup="trt", tooltip, label, ntop = 500, relevel,
  pc=c(1,2), scale=FALSE, ggplot=FALSE, ...){
    if(length(pc) != 2) stop( "pc should be a vector of length 2")
    if( class(object)[1] == "matrix"){
       colMetadata <- data.frame(id= colnames(object), trt="sample")
-       group <- colMetadata$trt  # or no key?    
+       group <- colMetadata$trt  # or no key?
       n  <- apply(object, 1, stats::var)
       x <- utils::head(object[ order(n, decreasing=TRUE),], ntop)
    }else if( class(object)[1] == "ExpressionSet"){
@@ -66,13 +66,19 @@ plot_pca <- function(object, intgroup="trt", tooltip, ntop = 500, relevel,
    d <- data.frame( PC1 = pca$x[, pc[1]], PC2 = pca$x[, pc[2]], INTGRP = group,
          COLNAMES = colnames(object), colMetadata, check.names = FALSE )
    if(ggplot){
-      ggplot2::ggplot(data=d, ggplot2::aes(x=PC1, y=PC2, color=INTGRP,
+      p <- ggplot2::ggplot(data=d, ggplot2::aes(x=PC1, y=PC2, color=INTGRP,
           shape=INTGRP)) +  ggplot2::geom_point(size=2) +
        ggplot2::xlab(paste0("PC1: ", percentVar[pc[1]],"% variance")) +
        ggplot2::ylab(paste0("PC2: ", percentVar[pc[2]],"% variance")) +
        ggplot2::theme_bw() +
        ggplot2::theme(legend.title = element_blank(),
            legend.key = element_blank())
+       if(missing(label)){
+		   p
+	   }else{
+		   if(!label %in% names(colMetadata) ) stop("name is missing from colData(object)")
+           p + geom_text_repel(aes(label=colMetadata[[label]]), cex=3, box.padding=.2, show.legend=FALSE)
+	   }
    }else{
       # if tooltip is missing use column names
       if(missing(tooltip)){

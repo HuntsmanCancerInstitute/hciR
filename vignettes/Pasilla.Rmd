@@ -1,0 +1,224 @@
+---
+title: "DESeq analysis of Pasilla knock-downs"
+date: '`r gsub("  ", " ", format(Sys.time(), "%B %e, %Y"))`'
+output: github_document
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, comment="# ", collapse=TRUE)
+```
+
+This guide follows the [Bioconductor RNA-Seq workflow] to find differentially
+expressed genes using [DESeq2] version `r gsub("‘’", "", packageVersion("DESeq2"))`.
+The [hciR] package works best with [tidyverse] packages (readr, dplyr, tibble, etc.) and
+simplifies the code in a typical differential expression analysis.
+
+### Load samples and counts
+
+Load the sample table from the [pasilla] package using the [readr] package.
+ A copy of these files are also available in `extdata` directory in the [hciR] package.
+
+```{r load_samples, message=FALSE}
+library(tidyverse)
+extdata <- system.file("extdata", package="hciR")
+samples <- read_tsv(paste(extdata, "pasilla_samples.tsv", sep="/"))
+samples
+```
+
+
+Load the count table.  The sample names in the first column above should match
+the count column names (the same order is not required).
+
+
+```{r load_counts, message=FALSE, echo=-1}
+options(width=110)
+counts  <- read_tsv(paste(extdata, "pasilla_counts.tsv", sep="/"))
+counts
+```
+
+
+Check the pre-filter count cutoffs.  The plot displays the number of reads removed using
+either a maximum based filter or the total number of reads.
+
+```{r plot_filter, fig.height=5, echo=-1}
+par(mar=c(5,4,1,1))
+library(hciR)
+plot_filter(counts)
+```
+
+Remove 2240 features with zero counts and 2954 with five or fewer reads in every sample
+to create a final matrix with 9405 rows.
+
+
+```{r prefiter}
+counts <- filter_counts(counts, n = 5)
+```
+
+
+### Load annotations
+
+The [hciRdata] package includes the latest Ensembl annotations for
+twelve common reference genomes (version 98).
+
+```{r fly98, echo=-1}
+options(width=110)
+library(hciRdata)
+dplyr::select(fly98, 1:4,8)
+```
+
+The [pasilla] dataset was analyzed using Ensembl version 62, so 708 gene ids have
+been removed from the latest release.  See the [Ensembl] vignette to download an
+earlier release.
+
+```{r missinggene}
+filter(counts, !id %in% fly98$id) %>% nrow()
+```
+
+
+Check genes with the highest number of assigned reads.
+
+```{r topgenes, echo=-1}
+options(width=110)
+n1 <- rowMeans(as_matrix(counts))
+right_join( dplyr::select(fly98, 1:4,8),
+ tibble(id= names(n1), mean_count = n1)) %>%
+ arrange(desc(mean_count))
+```
+
+
+
+### Run DESeq
+
+Run `DESeq` using ~ condition + type in the design formula to control  for
+paired vs single end effects on gene expression and get the regularized log
+(rlog)  counts for sample visualizations.  These values are similar to the log2
+normalized counts except the variance in low count genes is reduced.
+
+
+
+```{r DESeqobject}
+dds <- deseq_from_tibble(counts, samples,  design = ~ condition + type)
+rld <- DESeq2::rlog(dds)
+```
+
+
+Plot the first two principal components using the rlog values from the top 500
+variable genes. The `plot_pca` function will plot an interactive [highchart] by default.
+
+```{r pcaplot, fig.height=4.5, fig.width=6}
+# plot_pca(rld, "condition", tooltip=c("file", "type") , width=700)
+plot_pca(rld, "condition", label="file", ggplot=TRUE)
+```
+
+<br>
+
+Cluster all the rlog values using the R function `dist` to calculate the
+Euclidean distance between samples. Since the distance values on the diagonal
+are always zero, this is set to NA to avoid skewing the heatmap
+colors.
+
+
+```{r dist, fig.height=5, fig.width=6.5}
+# plot_dist(rld , c("condition", "type"), palette="Blues", diagNA=FALSE, reverse=TRUE)
+plot_dist(rld , c("condition", "type"), na_col="white")
+```
+
+
+### Results
+
+
+The `results_all` function will run ***all***  pairwise comparisons
+in alphabetical order (A vs B, A vs C and B vs C).  Use `check_contrasts` to
+list the contrasts.
+
+
+```{r checkcontrasts}
+check_contrasts(dds$condition)
+```
+
+The control group should be the reference level and listed second.  If you need  to reorder the
+groups, use `factor` to set the factor levels ***before*** running `DESeq` above.   For example,
+if you have a `trt` column with KO and control groups, set the factor levels so the control group
+is listed last.  Note the standard DESeq2 workflow typically wants the control group listed first.
+
+```{r relevel, eval=FALSE}
+samples$trt <- factor(samples$trt, levels = c( "KO", "control"))
+```
+
+Compare treated vs. untreated using a 5% FDR and add gene annotations to the result tables.
+
+
+
+```{r DESeq_results}
+res <- results_all(dds, fly98, alpha= 0.05)
+```
+
+The results are a tibble or list of tibbles if there is more than one contrast.
+
+```{r res, echo=-1}
+options(width=110)
+arrange(res, padj)  %>%
+  dplyr::select(1:7,11)
+```
+
+
+Plot the fold changes and p-values in a volcano plot.
+
+```{r volcano, fig.width=7, fig.height=5.5}
+plot_volcano(res, pvalue= c(35,25))
+```
+
+
+Cluster the top 40 significant genes and scale by rows, so values represent
+the number of standard deviations from the mean rlog value.
+
+
+
+```{r plot1, fig.width=6, fig.height=7}
+x <- top_counts( res, rld, top=40)
+x
+plot_genes(x, c("condition", "type"), scale ="row", annotation_names_col=FALSE)
+```
+
+
+Cluster all 1090 significant genes.
+
+```{r gene_heatmap1c, fig.width=5, fig.height=7}
+x <- top_counts(res, rld, top=2000)
+nrow(x)
+plot_genes(x, c("condition", "type"), scale ="row", annotation_names_col=FALSE,
+ show_rownames=FALSE)
+```
+
+
+
+### Save results
+
+Save the DESeq results, raw counts, normalized counts, regularized log counts
+and fly annotations to a single Excel file in `DESeq.xlsx` and R objects to a
+binary data file to load into a new session.
+
+```{r write_results_to_Excel, eval=FALSE}
+write_deseq(res, dds, rld, fly98)
+save(res, dds, rld, file="dds.rda")
+```
+
+The pasilla dataset is also available in the `hciR` package and used in the help examples.
+
+```{r create_pasilla, eval=FALSE}
+pasilla <- list(dds = dds, rlog = rld, results = res)
+```
+
+
+
+<br>
+
+[Bioconductor RNA-Seq workflow]: http://master.bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html
+[DESeq2]: http://www.bioconductor.org/packages/release/bioc/html/DESeq2.html
+[hciR]: https://github.com/HuntsmanCancerInstitute/hciR
+[tidyverse]: http://tidyverse.org/
+[pasilla]: http://bioconductor.org/packages/release/data/experiment/html/pasilla.html
+[readr]: http://readr.tidyverse.org/
+[hciRdata]: https://github.com/HuntsmanCancerInstitute/hciRdata
+[Ensembl]: https://github.com/HuntsmanCancerInstitute/hciR/vignettes/Ensembl.md
+[highchart]: http://jkunst.com/highcharter/index.html

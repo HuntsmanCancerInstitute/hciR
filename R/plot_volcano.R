@@ -8,16 +8,17 @@
 #' \code{ggrepel}, so avoid labeling too many points (200 is the limit).
 #'
 #' @param res Annotated DESeq results table from results_all.
-#' @param pvalue_cutoff label points above this cutoff on a -10 log10 y-axis
-#' scale, the default is 1.3 (padj = 0.05) for highcharts and no labels for
-#' ggplot
-#' @param foldchange_cutoff absolute value of log2 fold change cutoff for
-#' labeling highchart points, default 2
+#' @param pvalue_cutoff either a single p-value cutoff on the y-axis or two
+#' p-values to label down- and up-regulated genes. The default is 1.3
+#' (corresponding to padj = 0.05) for highcharts and no labels for ggplot.
+#' @param foldchange_cutoff either the absolute value of the log2 fold change
+#' cutoff or negative and positive fold changes to label genes, default is 2 for
+#' highcharts and no labels for ggplot.
 #' @param max_pvalue y-axis limit, maximum value on a -10 log10 y-axis scale,
 #' the default is 200 (padj < 1e-200), so genes below this cutoff are assigned
 #' the maximum p-value.
 #' @param radius point size, default 3
-#' @param ggplot plot ggplot version
+#' @param ggplot plot ggplot version, default TRUE
 #' @param palette RColorBrewer palette name, vector of colors, or "RdGn" for
 #' ggplot
 #' @param \dots other options like width passed to \code{hc_chart}
@@ -27,9 +28,7 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#' \dontrun{
-#' plot_volcano(res, ggplot=TRUE, pvalue=10)
-#' }
+#' plot_volcano(pasilla$res, pvalue=c(35,25), foldchange=2.5)
 #' @export
 
 plot_volcano<- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
@@ -83,50 +82,45 @@ plot_volcano<- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
          ggplot2::ylab("-Log10 Adjusted P-value") +
          ggplot2::scale_fill_gradientn(colors=clrs, limits=c(-fc, fc),
              guide=FALSE)
-      ## add labels
-      if(!missing(pvalue_cutoff) || !missing(foldchange_cutoff)){
-         if(missing(foldchange_cutoff)){
-            if(length(pvalue_cutoff) == 2){
-                 y <- filter(x, padj < 1/10^pvalue_cutoff[1] &
-                    log2FoldChange < 0 | padj < 1/10^pvalue_cutoff[2] &
-                      log2FoldChange > 0 )
+		if( missing(pvalue_cutoff) & missing(foldchange_cutoff)){
+			p1
+		}else{
+		   ## add labels, pvalue, fc or BOTH
+		   ## avoid ggrepel warning if missing name
+		   y <- filter(x, !is.na(gene_name))
+		   y1 <- NULL
+		   y2 <- NULL
+           if(!missing(pvalue_cutoff)){
+             if(length(pvalue_cutoff) == 2){
+                 y1 <- filter(y,
+					   padj < 1/10^pvalue_cutoff[1] & log2FoldChange < 0 |
+					   padj < 1/10^pvalue_cutoff[2] & log2FoldChange > 0 )
             }else{
-                 y <- filter(x, padj < 1/10^pvalue_cutoff )
+                 y1 <- filter(y, padj < 1/10^pvalue_cutoff )
             }
-         }else if(missing(pvalue_cutoff)){
-            ### if vector with 2 values
+		  }
+		  ##
+		  if(!missing(foldchange_cutoff)){
             if(length(foldchange_cutoff)==2){
-               y <- filter(x, log2FoldChange < foldchange_cutoff[1] |
-                              log2FoldChange > foldchange_cutoff[2])
+                 y2 <- filter(y, log2FoldChange < foldchange_cutoff[1] |
+                                 log2FoldChange > foldchange_cutoff[2])
             }else{
-               y <- filter(x, abs(log2FoldChange) > foldchange_cutoff)
+                 y2 <- filter(y, abs(log2FoldChange) > foldchange_cutoff)
             }
-         ### TO DO add code for 2 pvalue cutoffs!
-         }else{
-            if(length(foldchange_cutoff)==2){
-               y <- filter(x, padj < 1/10^pvalue_cutoff |
-                    log2FoldChange < foldchange_cutoff[1] |
-                    log2FoldChange > foldchange_cutoff[2])
-            }else{
-               y <- filter(x, padj < 1/10^pvalue_cutoff |
-                   abs(log2FoldChange) > foldchange_cutoff)
-            }
-         }
-         if(nrow(y) > 0){
+		  }
+		  # combine cutoffs
+		  y <- bind_rows(y1, y2) %>% unique()
+          if(nrow(y) > 0){
             if(nrow(y) > 200){
                message("Too many points for ggrepel to label (", nrow(y),
-                   "), check pvalue cutoff and use a -log10 scale")
+                   "), check pvalue and fold change cutoffs")
                p1
             }else{
                 p1 + ggrepel::geom_text_repel(data=y, ggplot2::aes(label=
                         gene_name), cex=3, box.padding=.1, point.padding=.1)
             }
-         }else{
-            p1
-         }
-      }else{
-         p1
-      }
+		 }
+	  }
    # Highcharts ------------------------------
    }else{
       ### Grouping column for enableMouseTracking
