@@ -1,7 +1,11 @@
 ---
-title: "DESeq analysis for mouse liver samples"
+title: "DESeq analysis of mouse liver samples"
 date: '`r gsub("  ", " ", format(Sys.time(), "%B %e, %Y"))`'
 output: github_document
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{DESeq analysis of mouse liver samples}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r global_options, include=FALSE}
@@ -85,7 +89,7 @@ Run DESeq using the new trt_diet column in the design formula and get the regula
 (rlog) counts for sample visualizations.  These values are similar to the log2
 normalized counts except the variance in low count genes is reduced.
 
-```{r DESeq1, eval=FALSE}
+```{r DESeq1}
 dds1 <- deseq_from_tibble(counts, samples, design = ~ trt_diet )
 rld1 <-  r_log(dds1)
 ```
@@ -173,7 +177,7 @@ plot_genes(x, c("trt", "diet"), fontsize_row=8, scale = "row")
 
 Run `DESeq` using ~ trt * diet in the design formula.
 
-```{r run_DESeq, eval=FALSE}
+```{r run_DESeq}
 dds2 <- deseq_from_tibble(counts, samples, design = ~ trt * diet)
 rld2 <- r_log(dds2)
 ```

@@ -1,4 +1,4 @@
-DESeq analysis for mouse liver samples
+DESeq analysis of mouse liver samples
 ================
 October 18, 2019
 
@@ -124,6 +124,12 @@ low count genes is reduced.
 
 ``` r
 dds1 <- deseq_from_tibble(counts, samples, design = ~ trt_diet )
+#  estimating size factors
+#  estimating dispersions
+#  gene-wise dispersion estimates
+#  mean-dispersion relationship
+#  final dispersion estimates
+#  fitting model and testing
 rld1 <-  r_log(dds1)
 ```
 
@@ -245,6 +251,12 @@ Run `DESeq` using ~ trt \* diet in the design formula.
 
 ``` r
 dds2 <- deseq_from_tibble(counts, samples, design = ~ trt * diet)
+#  estimating size factors
+#  estimating dispersions
+#  gene-wise dispersion estimates
+#  mean-dispersion relationship
+#  final dispersion estimates
+#  fitting model and testing
 rld2 <- r_log(dds2)
 ```
 

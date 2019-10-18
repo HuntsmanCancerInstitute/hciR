@@ -2,6 +2,10 @@
 title: "DESeq analysis of Pasilla knock-downs"
 date: '`r gsub("  ", " ", format(Sys.time(), "%B %e, %Y"))`'
 output: github_document
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{DESeq analysis of Pasilla knock-downs}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r global_options, include=FALSE}
