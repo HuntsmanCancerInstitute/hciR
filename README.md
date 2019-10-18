@@ -1,5 +1,12 @@
 ## RNA-Seq workflows at HCI
 
+The `hciR` package works best with [tidyverse] packages (readr, dplyr, tibble,
+etc.) and simplifies the code in a differential expression analysis.  The
+package includes functions to run [DESeq2] using sample and count tibbles as
+input, get annotated DESeq results for all pairwise combinations and create
+interactive plots and other visualizations.
+
+
 Use `devtools` to install the package from GitHub.
 
 ```r
@@ -7,11 +14,6 @@ library(devtools)
 install_github("HuntsmanCancerInstitute/hciR")
 ```
 
-The `hciR` package works best with [tidyverse] packages (readr, dplyr, tibble,
-etc.) and simplifies the code in a differential expression analysis.  The
-package includes functions to run [DESeq2] using sample and count tibbles as
-input, get annotated DESeq results for all pairwise combination and create
-interactive plots and other visualizations.
 
 The basic workflow for a mouse experiment with three groups in a `trt` column is
 listed below.
