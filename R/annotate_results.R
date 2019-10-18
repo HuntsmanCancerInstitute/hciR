@@ -16,7 +16,7 @@
 #'
 #' @examples
 #' \dontrun{
-#'  annotate_results(res, hsa)
+#'  annotate_results(res, human98)
 #' }
 #' @export
 

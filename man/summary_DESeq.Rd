@@ -16,7 +16,6 @@ A data.frame
 Summarize DESeq2 results into a \code{data.frame}
 }
 \examples{
-data(pasilla)
 summary_deseq(pasilla$results)
 }
 \author{

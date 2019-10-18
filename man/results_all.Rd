@@ -51,13 +51,9 @@ Factors should be separated by space, dash or underscore in the combined treatme
 }
 \examples{
 \dontrun{
-data(pasilla)
-data(fly)
-res <- results_all(pasilla$dds, fly)
+library(hciRdata)
+res <- results_all(pasilla$dds, fly98)
 res
-# Relevel to change default contrast order in dds$trt
-levels(dds$trt)
-results_all(dds, mmu, relevel=c("heart", "lung", "control"))
 }
 }
 \author{

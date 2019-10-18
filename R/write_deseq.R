@@ -19,7 +19,7 @@
 #'
 #' @examples
 #' \dontrun{
-#'  write_deseq(res, dds, rld, hsa)
+#'  write_deseq(res, dds, rld, human98)
 #' }
 #' @export
 

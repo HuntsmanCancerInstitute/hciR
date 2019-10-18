@@ -18,9 +18,9 @@ Mainly used to convert count tables to matrix for Bioconductor functions that
 require a matrix as input.
 }
 \examples{
-\dontrun{
-  rlog(as_matrix(count_tbl))
-}
+x <- top_counts(pasilla$results, pasilla$rlog, top=25)
+x
+as_matrix(x)
 }
 \author{
 Chris Stubben

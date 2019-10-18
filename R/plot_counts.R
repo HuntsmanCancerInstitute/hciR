@@ -13,12 +13,7 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#' \dontrun{
-#'  DESeq2::plotCounts(dds, "ENSG00000075624",  "time")
-#'  plot_counts(rld, "ENSG00000075624",  "time")
-#'  # interaction plot
-#'  plot_counts(rld, "ENSG00000075624",  c("time", "trt"), title = "ACTB")
-#' }
+#'  plot_counts(pasilla$rlog, "FBgn0033635",  c("type","condition"), title = "Prip")
 #' @export
 
 plot_counts <- function(rld, gene, intgroups, ylab="count", title){
@@ -39,7 +34,7 @@ plot_counts <- function(rld, gene, intgroups, ylab="count", title){
     }else{
        ggplot2::ggplot(x, ggplot2::aes_string(x=intgroups[1], y="gene",
         color=intgroups[2])) + ggplot2::geom_point() +
-         ggplot2::stat_summary(ggplot2::aes_string(y="gene", 
+         ggplot2::stat_summary(ggplot2::aes_string(y="gene",
                    group=intgroups[2]), fun.y="mean", geom="line") +
           ggplot2::ylab(ylab) + ggplot2::ggtitle(title)
    }

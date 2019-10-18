@@ -44,12 +44,9 @@ Plot heatmap of top genes with annoation bars, reordered branches, and color
 scale midpoint at zero.
 }
 \examples{
-data(pasilla)
- x <- top_counts(pasilla$results, pasilla$rlog)
-plot_genes(x)
-plot_genes(x, "condition", palette="RdBu")
-plot_genes(top_counts(pasilla$results, pasilla$rlog, sort_fc=TRUE) )
-plot_genes(top_counts(pasilla$results, pasilla$rlog, top=200), output = "d3")
+x <- top_counts(pasilla$results, pasilla$rlog)
+plot_genes(x, c("condition", "type"), scale="row", annotation_names_col=FALSE)
+plot_genes(x, output = "d3") 
 }
 \author{
 Chris Stubben

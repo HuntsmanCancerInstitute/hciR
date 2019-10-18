@@ -14,8 +14,8 @@
 #' @examples
 #' \dontrun{
 #' brca <- GDCprepare(query)
-#' data(hsa87)
-#' genes <- gdc_rowdata(brca, hsa87)
+#' library(hciRdata)
+#' genes <- gdc_rowdata(brca, human90)
 #' genes
 #' }
 #' @export

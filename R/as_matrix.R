@@ -9,9 +9,9 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#' \dontrun{
-#'   rlog(as_matrix(count_tbl))
-#' }
+#' x <- top_counts(pasilla$results, pasilla$rlog, top=25)
+#' x
+#' as_matrix(x)
 #' @export
 
 

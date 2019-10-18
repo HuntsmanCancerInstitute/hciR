@@ -14,10 +14,9 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#' \dontrun{
-#'  x <- top_counts( res, rld, top=25)
-#'  plot_interactions(x,  c("time", "trt"))
-#' }
+#'  x <- top_counts( pasilla$res, pasilla$rlog, top=25)
+#'  # no interaction from single or paired end as expected
+#'  plot_interactions(x,  c("condition", "type"))
 #' @export
 
 plot_interactions <- function(x, intgroups, ylab = "scaled rlog", scaled = TRUE,

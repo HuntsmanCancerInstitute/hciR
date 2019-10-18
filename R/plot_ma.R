@@ -19,9 +19,7 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#' \dontrun{
-#' plot_ma(res)
-#' }
+#' plot_ma(pasilla$results, ggplot=TRUE)
 #' @export
 
 plot_ma <- function(res, baseMean = 10000 , foldchange = 2, radius=3, size = 1,

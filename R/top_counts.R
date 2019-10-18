@@ -16,11 +16,8 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#' \dontrun{
-#'  x <- top_counts(res[[1]], rld)
-#'  pheatmap(as_matrix(x))
-#'  plot_genes(x, "trt")
-#' }
+#' x <- top_counts(pasilla$results, pasilla$rlog)
+#' x 
 #' @export
 
 top_counts <- function(res, rld, by="id",  filter = TRUE, col_names, row_names="gene_name",

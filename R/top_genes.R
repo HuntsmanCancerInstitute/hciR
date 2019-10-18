@@ -14,8 +14,7 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#' data(pasilla)
-#'  top_genes(pasilla$results)
+#' top_genes(pasilla$results) %>% dplyr::select(1:7,11)
 #' @export
 
 top_genes <- function(res, top=40, padjust = 0.05,  basemean, log2FC, sort_fc=FALSE){

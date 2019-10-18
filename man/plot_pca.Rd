@@ -4,17 +4,19 @@
 \alias{plot_pca}
 \title{Highchart version of plotPCA in DESeq2}
 \usage{
-plot_pca(object, intgroup = "trt", tooltip, ntop = 500, relevel,
+plot_pca(object, intgroup = "trt", tooltip, label, ntop = 500, relevel,
   pc = c(1, 2), scale = FALSE, ggplot = FALSE, ...)
 }
 \arguments{
 \item{object}{a matrix, ExpressionSet or DESeqTransform object}
 
-\item{intgroup}{a character vector of names in pData(x) or colData(x) for
-grouping, default 'trt'}
+\item{intgroup}{a character vector of names from colData(object) or
+pData(object) for ExpressionSets for grouping, default 'trt'}
 
-\item{tooltip}{a character vector of names in pData(x) or colData(x) for
-tooltip display, default displays the object column names}
+\item{tooltip}{a character vector of names in colData(object) for tooltip
+display, default is id column}
+
+\item{label}{a name in colData(object) for ggplot labels}
 
 \item{ntop}{number of top variable genes to use for principal components}
 
@@ -24,7 +26,7 @@ tooltip display, default displays the object column names}
 
 \item{scale}{option to scale variables in prcomp, default FALSE}
 
-\item{ggplot}{plot ggplot version}
+\item{ggplot}{plot ggplot version, default FALSE}
 
 \item{\dots}{additional options passed to \code{hc_chart}}
 }
@@ -35,9 +37,8 @@ A highchart
 Highchart version of sample PCA plot
 }
 \examples{
-data(pasilla)
 plot_pca(pasilla$rlog, "condition", tooltip=c("file", "type"))
-plot_pca(pasilla$rlog, c("condition", "type"))
+plot_pca(pasilla$rlog, "condition", label="file", ggplot=TRUE)
 }
 \author{
 Chris Stubben

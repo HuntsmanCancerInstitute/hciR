@@ -31,11 +31,8 @@ A tibble with colData attribute
 Join DESeq results to rlog or other counts, mainly for plotting gene heatmaps.
 }
 \examples{
-\dontrun{
- x <- top_counts(res[[1]], rld)
- pheatmap(as_matrix(x))
- plot_genes(x, "trt")
-}
+x <- top_counts(pasilla$results, pasilla$rlog)
+x 
 }
 \author{
 Chris Stubben

@@ -16,9 +16,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' data(pasilla)
-#' data(fly)
-#' res <- results2(pasilla$dds, fly, "treated", "untreated", trt="condition")
+#' library(hciRdata)
+#' res <- results2(pasilla$dds, fly98, "treated", "untreated", trt="condition")
 #' }
 #' @export
 

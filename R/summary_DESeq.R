@@ -9,7 +9,6 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#' data(pasilla)
 #' summary_deseq(pasilla$results)
 #' @export
 

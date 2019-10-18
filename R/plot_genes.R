@@ -25,12 +25,9 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#' data(pasilla)
-#'  x <- top_counts(pasilla$results, pasilla$rlog)
-#' plot_genes(x)
-#' plot_genes(x, "condition", palette="RdBu")
-#' plot_genes(top_counts(pasilla$results, pasilla$rlog, sort_fc=TRUE) )
-#' plot_genes(top_counts(pasilla$results, pasilla$rlog, top=200), output = "d3")
+#' x <- top_counts(pasilla$results, pasilla$rlog)
+#' plot_genes(x, c("condition", "type"), scale="row", annotation_names_col=FALSE)
+#' plot_genes(x, output = "d3") 
 #' @export
 
 plot_genes <-  function( x, intgroup, output="pheatmap", palette="RdBu",
@@ -51,7 +48,7 @@ plot_genes <-  function( x, intgroup, output="pheatmap", palette="RdBu",
                 levels(df[, i]) <- paste0(levels(df[, i]), "    ")
             }
        }
-    } 
+    }
    ## convert tibble to matrix
    x <- as_matrix(x)
    brks <- NA

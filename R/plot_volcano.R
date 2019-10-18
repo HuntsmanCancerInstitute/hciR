@@ -28,7 +28,7 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#' plot_volcano(pasilla$res, pvalue=c(35,25), foldchange=2.5)
+#' plot_volcano(pasilla$results, pvalue=c(35,25), foldchange=2.5)
 #' @export
 
 plot_volcano<- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,

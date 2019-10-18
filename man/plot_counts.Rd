@@ -27,12 +27,7 @@ Plot counts for a single gene
 See \code{link{plot_interactions}} to plot many genes.
 }
 \examples{
-\dontrun{
- DESeq2::plotCounts(dds, "ENSG00000075624",  "time")
- plot_counts(rld, "ENSG00000075624",  "time")
- # interaction plot
- plot_counts(rld, "ENSG00000075624",  c("time", "trt"), title = "ACTB")
-}
+ plot_counts(pasilla$rlog, "FBgn0033635",  c("type","condition"), title = "Prip")
 }
 \author{
 Chris Stubben

@@ -30,9 +30,8 @@ Extract and annotate a single contrast.  See \code{\link{results_all}} to annota
 }
 \examples{
 \dontrun{
-data(pasilla)
-data(fly)
-res <- results2(pasilla$dds, fly, "treated", "untreated", trt="condition")
+library(hciRdata)
+res <- results2(pasilla$dds, fly98, "treated", "untreated", trt="condition")
 }
 }
 \author{

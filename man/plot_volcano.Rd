@@ -10,12 +10,13 @@ plot_volcano(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
 \arguments{
 \item{res}{Annotated DESeq results table from results_all.}
 
-\item{pvalue_cutoff}{label points above this cutoff on a -10 log10 y-axis
-scale, the default is 1.3 (padj = 0.05) for highcharts and no labels for
-ggplot}
+\item{pvalue_cutoff}{either a single p-value cutoff on the y-axis or two
+p-values to label down- and up-regulated genes. The default is 1.3
+(corresponding to padj = 0.05) for highcharts and no labels for ggplot.}
 
-\item{foldchange_cutoff}{absolute value of log2 fold change cutoff for
-labeling highchart points, default 2}
+\item{foldchange_cutoff}{either the absolute value of the log2 fold change
+cutoff or negative and positive fold changes to label genes, default is 2 for
+highcharts and no labels for ggplot.}
 
 \item{max_pvalue}{y-axis limit, maximum value on a -10 log10 y-axis scale,
 the default is 200 (padj < 1e-200), so genes below this cutoff are assigned
@@ -23,7 +24,7 @@ the maximum p-value.}
 
 \item{radius}{point size, default 3}
 
-\item{ggplot}{plot ggplot version}
+\item{ggplot}{plot ggplot version, default TRUE}
 
 \item{palette}{RColorBrewer palette name, vector of colors, or "RdGn" for
 ggplot}
@@ -43,9 +44,7 @@ avoid stacking close overlapping points.  Labels are added using
 \code{ggrepel}, so avoid labeling too many points (200 is the limit).
 }
 \examples{
-\dontrun{
-plot_volcano(res, ggplot=TRUE, pvalue=10)
-}
+plot_volcano(pasilla$results, pvalue=c(35,25), foldchange=2.5)
 }
 \author{
 Chris Stubben

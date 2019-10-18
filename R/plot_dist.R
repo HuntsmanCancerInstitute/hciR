@@ -18,9 +18,8 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#' data(pasilla)
-#' plot_dist(pasilla$rlog, c("condition", "type") )
-#' plot_dist(pasilla$rlog, palette="Blues", diagNA=FALSE)
+#' plot_dist(pasilla$rlog, c("condition", "type"), na_col="white")
+#' plot_dist(pasilla$rlog, c("condition", "type"), palette="Blues", diagNA=FALSE, reverse=TRUE)
 #' plot_dist(pasilla$rlog, output = "d3")
 #' @export
 
