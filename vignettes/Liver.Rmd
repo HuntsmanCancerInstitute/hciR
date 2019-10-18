@@ -290,7 +290,7 @@ openxlsx::write.xlsx(k1, file = "KEGG_pathways.xlsx")
 <br>
 
 The genes from [MSigDB] are saved as a list of vectors and include
-hallmark, go, motifs, cancer, immunologic and oncogenic sets.
+hallmark, pathways, go, motifs, cancer, immunologic and oncogenic sets.
 
 
 ```{r hallmark}

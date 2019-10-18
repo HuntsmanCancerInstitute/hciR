@@ -19,19 +19,19 @@ extdata <- system.file("extdata", package="hciR")
 samples <- read_tsv(paste(extdata, "liver_samples.tsv", sep="/"))
 samples
 #  # A tibble: 12 x 4
-#     id       name      trt      diet 
+#     id       name      trt      diet
 #     <chr>    <chr>     <chr>    <chr>
-#   1 15089X1  194-Liver Control  NCD  
-#   2 15089X3  209-Liver Control  NCD  
-#   3 15089X4  220-Liver Control  NCD  
-#   4 15089X6  185-Liver Degs1_KO NCD  
-#   5 15089X7  186-Liver Degs1_KO NCD  
-#   6 15089X8  187-Liver Degs1_KO NCD  
-#   7 15089X9  61-Liver  Control  HFD  
-#   8 15089X10 70-Liver  Control  HFD  
-#   9 15089X12 76-Liver  Control  HFD  
-#  10 15089X13 82-Liver  Degs1_KO HFD  
-#  11 15089X14 89-Liver  Degs1_KO HFD  
+#   1 15089X1  194-Liver Control  NCD
+#   2 15089X3  209-Liver Control  NCD
+#   3 15089X4  220-Liver Control  NCD
+#   4 15089X6  185-Liver Degs1_KO NCD
+#   5 15089X7  186-Liver Degs1_KO NCD
+#   6 15089X8  187-Liver Degs1_KO NCD
+#   7 15089X9  61-Liver  Control  HFD
+#   8 15089X10 70-Liver  Control  HFD
+#   9 15089X12 76-Liver  Control  HFD
+#  10 15089X13 82-Liver  Degs1_KO HFD
+#  11 15089X14 89-Liver  Degs1_KO HFD
 #  12 15089X16 92-Liver  Degs1_KO HFD
 ```
 
@@ -88,7 +88,7 @@ right_join( dplyr::select(mouse92, 1:4,8),
 #   4 ENSMUSG00000002985 Apoe      protein_coding 7          Apolipoprotein E                            282255.
 #   5 ENSMUSG00000058207 Serpina3k protein_coding 12         serine (or cysteine) peptidase inhibitor    208042.
 #   6 ENSMUSG00000064351 mt-Co1    protein_coding MT         mitochondrially encoded cytochrome c oxi    205715.
-#   7 ENSMUSG00000037071 Scd1      protein_coding 19         stearoyl-Coenzyme A desaturase 1            161081 
+#   7 ENSMUSG00000037071 Scd1      protein_coding 19         stearoyl-Coenzyme A desaturase 1            161081
 #   8 ENSMUSG00000066154 Mup3      protein_coding 4          ""                                          129662.
 #   9 ENSMUSG00000024164 C3        protein_coding 17         Complement C3 Complement C3 beta chain C    127646.
 #  10 ENSMUSG00000035540 Gc        protein_coding 5          Vitamin D-binding protein                   114648.
@@ -268,7 +268,7 @@ DESeq2::resultsNames(dds2)
 #  [1] "Intercept"               "trt_Degs1_KO_vs_Control" "diet_NCD_vs_HFD"         "trtDegs1_KO.dietNCD"
 int <- DESeq2::results(dds2, name = "trtDegs1_KO.dietNCD", alpha = 0.05)
 DESeq2::summary.DESeqResults(int)
-#  
+#
 #  out of 19438 with nonzero total read count
 #  adjusted p-value < 0.05
 #  LFC > 0 (up)       : 58, 0.3%
@@ -354,7 +354,7 @@ for details about the statistics.
 group_by(k1[[1]][, -8], enriched) %>% top_n(4, abs(NES)) %>% ungroup()
 #  # A tibble: 8 x 8
 #    pathway                                          pval    padj     ES   NES nMoreExtreme  size enriched
-#    <chr>                                           <dbl>   <dbl>  <dbl> <dbl>        <dbl> <int> <chr>   
+#    <chr>                                           <dbl>   <dbl>  <dbl> <dbl>        <dbl> <int> <chr>
 #  1 Ribosome                                     0.000291 0.00413 -0.869 -3.78            0    82 negative
 #  2 Spliceosome                                  0.000311 0.00413 -0.488 -2.29            0   122 negative
 #  3 Oxidative Phosphorylation                    0.000301 0.00413 -0.497 -2.26            0   103 negative
@@ -371,7 +371,7 @@ Get the fold change vector and create an enrichment plot for Ribosome.
 library(fgsea)
 fc <- write_gsea_rnk(res, write=FALSE)
 head(fc[[1]])
-#   CNTNAP1     CD36   TTC39A   LGALS1   PNLDC1    PLIN4 
+#   CNTNAP1     CD36   TTC39A   LGALS1   PNLDC1    PLIN4
 #  2.030035 1.985832 1.983363 1.905122 1.876408 1.839541
 plotEnrichment(msig_pathways$KEGG[["Ribosome"]],  fc[[1]]) +
 ggplot2::labs(title="Ribosome")
@@ -408,17 +408,17 @@ openxlsx::write.xlsx(k1, file = "KEGG_pathways.xlsx")
 
 The genes from
 [MSigDB](http://software.broadinstitute.org/gsea/msigdb/collections.jsp)
-are saved as a list of vectors and include hallmark, go, motifs, cancer,
+are saved as a list of vectors and include hallmark, pathways, go, motifs, cancer,
 immunologic and oncogenic sets.
 
 ``` r
 lapply(msig_hallmark[1:3], head, 7)
 #  $`Tnfa Signaling Via Nfkb`
-#  [1] "ABCA1"      "AC129492.1" "ACKR3"      "AREG"       "ATF3"       "ATP2B1"     "B4GALT1"   
-#  
+#  [1] "ABCA1"      "AC129492.1" "ACKR3"      "AREG"       "ATF3"       "ATP2B1"     "B4GALT1"
+#
 #  $Hypoxia
-#  [1] "ACKR3"   "ADM"     "ADORA2B" "AK4"     "AKAP12"  "ALDOA"   "ALDOB"  
-#  
+#  [1] "ACKR3"   "ADM"     "ADORA2B" "AK4"     "AKAP12"  "ALDOA"   "ALDOB"
+#
 #  $`Cholesterol Homeostasis`
 #  [1] "ABCA2" "ACAT2" "ACSS2" "ACTG1" "ADH4"  "ALCAM" "ALDOC"
 ```
