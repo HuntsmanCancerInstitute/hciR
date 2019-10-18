@@ -43,8 +43,8 @@ on the command line.  See the [hciR scripts] file for more details.
 
 
 [tidyverse]: http://tidyverse.org/
-[Ensembl]: https://github.com/HuntsmanCancerInstitute/hciR/blob/mastervignettes/Ensembl.md
-[Liver]: https://github.com/HuntsmanCancerInstitute/hciR/blob/mastervignettes/Liver.md
+[Ensembl]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/vignettes/Ensembl.md
+[Liver]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/vignettes/Liver.md
 [Pasilla]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/vignettes/Pasilla.md
 [hciR  scripts]: https://huntsmancancerinstitute.github.io/hciRscripts/hciR_scripts.html
 [hciRscripts]: https://github.com/HuntsmanCancerInstitute/hciRscripts
