@@ -1,4 +1,4 @@
-## RNA-Seq workflows at [HCI]
+## RNA-Seq workflows at HCI
 
 Use `devtools` to install the package from GitHub.
 
@@ -43,7 +43,8 @@ on the command line.  See the [hciR scripts] file for more details.
 
 
 [tidyverse]: http://tidyverse.org/
-[Ensembl]: https://github.com/HuntsmanCancerInstitute/hciR/vignettes/Ensembl.md
-[Pasilla]: https://github.com/HuntsmanCancerInstitute/hciR/vignettes/Pasilla.md
+[Ensembl]: https://github.com/HuntsmanCancerInstitute/hciR/blob/mastervignettes/Ensembl.md
+[Liver]: https://github.com/HuntsmanCancerInstitute/hciR/blob/mastervignettes/Liver.md
+[Pasilla]: https://github.com/HuntsmanCancerInstitute/hciR/blob/master/vignettes/Pasilla.md
 [hciR  scripts]: https://huntsmancancerinstitute.github.io/hciRscripts/hciR_scripts.html
 [hciRscripts]: https://github.com/HuntsmanCancerInstitute/hciRscripts
