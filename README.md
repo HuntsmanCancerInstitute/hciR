@@ -7,7 +7,7 @@ input, get annotated DESeq results for all pairwise comparisons and create
 interactive plots and other visualizations.
 
 
-Use `devtools` to install the package from GitHub plus the [hciRdata] package
+Use `devtools` to install the package and the [hciRdata] package
 with Ensembl annotations.
 
 ```r
