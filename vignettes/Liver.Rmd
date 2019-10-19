@@ -11,7 +11,6 @@ vignette: >
 ```{r global_options, include=FALSE}
 options(width=120)
 knitr::opts_chunk$set(warning=FALSE, comment="# ", collapse=TRUE)
-library(DT)
 ```
 
 This guide follows the [Bioconductor RNA-Seq workflow] to find differentially expressed

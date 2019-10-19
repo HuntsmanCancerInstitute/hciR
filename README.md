@@ -3,7 +3,7 @@
 The `hciR` package works best with [tidyverse] packages (readr, dplyr, tibble,
 etc.) and simplifies the code in a differential expression analysis.  The
 package includes functions to run [DESeq2] using sample and count tibbles as
-input, get annotated DESeq results for all pairwise combinations and create
+input, get annotated DESeq results for all pairwise comparisons and create
 interactive plots and other visualizations.
 
 
