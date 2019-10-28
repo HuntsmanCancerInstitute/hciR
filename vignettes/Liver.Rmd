@@ -83,7 +83,6 @@ samples$trt_diet <- factor(samples$trt_diet,
      levels = c("KO_HFD",  "KO_NCD", "Control_HFD", "Control_NCD"))
 ```
 
-
 Run DESeq using the new trt_diet column in the design formula and get the regularized log
 (rlog) counts for sample visualizations.  These values are similar to the log2
 normalized counts except the variance in low count genes is reduced.
@@ -92,8 +91,6 @@ normalized counts except the variance in low count genes is reduced.
 dds1 <- deseq_from_tibble(counts, samples, design = ~ trt_diet )
 rld1 <-  r_log(dds1)
 ```
-
-
 
 Plot the first two principal components using the rlog values from the top 500
 variable genes.

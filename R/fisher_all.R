@@ -54,7 +54,7 @@ fisher_all <- function(res, gsets, deseq.padj = 0.05, logFC, min_set =2,
 
        r1 <- res[[i]]
        if(protein_coding){
-           if(i ==1 & !quiet) message("Dropping ", sum(r1$biotype!= "protein_coding" ), " non-coding genes")
+           if(i ==1 & !quiet) message("Dropping ", sum(r1$biotype!= "protein_coding", na.rm=TRUE), " non-coding genes")
            r1 <- filter(r1, biotype == "protein_coding")
        }
        ## use first gene name in comma-separated lists of human homologs?
