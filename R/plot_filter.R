@@ -12,10 +12,9 @@
 #'
 #' @examples
 #' \dontrun{
-#'  plot_counts(counts)
+#'  plot_filter(counts)
 #' }
 #' @export
-
 
 plot_filter <- function(x, n = 20){
    if(dplyr::is.tbl(x)) x <- as_matrix(x)

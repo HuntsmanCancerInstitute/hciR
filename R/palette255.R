@@ -26,9 +26,7 @@ palette255 <- function(palette, ramp=TRUE){
        }else if(palette %in% c("BrBG","PiYG","PRGn","PuOr","RdBu","RdGy","RdYlBu","RdYlGn","Spectral")){
           clrs <- rev( RColorBrewer::brewer.pal(11, palette))
        }else{
-          clrs <- try( RColorBrewer::brewer.pal(9, "white"), silent=TRUE)
-          ## hack for single color in volcano plot
-          if(class(clrs)[1] == "try-error") clrs <- palette
+          clrs <- c("white", RColorBrewer::brewer.pal(9, palette))    
        }
     }
     if(ramp) clrs <- grDevices::colorRampPalette(clrs)(255)

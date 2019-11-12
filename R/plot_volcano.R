@@ -21,6 +21,7 @@
 #' @param ggplot plot ggplot version, default TRUE
 #' @param palette RColorBrewer palette name, vector of colors, or "RdGn" for
 #' ggplot
+#' @param missing Replace missing gene names with Ensembl IDs
 #' @param \dots other options like width passed to \code{hc_chart}
 #'
 #' @return A highchart or ggplot.
@@ -32,7 +33,7 @@
 #' @export
 
 plot_volcano<- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
- radius=3, ggplot=TRUE, palette="RdBu", ...){
+ radius=3, ggplot=TRUE, palette="RdBu", missing=FALSE,  ...){
    if(!tibble::is_tibble(res)){
       if(is.list(res)){
         message("Plotting the first table in the list")
@@ -85,11 +86,16 @@ plot_volcano<- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
 		if( missing(pvalue_cutoff) & missing(foldchange_cutoff)){
 			p1
 		}else{
-		   ## add labels, pvalue, fc or BOTH
-		   ## avoid ggrepel warning if missing name
+		   ## is missing gene name
+		   if(missing){
+             n <- x$gene_name == "" | is.na(x$gene_name)
+		     if(sum(n)>0) x$gene_name[n] <- x$id[n]
+		   }
+           ## avoid ggrepel warning if missing name
 		   y <- filter(x, !is.na(gene_name))
 		   y1 <- NULL
 		   y2 <- NULL
+		   ## add labels using pvalue, fc or BOTH
            if(!missing(pvalue_cutoff)){
              if(length(pvalue_cutoff) == 2){
                  y1 <- filter(y,

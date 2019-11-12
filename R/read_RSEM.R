@@ -41,7 +41,11 @@ read_RSEM <- function(path = ".", gene = TRUE, value="expected_count", reshape =
       if(reshape){
           res1 <- tidyr::spread_(res1, "sample", value)
            #  sort HCI samples as X1, X2, ..., X10, X11
-          res1  <-  res1[, c(1, order_samples(colnames(res1)[-1])+1) ]
+		  if(gene){
+             res1  <-  res1[, c(1, order_samples(colnames(res1)[-1])+1) ]
+		 }else{
+			 res1  <-  res1[, c(1,2, order_samples(colnames(res1)[-(1:2)])+2) ]
+		 }
        }
    }else{
       cntF <- list.files(path, "\\.cnt$", recursive=TRUE, full.names=TRUE)
