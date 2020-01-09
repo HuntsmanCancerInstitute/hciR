@@ -17,7 +17,7 @@
 #'
 #' @examples
 #' x <- top_counts(pasilla$results, pasilla$rlog)
-#' x 
+#' x
 #' @export
 
 top_counts <- function(res, rld, by="id",  filter = TRUE, col_names, row_names="gene_name",
@@ -46,7 +46,7 @@ top_counts <- function(res, rld, by="id",  filter = TRUE, col_names, row_names="
    n <- match(x[[ by ]], rownames(rldx))
    if(all(is.na(n))) stop("Column ", by, " in results and rownames in counts do not match")
    if(any(is.na(n))) stop(sum(is.na(n)) , " result rows not in count matrix" )
-   mat <- rldx[n, ]
+   mat <- rldx[n, , drop=FALSE]
    ## gene name by default as id  - use id if missing
    if(row_names == "gene_name"){
            n <- is.na( x[["gene_name"]]) | x[["gene_name"]] ==""
