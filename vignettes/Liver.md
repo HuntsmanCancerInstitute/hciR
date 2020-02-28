@@ -1,12 +1,16 @@
 DESeq analysis of mouse liver samples
 ================
-October 18, 2019
+February 28, 2020
 
 This guide follows the [Bioconductor RNA-Seq
 workflow](http://master.bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html)
 to find differentially expressed genes using
 [DESeq2](http://www.bioconductor.org/packages/release/bioc/html/DESeq2.html)
-version 1.24.0.
+version 1.26.0. For more details about the statistics, check the
+original
+[paper](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0550-8)
+or online tutorials like the one from
+[Harvard](https://hbctraining.github.io/DGE_workshop/lessons/04_DGE_DESeq2_analysis.html).
 
 ### Load samples and counts
 
@@ -19,19 +23,19 @@ extdata <- system.file("extdata", package="hciR")
 samples <- read_tsv(paste(extdata, "liver_samples.tsv", sep="/"))
 samples
 #  # A tibble: 12 x 4
-#     id       name      trt      diet
+#     id       name      trt      diet 
 #     <chr>    <chr>     <chr>    <chr>
-#   1 15089X1  194-Liver Control  NCD
-#   2 15089X3  209-Liver Control  NCD
-#   3 15089X4  220-Liver Control  NCD
-#   4 15089X6  185-Liver Degs1_KO NCD
-#   5 15089X7  186-Liver Degs1_KO NCD
-#   6 15089X8  187-Liver Degs1_KO NCD
-#   7 15089X9  61-Liver  Control  HFD
-#   8 15089X10 70-Liver  Control  HFD
-#   9 15089X12 76-Liver  Control  HFD
-#  10 15089X13 82-Liver  Degs1_KO HFD
-#  11 15089X14 89-Liver  Degs1_KO HFD
+#   1 15089X1  194-Liver Control  NCD  
+#   2 15089X3  209-Liver Control  NCD  
+#   3 15089X4  220-Liver Control  NCD  
+#   4 15089X6  185-Liver Degs1_KO NCD  
+#   5 15089X7  186-Liver Degs1_KO NCD  
+#   6 15089X8  187-Liver Degs1_KO NCD  
+#   7 15089X9  61-Liver  Control  HFD  
+#   8 15089X10 70-Liver  Control  HFD  
+#   9 15089X12 76-Liver  Control  HFD  
+#  10 15089X13 82-Liver  Degs1_KO HFD  
+#  11 15089X14 89-Liver  Degs1_KO HFD  
 #  12 15089X16 92-Liver  Degs1_KO HFD
 ```
 
@@ -62,6 +66,7 @@ fewer reads in every sample to create a final count matrix with 19438
 rows.
 
 ``` r
+library(hciR)
 counts <- filter_counts(counts, n=5)
 #  Removed 18059 features with 0 reads
 #  Removed 16304 features with <=5 maximum reads
@@ -74,24 +79,24 @@ check genes with the highest number of assigned reads.
 ``` r
 library(hciRdata)
 n1 <- rowMeans(as_matrix(counts))
-right_join( dplyr::select(mouse92, 1:4,8),
+inner_join( dplyr::select(mouse92, 1:4,8),
  tibble(id= names(n1), mean_count = n1)) %>%
  mutate(description=substr(description, 1, 40)) %>%
  arrange(desc(mean_count))
 #  Joining, by = "id"
 #  # A tibble: 19,438 x 6
-#     id                 gene_name biotype        chromosome description                              mean_count
-#     <chr>              <chr>     <chr>          <chr>      <chr>                                         <dbl>
-#   1 ENSMUSG00000029368 Alb       protein_coding 5          Serum albumin                              1203267.
-#   2 ENSMUSG00000064339 mt-Rnr2   Mt_rRNA        MT         mitochondrially encoded 16S rRNA            446965.
-#   3 ENSMUSG00000020609 Apob      protein_coding 12         Apolipoprotein B-100 Apolipoprotein B-48    383672.
-#   4 ENSMUSG00000002985 Apoe      protein_coding 7          Apolipoprotein E                            282255.
-#   5 ENSMUSG00000058207 Serpina3k protein_coding 12         serine (or cysteine) peptidase inhibitor    208042.
-#   6 ENSMUSG00000064351 mt-Co1    protein_coding MT         mitochondrially encoded cytochrome c oxi    205715.
-#   7 ENSMUSG00000037071 Scd1      protein_coding 19         stearoyl-Coenzyme A desaturase 1            161081
-#   8 ENSMUSG00000066154 Mup3      protein_coding 4          ""                                          129662.
-#   9 ENSMUSG00000024164 C3        protein_coding 17         Complement C3 Complement C3 beta chain C    127646.
-#  10 ENSMUSG00000035540 Gc        protein_coding 5          Vitamin D-binding protein                   114648.
+#     id                 gene_name biotype        chromosome description                               mean_count
+#     <chr>              <chr>     <chr>          <chr>      <chr>                                          <dbl>
+#   1 ENSMUSG00000029368 Alb       protein_coding 5          "Serum albumin"                             1203267.
+#   2 ENSMUSG00000064339 mt-Rnr2   Mt_rRNA        MT         "mitochondrially encoded 16S rRNA"           446965.
+#   3 ENSMUSG00000020609 Apob      protein_coding 12         "Apolipoprotein B-100 Apolipoprotein B-4…    383672.
+#   4 ENSMUSG00000002985 Apoe      protein_coding 7          "Apolipoprotein E"                           282255.
+#   5 ENSMUSG00000058207 Serpina3k protein_coding 12         "serine (or cysteine) peptidase inhibito…    208042.
+#   6 ENSMUSG00000064351 mt-Co1    protein_coding MT         "mitochondrially encoded cytochrome c ox…    205715.
+#   7 ENSMUSG00000037071 Scd1      protein_coding 19         "stearoyl-Coenzyme A desaturase 1"           161081 
+#   8 ENSMUSG00000066154 Mup3      protein_coding 4          ""                                           129662.
+#   9 ENSMUSG00000024164 C3        protein_coding 17         "Complement C3 Complement C3 beta chain …    127646.
+#  10 ENSMUSG00000035540 Gc        protein_coding 5          "Vitamin D-binding protein"                  114648.
 #  # … with 19,428 more rows
 ```
 
@@ -267,8 +272,8 @@ discovery rate (FDR). There are 98 signfiicant interactions.
 DESeq2::resultsNames(dds2)
 #  [1] "Intercept"               "trt_Degs1_KO_vs_Control" "diet_NCD_vs_HFD"         "trtDegs1_KO.dietNCD"
 int <- DESeq2::results(dds2, name = "trtDegs1_KO.dietNCD", alpha = 0.05)
-DESeq2::summary.DESeqResults(int)
-#
+DESeq2::summary(int)
+#  
 #  out of 19438 with nonzero total read count
 #  adjusted p-value < 0.05
 #  LFC > 0 (up)       : 58, 0.3%
@@ -343,7 +348,7 @@ k1 <- fgsea_all(res, msig_pathways$KEGG)
 #  1. KO_HFD vs. KO_NCD:            38 enriched sets (17 positive, 21 negative)
 #  2. KO_HFD vs. Control_HFD:       84 enriched sets (54 positive, 30 negative)
 #  3. KO_NCD vs. Control_NCD:       33 enriched sets (4 positive, 29 negative)
-#  4. Control_HFD vs. Control_NCD:  41 enriched sets (0 positive, 41 negative)
+#  4. Control_HFD vs. Control_NCD:  39 enriched sets (0 positive, 39 negative)
 ```
 
 Print the top pathways from KO\_HFD vs. KO\_NCD and check the GSEA [user
@@ -354,7 +359,7 @@ for details about the statistics.
 group_by(k1[[1]][, -8], enriched) %>% top_n(4, abs(NES)) %>% ungroup()
 #  # A tibble: 8 x 8
 #    pathway                                          pval    padj     ES   NES nMoreExtreme  size enriched
-#    <chr>                                           <dbl>   <dbl>  <dbl> <dbl>        <dbl> <int> <chr>
+#    <chr>                                           <dbl>   <dbl>  <dbl> <dbl>        <dbl> <int> <chr>   
 #  1 Ribosome                                     0.000291 0.00413 -0.869 -3.78            0    82 negative
 #  2 Spliceosome                                  0.000311 0.00413 -0.488 -2.29            0   122 negative
 #  3 Oxidative Phosphorylation                    0.000301 0.00413 -0.497 -2.26            0   103 negative
@@ -371,7 +376,7 @@ Get the fold change vector and create an enrichment plot for Ribosome.
 library(fgsea)
 fc <- write_gsea_rnk(res, write=FALSE)
 head(fc[[1]])
-#   CNTNAP1     CD36   TTC39A   LGALS1   PNLDC1    PLIN4
+#   CNTNAP1     CD36   TTC39A   LGALS1   PNLDC1    PLIN4 
 #  2.030035 1.985832 1.983363 1.905122 1.876408 1.839541
 plotEnrichment(msig_pathways$KEGG[["Ribosome"]],  fc[[1]]) +
 ggplot2::labs(title="Ribosome")
@@ -393,7 +398,7 @@ Plot NES scores from significant pathways in two or more contrasts.
 
 ``` r
 plot_fgsea(k1, fontsize_row=7, sets =2)
-#  58 total sets
+#  57 total sets
 ```
 
 ![](Liver_files/figure-gfm/plotfgsea-1.png)<!-- -->
@@ -408,17 +413,17 @@ openxlsx::write.xlsx(k1, file = "KEGG_pathways.xlsx")
 
 The genes from
 [MSigDB](http://software.broadinstitute.org/gsea/msigdb/collections.jsp)
-are saved as a list of vectors and include hallmark, pathways, go, motifs, cancer,
-immunologic and oncogenic sets.
+are saved as a list of vectors and include hallmark, pathways, go,
+motifs, cancer, immunologic and oncogenic sets.
 
 ``` r
 lapply(msig_hallmark[1:3], head, 7)
 #  $`Tnfa Signaling Via Nfkb`
-#  [1] "ABCA1"      "AC129492.1" "ACKR3"      "AREG"       "ATF3"       "ATP2B1"     "B4GALT1"
-#
+#  [1] "ABCA1"      "AC129492.1" "ACKR3"      "AREG"       "ATF3"       "ATP2B1"     "B4GALT1"   
+#  
 #  $Hypoxia
-#  [1] "ACKR3"   "ADM"     "ADORA2B" "AK4"     "AKAP12"  "ALDOA"   "ALDOB"
-#
+#  [1] "ACKR3"   "ADM"     "ADORA2B" "AK4"     "AKAP12"  "ALDOA"   "ALDOB"  
+#  
 #  $`Cholesterol Homeostasis`
 #  [1] "ABCA2" "ACAT2" "ACSS2" "ACTG1" "ADH4"  "ALCAM" "ALDOC"
 ```

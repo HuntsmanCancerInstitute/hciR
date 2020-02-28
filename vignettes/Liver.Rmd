@@ -14,7 +14,8 @@ knitr::opts_chunk$set(warning=FALSE, comment="# ", collapse=TRUE)
 ```
 
 This guide follows the [Bioconductor RNA-Seq workflow] to find differentially expressed
-genes using [DESeq2] version `r gsub("‘’", "", packageVersion("DESeq2"))`.
+genes using [DESeq2] version `r gsub("‘’", "", packageVersion("DESeq2"))`. For more details about the
+statistics, check the original [paper] or online tutorials like the one from [Harvard].
 
 
 ### Load samples and counts
@@ -45,6 +46,7 @@ in every sample to create a final count matrix with 19438 rows.
 
 
 ```{r count_matrix}
+library(hciR)
 counts <- filter_counts(counts, n=5)
 ```
 
@@ -56,7 +58,7 @@ the highest number of assigned reads.
 options(width=110)
 library(hciRdata)
 n1 <- rowMeans(as_matrix(counts))
-right_join( dplyr::select(mouse92, 1:4,8),
+inner_join( dplyr::select(mouse92, 1:4,8),
  tibble(id= names(n1), mean_count = n1)) %>%
  mutate(description=substr(description, 1, 40)) %>%
  arrange(desc(mean_count))
@@ -184,7 +186,7 @@ There are 98 signfiicant interactions.
 ```{r summary1}
 DESeq2::resultsNames(dds2)
 int <- DESeq2::results(dds2, name = "trtDegs1_KO.dietNCD", alpha = 0.05)
-DESeq2::summary.DESeqResults(int)
+DESeq2::summary(int)
 ```
 
 
@@ -306,7 +308,8 @@ names(msig_cancer)
 
 <br>
 
-
+[Harvard]: https://hbctraining.github.io/DGE_workshop/lessons/04_DGE_DESeq2_analysis.html
+[paper]: https://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0550-8
 [Correlation Engine]: https://hci.ussc.informatics.illumina.com/
 [Enrichr]: http://amp.pharm.mssm.edu/Enrichr/
 [user guide]: http://software.broadinstitute.org/gsea/doc/GSEAUserGuideFrame.html
