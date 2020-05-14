@@ -22,7 +22,8 @@
 #' @param palette RColorBrewer palette name, vector of colors, or "RdGn" for
 #' ggplot
 #' @param missing Replace missing gene names with Ensembl IDs
-#' @param \dots other options like width passed to \code{hc_chart}
+#' @param labelsize label size, default 3
+#' @param \dots other options passed to \code{hc_chart} or \code{geom_text_repel}
 #'
 #' @return A highchart or ggplot.
 #'
@@ -33,7 +34,7 @@
 #' @export
 
 plot_volcano<- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
- radius=3, ggplot=TRUE, palette="RdBu", missing=FALSE,  ...){
+ radius=3, ggplot=TRUE, palette="RdBu", missing=FALSE, labelsize=3, ...){
    if(!tibble::is_tibble(res)){
       if(is.list(res)){
         message("Plotting the first table in the list")
@@ -122,8 +123,9 @@ plot_volcano<- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
                    "), check pvalue and fold change cutoffs")
                p1
             }else{
+				## old defaults, cex=3, box.padding = 0.1, point.padding = 0.1
                 p1 + ggrepel::geom_text_repel(data=y, ggplot2::aes(label=
-                        gene_name), cex=3, box.padding=.1, point.padding=.1)
+                        gene_name), cex=labelsize, ...)
             }
 		 }
 	  }

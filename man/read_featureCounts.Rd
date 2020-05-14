@@ -4,8 +4,7 @@
 \alias{read_featureCounts}
 \title{Read featureCounts output files}
 \usage{
-read_featureCounts(path = ".", pattern, reshape = TRUE,
-  stats = FALSE)
+read_featureCounts(path = ".", pattern, reshape = TRUE, stats = FALSE)
 }
 \arguments{
 \item{path}{the path to featureCounts output files, the default

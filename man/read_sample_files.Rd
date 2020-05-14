@@ -4,8 +4,7 @@
 \alias{read_sample_files}
 \title{Read and combine common output files}
 \usage{
-read_sample_files(path = ".", pattern = "\\\\.counts$",
-  delim = "\\t", ...)
+read_sample_files(path = ".", pattern = "\\\\.counts$", delim = "\\t", ...)
 }
 \arguments{
 \item{path}{the path to output files, the default corresponds to the working directory.}

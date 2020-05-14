@@ -21,3 +21,12 @@ as_matrix <- function(x){
   rownames(y) <- x[[1]]
   y
 }
+
+#' @describeIn as_matrix Convert matrix to tibble
+#' @param var name of column, default id
+#' @export
+
+as_tbl <- function(x, var="id"){
+  if(!is.matrix(x)) stop("x must be a matrix")
+  tibble::as_tibble(tibble::rownames_to_column(data.frame(x, check.names=FALSE), var))
+}

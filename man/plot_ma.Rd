@@ -4,12 +4,24 @@
 \alias{plot_ma}
 \title{Highchart version of MA-plot}
 \usage{
-plot_ma(res, baseMean = 10000, foldchange = 2, radius = 3,
-  size = 1, alpha = 0.3, ylab = "Log2 Fold Change", ggplot = FALSE,
-  ...)
+plot_ma(
+  res,
+  signif = 0.05,
+  baseMean = 10000,
+  foldchange = 2,
+  radius = 3,
+  size = 1,
+  alpha = 0.3,
+  sig_alpha = TRUE,
+  ylab = "Log2 Fold Change",
+  ggplot = TRUE,
+  ...
+)
 }
 \arguments{
 \item{res}{Annotated DESeq results table from results_all}
+
+\item{signif}{significance level, default 0.05}
 
 \item{baseMean}{normalized count cutoff for labeling points, default 10000}
 
@@ -21,6 +33,8 @@ points, default 2}
 \item{size}{ggplot point size, default 1}
 
 \item{alpha}{ggplot alpha transparency, default 0.3}
+
+\item{sig_alpha}{use transparency for significant genes, default TRUE}
 
 \item{ylab}{y-axis label}
 

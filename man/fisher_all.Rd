@@ -4,8 +4,15 @@
 \alias{fisher_all}
 \title{Run Fisher's test on all DESeq2 result tables}
 \usage{
-fisher_all(res, gsets, deseq.padj = 0.05, logFC, min_set = 2,
-  protein_coding = TRUE, quiet = FALSE)
+fisher_all(
+  res,
+  gsets,
+  deseq.padj = 0.05,
+  logFC,
+  min_set = 2,
+  protein_coding = TRUE,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{res}{A list of DESeq results}

@@ -4,8 +4,7 @@
 \alias{results2}
 \title{Extract and annotate a single DESeq results table}
 \usage{
-results2(dds, biomart, exp, ref, trt = "trt", alpha = 0.05,
-  lfcShrink = TRUE)
+results2(dds, biomart, exp, ref, trt = "trt", alpha = 0.05, lfcShrink = TRUE)
 }
 \arguments{
 \item{dds}{a DESeqDataSet}

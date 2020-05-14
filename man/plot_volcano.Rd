@@ -4,8 +4,18 @@
 \alias{plot_volcano}
 \title{Volcano plot}
 \usage{
-plot_volcano(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
-  radius = 3, ggplot = TRUE, palette = "RdBu", ...)
+plot_volcano(
+  res,
+  pvalue_cutoff,
+  foldchange_cutoff,
+  max_pvalue = 200,
+  radius = 3,
+  ggplot = TRUE,
+  palette = "RdBu",
+  missing = FALSE,
+  labelsize = 3,
+  ...
+)
 }
 \arguments{
 \item{res}{Annotated DESeq results table from results_all.}
@@ -29,7 +39,11 @@ the maximum p-value.}
 \item{palette}{RColorBrewer palette name, vector of colors, or "RdGn" for
 ggplot}
 
-\item{\dots}{other options like width passed to \code{hc_chart}}
+\item{missing}{Replace missing gene names with Ensembl IDs}
+
+\item{labelsize}{label size, default 3}
+
+\item{\dots}{other options passed to \code{hc_chart} or \code{geom_text_repel}}
 }
 \value{
 A highchart or ggplot.

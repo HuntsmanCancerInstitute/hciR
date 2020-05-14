@@ -4,8 +4,7 @@
 \alias{deseq_from_tibble}
 \title{Run DESeq from tibbles}
 \usage{
-deseq_from_tibble(counts, samples, run_deseq = TRUE, minReplicates = 7,
-  ...)
+deseq_from_tibble(counts, samples, run_deseq = TRUE, minReplicates = 7, ...)
 }
 \arguments{
 \item{counts}{a count table with feature ids in row 1}

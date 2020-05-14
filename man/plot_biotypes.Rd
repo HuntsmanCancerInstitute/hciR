@@ -4,8 +4,14 @@
 \alias{plot_biotypes}
 \title{Plot reads assigned to biotypes}
 \usage{
-plot_biotypes(x, n = 12, group = FALSE, stack = "percent",
-  barwidth = NULL, ...)
+plot_biotypes(
+  x,
+  n = 12,
+  group = FALSE,
+  stack = "percent",
+  barwidth = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{count matrix from featureCounts with `-g gene_biotype`}

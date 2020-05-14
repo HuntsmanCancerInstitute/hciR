@@ -71,7 +71,7 @@ write_deseq <- function(result_all, dds, rld, biomart, sets, fpkm,
     samp1$replaceable <- NULL
   Counts <-    list(
        "raw_counts" = DESeq2::counts(dds),
-       "normalized" = DESeq2::counts(dds, normalized=TRUE),
+       "log2_norm"  = SummarizedExperiment::assay(DESeq2::normTransform(dds)),
        "rlog"       = SummarizedExperiment::assay(rld))
 
      if(!missing(fpkm)){
@@ -85,7 +85,7 @@ write_deseq <- function(result_all, dds, rld, biomart, sets, fpkm,
    if(!missing(biomart)){
         Meta <- c(Meta, list( "ensembl"= as.data.frame(biomart)))
         # add gene names to count tables?
-        Counts <- lapply(Counts, function(y) dplyr::inner_join(biomart[,1:3],
+        Counts <- lapply(Counts, function(y) dplyr::right_join(biomart[,1:3],
                 tibble::rownames_to_column( as.data.frame(y), "id"), by="id"))
    }
    DESeq_tables <-  c( sum1, res1, Counts, Meta)

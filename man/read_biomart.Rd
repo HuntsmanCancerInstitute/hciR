@@ -4,8 +4,15 @@
 \alias{read_biomart}
 \title{Read biomart annotations}
 \usage{
-read_biomart(dataset = "human", attributes, host = "www.ensembl.org",
-  version = NULL, patch = FALSE, list = NULL, ...)
+read_biomart(
+  dataset = "human",
+  attributes,
+  host = "www.ensembl.org",
+  version = NULL,
+  patch = FALSE,
+  list = NULL,
+  ...
+)
 }
 \arguments{
 \item{dataset}{The first letter of genus and full species name like btaurus,

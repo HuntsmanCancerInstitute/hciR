@@ -20,7 +20,7 @@ low count cutoffs for both maximum and total reads
 }
 \examples{
 \dontrun{
- plot_counts(counts)
+ plot_filter(counts)
 }
 }
 \author{

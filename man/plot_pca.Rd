@@ -4,8 +4,18 @@
 \alias{plot_pca}
 \title{Highchart version of plotPCA in DESeq2}
 \usage{
-plot_pca(object, intgroup = "trt", tooltip, label, ntop = 500, relevel,
-  pc = c(1, 2), scale = FALSE, ggplot = FALSE, ...)
+plot_pca(
+  object,
+  intgroup = "trt",
+  tooltip,
+  label,
+  ntop = 500,
+  relevel,
+  pc = c(1, 2),
+  scale = FALSE,
+  ggplot = FALSE,
+  ...
+)
 }
 \arguments{
 \item{object}{a matrix, ExpressionSet or DESeqTransform object}

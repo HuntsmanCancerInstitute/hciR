@@ -4,8 +4,13 @@
 \alias{read_RSEM}
 \title{Read RSEM output files}
 \usage{
-read_RSEM(path = ".", gene = TRUE, value = "expected_count",
-  reshape = TRUE, stats = FALSE)
+read_RSEM(
+  path = ".",
+  gene = TRUE,
+  value = "expected_count",
+  reshape = TRUE,
+  stats = FALSE
+)
 }
 \arguments{
 \item{path}{the path to RSEM output files, the default corresponds to the working directory.}

@@ -4,8 +4,16 @@
 \alias{top_counts}
 \title{Get a count matrix of top genes}
 \usage{
-top_counts(res, rld, by = "id", filter = TRUE, col_names,
-  row_names = "gene_name", collapse, ...)
+top_counts(
+  res,
+  rld,
+  by = "id",
+  filter = TRUE,
+  col_names,
+  row_names = "gene_name",
+  collapse,
+  ...
+)
 }
 \arguments{
 \item{res}{an annotated DESeq2 results file}
@@ -32,7 +40,7 @@ Join DESeq results to rlog or other counts, mainly for plotting gene heatmaps.
 }
 \examples{
 x <- top_counts(pasilla$results, pasilla$rlog)
-x 
+x
 }
 \author{
 Chris Stubben

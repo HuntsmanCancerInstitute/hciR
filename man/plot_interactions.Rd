@@ -4,8 +4,15 @@
 \alias{plot_interactions}
 \title{Plot counts for many genes}
 \usage{
-plot_interactions(x, intgroups, ylab = "scaled rlog", scaled = TRUE,
-  n = 40, reorder, ...)
+plot_interactions(
+  x,
+  intgroups,
+  ylab = "scaled rlog",
+  scaled = TRUE,
+  n = 40,
+  reorder,
+  ...
+)
 }
 \arguments{
 \item{x}{a tibble from \code{\link{top_counts}}}

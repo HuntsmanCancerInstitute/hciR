@@ -71,8 +71,8 @@ plot_pca <- function(object, intgroup="trt", tooltip, label, ntop = 500, relevel
        ggplot2::xlab(paste0("PC1: ", percentVar[pc[1]],"% variance")) +
        ggplot2::ylab(paste0("PC2: ", percentVar[pc[2]],"% variance")) +
        ggplot2::theme_bw() +
-       ggplot2::theme(legend.title = element_blank(),
-           legend.key = element_blank())
+       ggplot2::theme(legend.title = ggplot2::element_blank(),
+           legend.key = ggplot2::element_blank())
        if(missing(label)){
 		   p
 	   }else{

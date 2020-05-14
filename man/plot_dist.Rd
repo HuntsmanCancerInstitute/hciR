@@ -4,9 +4,18 @@
 \alias{plot_dist}
 \title{Plot heatmap of sample distances}
 \usage{
-plot_dist(rld, intgroup, col_name, output = "pheatmap",
-  palette = "RdYlBu", reverse_pal = FALSE, diagNA = TRUE,
-  border = NA, fontsize = 10, ...)
+plot_dist(
+  rld,
+  intgroup,
+  col_name,
+  output = "pheatmap",
+  palette = "RdYlBu",
+  reverse_pal = FALSE,
+  diagNA = TRUE,
+  border = NA,
+  fontsize = 10,
+  ...
+)
 }
 \arguments{
 \item{rld}{a matrix or DESeqTransform with assay slot}

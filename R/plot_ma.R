@@ -57,7 +57,7 @@ plot_ma <- function(res, signif = 0.05, baseMean = 10000, foldchange = 2, radius
    if(!sig_alpha) alpha <- ifelse(x$de == "sig", 1, alpha)
    ggplot2::ggplot(data=x, ggplot2::aes(x= x1, y= log2FoldChange, color=de, shape=de)) +
         ggplot2::geom_point(alpha=alpha, size= size, show.legend = FALSE) +
-		scale_color_manual(values=c("gray20", "red")) +
+		ggplot2::scale_color_manual(values=c("gray20", "red")) +
         ggplot2::xlab( xlab1) + ggplot2::ylab(ylab) + ggplot2::theme_light()
   }else{
      ### Grouping column for enableMouseTracking

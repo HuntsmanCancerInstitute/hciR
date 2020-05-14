@@ -4,9 +4,19 @@
 \alias{plot_genes}
 \title{Plot heatmap of top genes}
 \usage{
-plot_genes(x, intgroup, output = "pheatmap", palette = "RdBu",
-  dendsort = TRUE, scale = "none", midpoint0 = TRUE,
-  max_scale = NA, border = NA, cluster_cols = TRUE, ...)
+plot_genes(
+  x,
+  intgroup,
+  output = "pheatmap",
+  palette = "RdBu",
+  dendsort = TRUE,
+  scale = "none",
+  midpoint0 = TRUE,
+  max_scale = NA,
+  border = NA,
+  cluster_cols = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{a tibble from \code{\link{top_counts}}}
@@ -46,7 +56,7 @@ scale midpoint at zero.
 \examples{
 x <- top_counts(pasilla$results, pasilla$rlog)
 plot_genes(x, c("condition", "type"), scale="row", annotation_names_col=FALSE)
-plot_genes(x, output = "d3") 
+plot_genes(x, output = "d3")
 }
 \author{
 Chris Stubben

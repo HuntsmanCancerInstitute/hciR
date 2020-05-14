@@ -4,8 +4,7 @@
 \alias{write_gsea_rnk}
 \title{Write DESeq results to GSEA rank file}
 \usage{
-write_gsea_rnk(res, write = TRUE, protein_coding = TRUE,
-  na_pvalue = TRUE)
+write_gsea_rnk(res, write = TRUE, protein_coding = TRUE, na_pvalue = TRUE)
 }
 \arguments{
 \item{res}{a list of DESeq results}

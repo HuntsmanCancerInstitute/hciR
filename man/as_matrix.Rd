@@ -2,13 +2,18 @@
 % Please edit documentation in R/as_matrix.R
 \name{as_matrix}
 \alias{as_matrix}
+\alias{as_tbl}
 \title{Convert tibbles to a matrix}
 \usage{
 as_matrix(x)
+
+as_tbl(x, var = "id")
 }
 \arguments{
 \item{x}{a tibble with identifiers in column 1 (assigned as rownames) and
 numbers in remaining columns}
+
+\item{var}{name of column, default id}
 }
 \value{
 A matrix
@@ -17,6 +22,11 @@ A matrix
 Mainly used to convert count tables to matrix for Bioconductor functions that
 require a matrix as input.
 }
+\section{Functions}{
+\itemize{
+\item \code{as_tbl}: Convert matrix to tibble
+}}
+
 \examples{
 x <- top_counts(pasilla$results, pasilla$rlog, top=25)
 x
