@@ -15,7 +15,7 @@
 #' @param add_columns a vector of biomart columns to add to result table, default
 #'        gene_name, biotype, chromosome, description and human_homolog if present
 #' @param trt Compare groups within trt group, default is first term in the design formula
-#' @param lfcShrink  shrink fold changes using \code{lfcShrink} for DESeq2 version >= 1.16
+#' @param lfcShrink  shrink fold changes using \code{lfcShrink} with type = "normal"
 #' @param simplify return a tibble if only 1 contrast present
 #' @param \dots additional options passed to \code{results}
 #'
@@ -91,7 +91,7 @@ results_all <- function( object, biomart,  vs= "all", subset, relevel, alpha = 0
        res1 <- DESeq2::results(object, contrast = c( trt, contrast[1,i], contrast[2,i] ), alpha = alpha, ...)
       if(lfcShrink){
         ## GET shrunken fold change - requires DESeq2 version >= 1.16
-         res1 <-  DESeq2::lfcShrink(object, contrast=c( trt, contrast[1,i], contrast[2,i] ), res=res1, quiet=TRUE)
+         res1 <-  DESeq2::lfcShrink(object, contrast=c( trt, contrast[1,i], contrast[2,i] ), res=res1, type = "normal", quiet=TRUE)
       }
        ft <- S4Vectors::metadata(res1)$filterThreshold
        x <- suppressMessages( summary_deseq(res1) )

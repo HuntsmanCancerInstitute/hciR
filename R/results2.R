@@ -8,7 +8,7 @@
 #' @param ref name of reference trt group in the denominator
 #' @param trt treatment group in the design formula
 #' @param alpha the significance cutoff for the adjusted p-value cutoff (FDR)
-#' @param lfcShrink  shrink fold changes using \code{lfcShrink} for DESeq2 version >= 1.16
+#' @param lfcShrink  shrink fold changes using \code{lfcShrink} with type = "normal"
 #'
 #' @return A tibble
 #'
@@ -24,7 +24,7 @@
 results2 <- function(dds, biomart, exp, ref, trt="trt", alpha =0.05, lfcShrink=TRUE){
       vs <- paste(c(exp, ref), collapse= " vs. ")
       res1 <- DESeq2::results(dds, contrast = c(trt, exp, ref), alpha= alpha)
-      if(lfcShrink) res1 <- DESeq2::lfcShrink(dds, contrast = c(trt, exp, ref), res = res1)
+      if(lfcShrink) res1 <- DESeq2::lfcShrink(dds, contrast = c(trt, exp, ref), res = res1, type = "normal")
       ft <- S4Vectors::metadata(res1)$filterThreshold
       Columns <- c("gene_name", "biotype", "chromosome",  "description")
       if("human_homolog" %in% names(biomart)) Columns <- c(Columns, "human_homolog")
