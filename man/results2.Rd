@@ -19,7 +19,7 @@ results2(dds, biomart, exp, ref, trt = "trt", alpha = 0.05, lfcShrink = TRUE)
 
 \item{alpha}{the significance cutoff for the adjusted p-value cutoff (FDR)}
 
-\item{lfcShrink}{shrink fold changes using \code{lfcShrink} for DESeq2 version >= 1.16}
+\item{lfcShrink}{shrink fold changes using \code{lfcShrink} with type = "normal"}
 }
 \value{
 A tibble

@@ -36,7 +36,7 @@ gene_name, biotype, chromosome, description and human_homolog if present}
 
 \item{trt}{Compare groups within trt group, default is first term in the design formula}
 
-\item{lfcShrink}{shrink fold changes using \code{lfcShrink} for DESeq2 version >= 1.16}
+\item{lfcShrink}{shrink fold changes using \code{lfcShrink} with type = "normal"}
 
 \item{simplify}{return a tibble if only 1 contrast present}
 
