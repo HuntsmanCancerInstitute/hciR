@@ -38,13 +38,13 @@ write_gsea_rnk <- function(res, write=TRUE, protein_coding = TRUE, na_pvalue = T
       ## add txt for GNomEx
       outfile <- paste0( gsub("/", "", vs), ".rnk")
       if(protein_coding && "biotype" %in% names(y)){
-           y <- filter(y, biotype == "protein_coding")
+           y <- dplyr::filter(y, biotype == "protein_coding")
       }
       if("padj" %in% names(y) ){
          nna <- sum(is.na(y$padj))
          if(na_pvalue & nna>0){
            message("Removing ", nna,  " genes with NA p-values")
-           y <- filter(y, !is.na(padj))
+           y <- dplyr::filter(y, !is.na(padj))
         }
      }
       if("human_homolog" %in% colnames(y)){

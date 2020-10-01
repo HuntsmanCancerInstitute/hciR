@@ -17,7 +17,6 @@ Imports:
     S4Vectors,
     DT,
     highcharter,
-    d3heatmap,
     pheatmap,
     RColorBrewer,
     htmlwidgets,

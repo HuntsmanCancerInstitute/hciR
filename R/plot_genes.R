@@ -48,7 +48,7 @@ plot_genes <-  function( x, intgroup, output="pheatmap", palette="RdBu",
                 levels(df[, i]) <- paste0(levels(df[, i]), "    ")
             }
        }
-    }
+    }	
    ## convert tibble to matrix
    x <- as_matrix(x)
    brks <- NA
