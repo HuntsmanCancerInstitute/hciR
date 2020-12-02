@@ -8,6 +8,7 @@
 #' then only plot unique sets.  If missing, then plots all sets, default.
 #' @param nes plot NES (or ES if FALSE)
 #' @param cluster_row Cluster dendrogram rows, default is an alphabetical list
+#' @param cluster_row Cluster dendrogram columns, default FALSE
 #' @param \dots other options passed to \code{pheatmap}
 #' @author Chris Stubben
 #' @examples
@@ -19,7 +20,7 @@
 #'  }
 #' @export
 
-plot_fgsea <- function(x, trim=70, sets, nes=TRUE, cluster_row=FALSE, ...){
+plot_fgsea <- function(x, trim=70, sets, nes=TRUE, cluster_row=FALSE,  cluster_col=FALSE, ...){
    if(is.data.frame(x)) stop("A list of from fgsea_all is required")
    y <- dplyr::bind_rows(x, .id = "contrast")
    ## order columns by order in list (or alphabetical)
@@ -50,6 +51,6 @@ plot_fgsea <- function(x, trim=70, sets, nes=TRUE, cluster_row=FALSE, ...){
    message(nrow(z) , " total sets")
    n1 <- max(abs(z), na.rm=TRUE)
    brks <- seq(-n1, n1, length = 255)
-   pheatmap::pheatmap(z, color = clrs, breaks = brks, cluster_cols=FALSE,
+   pheatmap::pheatmap(z, color = clrs, breaks = brks, cluster_cols=cluster_col,
        cluster_rows=cluster_row, ...)
 }

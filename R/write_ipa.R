@@ -1,6 +1,7 @@
 #' Write DESeq results to text files for bulk uploading into IPA
 #'
 #' @param result_all a list from \code{results_all}
+#' @param run add run ID to file name
 #'
 #' @return Text files
 #'
@@ -12,7 +13,7 @@
 #' }
 #' @export
 
-write_ipa <- function(result_all){
+write_ipa <- function(result_all, run){
 
    ##  if results are a tibble (since simplify=TRUE by default)
    if(!class(result_all)[1] == "list"){
@@ -22,6 +23,8 @@ write_ipa <- function(result_all){
    }
    res <- result_all
    names(res)  <- gsub( "/", "", names(res))
+if(!missing(run)) names(res)  <- paste(run, names(res))
+   
    for (i in 1:length(res)){
       vs <- gsub( "\\.* ", "_", names(res[i]))
       vs <- gsub("_+_", "_", vs, fixed=TRUE)

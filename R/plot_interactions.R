@@ -39,11 +39,15 @@ plot_interactions <- function(x, intgroups, ylab = "scaled rlog", scaled = TRUE,
    z <- tidyr::gather(y, -intgroups, key="gene", value = "rlog")
     ## reorder?
     if(!missing(reorder)) z[[1]] <- factor(z[[1]], levels = reorder)
+
+	# Note: Using an external vector in selections is ambiguous.
+    #  Use `all_of(intgroups)` instead of `intgroups` to silence this message.
+
   ## add option to drop geom_poins (only fitted line)
-   ggplot2::ggplot(z, ggplot2::aes_string(x = intgroups[1], y = "rlog",
-      group =intgroups[2], shape =intgroups[2], color=intgroups[2])) +
+   ggplot2::ggplot(z, ggplot2::aes_string(x = names(z)[1], y = "rlog",
+      group =names(z)[2], shape =names(z)[2], color=names(z)[2])) +
      ggplot2::geom_point() +
-       ggplot2::stat_summary( fun.y="mean", geom="line") +
+       ggplot2::stat_summary( fun="mean", geom="line") +
         ggplot2::facet_wrap(~gene, ...) + ggplot2::ylab( ylab)
 
 }
