@@ -62,8 +62,9 @@ write_deseq <- function(result_all, dds, rld, biomart, sets, fpkm,
    names(res1)  <- gsub( "/", "", names(res1))
    # A worksheet name cannot exceed 31 characters.
    if(any(nchar(names(res1)) > 31)){
+	  message("Note: some contrast names are longer than the 31 characters and will be truncated")
       z <- substr(names(res1), 1, 31)
-	  if(any(duplicated(z))) stop("Excel worksheets cannot exceed 31 characters and names(result_all) is not unique after truncating. Please shorten the contrast names for Excel")
+	  if(any(duplicated(z))) stop("Warnings: names(result_all) is not unique after truncating. Please shorten the contrast names for Excel")
 	  names(res1) <- z
    }
    for(i in names(res1)) message(i)
