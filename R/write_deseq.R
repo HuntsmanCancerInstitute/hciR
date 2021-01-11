@@ -48,8 +48,8 @@ write_deseq <- function(result_all, dds, rld, biomart, sets, fpkm,
      if( !class(dds)[1] == "DESeqDataSet") stop("dds should be a DESeqDataSet object")
      if( !class(rld)[1] == "DESeqTransform") stop("rld should be a DESeqTransform object")
 
-   ## 1. summary
-   sum1 <-  dplyr::bind_rows(lapply(result_all, summary_deseq), .id= "contrast")
+   ## 1. summary  - will print contrast name (which may change if longer than 32 characters)
+   sum1 <- suppressMessages( dplyr::bind_rows(lapply(result_all, summary_deseq), .id= "contrast"))
    # write.xlsx does not like tibbles, so use as.data.frame
    sum1 <- as.data.frame( sum1)
    # write.xlsx requires a named list for writing mulitple worksheets
@@ -60,6 +60,13 @@ write_deseq <- function(result_all, dds, rld, biomart, sets, fpkm,
    names(res1)  <- gsub( "\\.? ", "_", names(res1))
    ## forward slash will cause Excel errors
    names(res1)  <- gsub( "/", "", names(res1))
+   # A worksheet name cannot exceed 31 characters.
+   if( any(nchar(names(res1)) > 31)){
+       z <- substr(names(res1), 1, 31)
+	  if( any(duplicated(z))) stop("Excel worksheets cannot exceed 31 characters and names(result_all) is not unique after truncating. Please shorten the contrast names for Excel")
+	  names(res1) <- z
+   }
+   for(i in names(res1)) message(i)
 
    # sample data in colData ... drop replaceable
    samp1 <- as.data.frame(SummarizedExperiment::colData(dds))

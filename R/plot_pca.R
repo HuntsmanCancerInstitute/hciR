@@ -106,6 +106,7 @@ plot_pca <- function(object, intgroup="trt", tooltip, label, ntop = 500, relevel
           startOnTick="true", endOnTick="true") %>%
       highcharter::hc_yAxis(title = list(text = paste0("PC", pc[2], ": ",
           percentVar[ pc[2] ], "% variance"))) %>%
+	  highcharter::hc_plotOptions( series=list(states=list(inactive=list(opacity=1))))   %>%
       highcharter::hc_chart(zoomType = "xy", ...)  %>%
       highcharter::hc_exporting(enabled=TRUE, filename = "pca")
    }
