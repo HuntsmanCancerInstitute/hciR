@@ -4,7 +4,15 @@
 \alias{plot_fgsea}
 \title{Plot fGSEA output}
 \usage{
-plot_fgsea(x, trim = 70, sets, nes = TRUE, cluster_row = FALSE, ...)
+plot_fgsea(
+  x,
+  trim = 70,
+  sets,
+  nes = TRUE,
+  cluster_row = FALSE,
+  cluster_col = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{list from \code{link{fgsea_all}}}
@@ -16,7 +24,7 @@ then only plot unique sets.  If missing, then plots all sets, default.}
 
 \item{nes}{plot NES (or ES if FALSE)}
 
-\item{cluster_row}{Cluster dendrogram rows, default is an alphabetical list}
+\item{cluster_row}{Cluster dendrogram columns, default FALSE}
 
 \item{\dots}{other options passed to \code{pheatmap}}
 }

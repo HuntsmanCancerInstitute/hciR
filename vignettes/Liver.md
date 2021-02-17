@@ -1,12 +1,14 @@
 DESeq analysis of mouse liver samples
 ================
-February 28, 2020
+February 17, 2021
 
 This guide follows the [Bioconductor RNA-Seq
 workflow](http://master.bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html)
-to find differentially expressed genes using
+to find differentially expressed genes in
+[GSE132056](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE132056)
+using
 [DESeq2](http://www.bioconductor.org/packages/release/bioc/html/DESeq2.html)
-version 1.26.0. For more details about the statistics, check the
+version 1.30.0. For more details about the statistics, check the
 original
 [paper](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0550-8)
 or online tutorials like the one from
@@ -22,21 +24,25 @@ library(tidyverse)
 extdata <- system.file("extdata", package="hciR")
 samples <- read_tsv(paste(extdata, "liver_samples.tsv", sep="/"))
 samples
-#  # A tibble: 12 x 4
-#     id       name      trt      diet 
+#  # A tibble: 16 x 4
+#     id       name      trt      diet
 #     <chr>    <chr>     <chr>    <chr>
-#   1 15089X1  194-Liver Control  NCD  
-#   2 15089X3  209-Liver Control  NCD  
-#   3 15089X4  220-Liver Control  NCD  
-#   4 15089X6  185-Liver Degs1_KO NCD  
-#   5 15089X7  186-Liver Degs1_KO NCD  
-#   6 15089X8  187-Liver Degs1_KO NCD  
-#   7 15089X9  61-Liver  Control  HFD  
-#   8 15089X10 70-Liver  Control  HFD  
-#   9 15089X12 76-Liver  Control  HFD  
-#  10 15089X13 82-Liver  Degs1_KO HFD  
-#  11 15089X14 89-Liver  Degs1_KO HFD  
-#  12 15089X16 92-Liver  Degs1_KO HFD
+#   1 15089X1  194-Liver Control  NCD
+#   2 15089X2  198-Liver Control  NCD
+#   3 15089X3  209-Liver Control  NCD
+#   4 15089X4  220-Liver Control  NCD
+#   5 15089X5  179-Liver Degs1_KO NCD
+#   6 15089X6  185-Liver Degs1_KO NCD
+#   7 15089X7  186-Liver Degs1_KO NCD
+#   8 15089X8  187-Liver Degs1_KO NCD
+#   9 15089X9  61-Liver  Control  HFD
+#  10 15089X10 70-Liver  Control  HFD
+#  11 15089X11 71-Liver  Control  HFD
+#  12 15089X12 76-Liver  Control  HFD
+#  13 15089X13 82-Liver  Degs1_KO HFD
+#  14 15089X14 89-Liver  Degs1_KO HFD
+#  15 15089X15 90-Liver  Degs1_KO HFD
+#  16 15089X16 92-Liver  Degs1_KO HFD
 ```
 
 Load the combined
@@ -46,30 +52,30 @@ Load the combined
 counts <- read_tsv(paste(extdata, "liver_counts.tsv", sep="/"))
 counts[, 1:8]
 #  # A tibble: 53,801 x 8
-#     geneid             `15089X1` `15089X3` `15089X4` `15089X6` `15089X7` `15089X8` `15089X9`
+#     geneid             `15089X1` `15089X2` `15089X3` `15089X4` `15089X5` `15089X6` `15089X7`
 #     <chr>                  <dbl>     <dbl>     <dbl>     <dbl>     <dbl>     <dbl>     <dbl>
-#   1 ENSMUSG00000000001      1941      2768      2910      2577      2265      2067      1517
-#   2 ENSMUSG00000000003         0         0         0         0         1         0         0
-#   3 ENSMUSG00000000028        21        27        27        28        17        18        21
-#   4 ENSMUSG00000000031         3         1         5         3        10         0         3
-#   5 ENSMUSG00000000037         0         0         0         0         4         0         0
-#   6 ENSMUSG00000000049     28341     50511     49518     33501     31659     28992     36375
-#   7 ENSMUSG00000000056       748      1665      1570      1002       694       907       811
-#   8 ENSMUSG00000000058        53        94        75       110       121        88        32
-#   9 ENSMUSG00000000078       249       200       355       180       221       218       190
-#  10 ENSMUSG00000000085       102        93       121        77        90        96       110
+#   1 ENSMUSG00000000001      1941      1745      2768      2910      1124      2577      2265
+#   2 ENSMUSG00000000003         0         0         0         0         0         0         1
+#   3 ENSMUSG00000000028        21        23        27        27        14        28        17
+#   4 ENSMUSG00000000031         3         3         1         5         3         3        10
+#   5 ENSMUSG00000000037         0         0         0         0         0         0         4
+#   6 ENSMUSG00000000049     28341     30970     50511     49518     22421     33501     31659
+#   7 ENSMUSG00000000056       748       728      1665      1570       716      1002       694
+#   8 ENSMUSG00000000058        53        84        94        75        28       110       121
+#   9 ENSMUSG00000000078       249       187       200       355       149       180       221
+#  10 ENSMUSG00000000085       102        84        93       121        89        77        90
 #  # … with 53,791 more rows
 ```
 
-Remove 18059 features with zero counts and 16304 features with 5 or
-fewer reads in every sample to create a final count matrix with 19438
+Remove 17597 features with zero counts and 16431 features with 5 or
+fewer reads in every sample to create a final count matrix with 19773
 rows.
 
 ``` r
 library(hciR)
 counts <- filter_counts(counts, n=5)
-#  Removed 18059 features with 0 reads
-#  Removed 16304 features with <=5 maximum reads
+#  Removed 17597 features with 0 reads
+#  Removed 16431 features with <=5 maximum reads
 ```
 
 Load the mouse annotations from Ensembl 92 in
@@ -81,23 +87,29 @@ library(hciRdata)
 n1 <- rowMeans(as_matrix(counts))
 inner_join( dplyr::select(mouse92, 1:4,8),
  tibble(id= names(n1), mean_count = n1)) %>%
- mutate(description=substr(description, 1, 40)) %>%
+ mutate(description=trimws(substr(description, 1, 40))) %>%
  arrange(desc(mean_count))
 #  Joining, by = "id"
-#  # A tibble: 19,438 x 6
-#     id                 gene_name biotype        chromosome description                               mean_count
-#     <chr>              <chr>     <chr>          <chr>      <chr>                                          <dbl>
-#   1 ENSMUSG00000029368 Alb       protein_coding 5          "Serum albumin"                             1203267.
-#   2 ENSMUSG00000064339 mt-Rnr2   Mt_rRNA        MT         "mitochondrially encoded 16S rRNA"           446965.
-#   3 ENSMUSG00000020609 Apob      protein_coding 12         "Apolipoprotein B-100 Apolipoprotein B-4…    383672.
-#   4 ENSMUSG00000002985 Apoe      protein_coding 7          "Apolipoprotein E"                           282255.
-#   5 ENSMUSG00000058207 Serpina3k protein_coding 12         "serine (or cysteine) peptidase inhibito…    208042.
-#   6 ENSMUSG00000064351 mt-Co1    protein_coding MT         "mitochondrially encoded cytochrome c ox…    205715.
-#   7 ENSMUSG00000037071 Scd1      protein_coding 19         "stearoyl-Coenzyme A desaturase 1"           161081 
-#   8 ENSMUSG00000066154 Mup3      protein_coding 4          ""                                           129662.
-#   9 ENSMUSG00000024164 C3        protein_coding 17         "Complement C3 Complement C3 beta chain …    127646.
-#  10 ENSMUSG00000035540 Gc        protein_coding 5          "Vitamin D-binding protein"                  114648.
-#  # … with 19,428 more rows
+#  # A tibble: 19,773 x 6
+#     id                 gene_name biotype        chromosome description                              mean_count
+#     <chr>              <chr>     <chr>          <chr>      <chr>                                         <dbl>
+#   1 ENSMUSG00000029368 Alb       protein_coding 5          Serum albumin                              1179072.
+#   2 ENSMUSG00000064339 mt-Rnr2   Mt_rRNA        MT         mitochondrially encoded 16S rRNA            445705.
+#   3 ENSMUSG00000020609 Apob      protein_coding 12         Apolipoprotein B-100 Apolipoprotein B-48    363466.
+#   4 ENSMUSG00000002985 Apoe      protein_coding 7          Apolipoprotein E                            277628.
+#   5 ENSMUSG00000058207 Serpina3k protein_coding 12         serine (or cysteine) peptidase inhibitor    198378.
+#   6 ENSMUSG00000064351 mt-Co1    protein_coding MT         mitochondrially encoded cytochrome c oxi    194757.
+#   7 ENSMUSG00000037071 Scd1      protein_coding 19         stearoyl-Coenzyme A desaturase 1            145974.
+#   8 ENSMUSG00000066154 Mup3      protein_coding 4          major urinary protein 3                     129677.
+#   9 ENSMUSG00000024164 C3        protein_coding 17         Complement C3 Complement C3 beta chain C    121210.
+#  10 ENSMUSG00000025479 Cyp2e1    protein_coding 7          Cytochrome P450 2E1                         114009.
+#  # … with 19,763 more rows
+```
+
+Drop the two MT rRNAs.
+
+``` r
+counts <- semi_join(counts, filter(mouse92, biotype!="Mt_rRNA"), by=c(geneid="id"))
 ```
 
 Following the DESeq2 vignette on
@@ -106,7 +118,7 @@ there are a few ways to model the data.
 
 1.  Combine trt and diet into a single column and select the pairwise
     comparisons of interest, for example Degs1-KO\_NCD vs Control\_NCD.
-2.  Test interactions using ~ trt \* diet in the design formula
+2.  Test interactions using \~ trt \* diet in the design formula
 3.  Analyze a subset of samples like those from NCD. See the DEseq2
     [FAQ](http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#if-i-have-multiple-groups-should-i-run-all-together-or-split-into-pairs-of-groups)
     for more details on when to split the analysis into pairs of groups.
@@ -139,8 +151,7 @@ rld1 <-  r_log(dds1)
 ```
 
 Plot the first two principal components using the rlog values from the
-top 500 variable
-genes.
+top 500 variable genes.
 
 ``` r
 # plot_pca(rld1, "trt_diet", tooltip=c("id", "name", "diet") , width=700)
@@ -183,10 +194,10 @@ the remaining rows using a 5% false discovery rate (FDR).
 res <- results_all(dds1, mouse92, subset=c(1,2,5,6) )
 #  Using adjusted p-value < 0.05
 #  Adding shrunken fold changes to log2FoldChange
-#  1. KO_HFD vs. KO_NCD:           1383 up and 1476 down regulated
-#  2. KO_HFD vs. Control_HFD:      101 up and 79 down regulated
-#  3. KO_NCD vs. Control_NCD:      87 up and 65 down regulated
-#  4. Control_HFD vs. Control_NCD: 762 up and 470 down regulated
+#  1. KO_HFD vs. KO_NCD:           1150 up and 1115 down regulated
+#  2. KO_HFD vs. Control_HFD:      267 up and 415 down regulated
+#  3. KO_NCD vs. Control_NCD:      35 up and 17 down regulated
+#  4. Control_HFD vs. Control_NCD: 494 up and 278 down regulated
 ```
 
 Plot fold changes and p-values from KO\_HFD vs. KO\_NCD in the first
@@ -207,7 +218,7 @@ mean rlog value.
 ``` r
 x <- top_counts(res[[1]], rld1, top=3000)
 nrow(x)
-#  [1] 2859
+#  [1] 2265
 plot_genes(x, c("trt", "diet"), scale ="row", annotation_names_col=FALSE,
  show_rownames=FALSE)
 ```
@@ -216,25 +227,24 @@ plot_genes(x, c("trt", "diet"), scale ="row", annotation_names_col=FALSE,
 
 Find genes in the PPAR Signaling Pathway using the MSigDB pathways in
 [hciRdata](https://github.com/HuntsmanCancerInstitute/hciRdata). Note
-the mouse annotations include human homologs from
-MGI.
+the mouse annotations include human homologs from MGI.
 
 ``` r
 p1 <- filter(res[[1]], human_homolog %in% msig_pathways$KEGG[["PPAR Signaling Pathway"]])
 dplyr::select(p1, 1:7,12)
 #  # A tibble: 70 x 8
-#     id        gene_name biotype   chromosome description                        human_homolog baseMean     padj
-#     <chr>     <chr>     <chr>     <chr>      <chr>                              <chr>            <dbl>    <dbl>
-#   1 ENSMUSG0… Pparg     protein_… 6          peroxisome proliferator activated… PPARG           252.   3.18e- 4
-#   2 ENSMUSG0… Nr1h3     protein_… 2          Mus musculus nuclear receptor sub… NR1H3          1769.   8.98e- 1
-#   3 ENSMUSG0… Ppard     protein_… 17         Peroxisome proliferator-activated… PPARD            55.0  9.57e- 1
-#   4 ENSMUSG0… Angptl4   protein_… 17         Angiopoietin-related protein 4     ANGPTL4        1867.   7.58e- 3
-#   5 ENSMUSG0… Cd36      protein_… 5          Platelet glycoprotein 4            CD36           2041.   7.27e-16
-#   6 ENSMUSG0… Apoa2     protein_… 1          Apolipoprotein A-II Proapolipopro… APOA2         90023.   4.84e- 1
-#   7 ENSMUSG0… Cpt1c     protein_… 7          Mus musculus carnitine palmitoylt… CPT1C             6.15 6.85e- 1
-#   8 ENSMUSG0… Ubc       protein_… 5          ubiquitin C                        UBC             875.   1.02e- 3
-#   9 ENSMUSG0… Acaa1b    protein_… 9          acetyl-Coenzyme A acyltransferase… ACAA1         12675.   4.12e- 1
-#  10 ENSMUSG0… Lpl       protein_… 8          lipoprotein lipase                 LPL             664.   3.76e- 1
+#     id        gene_name biotype   chromosome description                         human_homolog baseMean    padj
+#     <chr>     <chr>     <chr>     <chr>      <chr>                               <chr>            <dbl>   <dbl>
+#   1 ENSMUSG0… Pparg     protein_… 6          peroxisome proliferator activated … PPARG           219.   0.121
+#   2 ENSMUSG0… Nr1h3     protein_… 2          Mus musculus nuclear receptor subf… NR1H3          1721.   0.864
+#   3 ENSMUSG0… Ppard     protein_… 17         Peroxisome proliferator-activated … PPARD            52.9  0.859
+#   4 ENSMUSG0… Angptl4   protein_… 17         Angiopoietin-related protein 4      ANGPTL4        1921.   0.0366
+#   5 ENSMUSG0… Cd36      protein_… 5          Platelet glycoprotein 4             CD36           1889.   0.00248
+#   6 ENSMUSG0… Apoa2     protein_… 1          Apolipoprotein A-II Proapolipoprot… APOA2         88339.   0.531
+#   7 ENSMUSG0… Cpt1c     protein_… 7          Mus musculus carnitine palmitoyltr… CPT1C             5.15 0.698
+#   8 ENSMUSG0… Ubc       protein_… 5          ubiquitin C                         UBC             871.   0.0382
+#   9 ENSMUSG0… Acaa1b    protein_… 9          acetyl-Coenzyme A acyltransferase … ACAA1         11724.   0.344
+#  10 ENSMUSG0… Lpl       protein_… 8          lipoprotein lipase                  LPL             640.   0.266
 #  # … with 60 more rows
 ```
 
@@ -252,7 +262,7 @@ plot_genes(x, c("trt", "diet"), fontsize_row=8, scale = "row")
 
 ## Model 2, interaction model
 
-Run `DESeq` using ~ trt \* diet in the design formula.
+Run `DESeq` using \~ trt \* diet in the design formula.
 
 ``` r
 dds2 <- deseq_from_tibble(counts, samples, design = ~ trt * diet)
@@ -266,21 +276,21 @@ rld2 <- r_log(dds2)
 ```
 
 Check if the treatment effect differs across diets using a 5% false
-discovery rate (FDR). There are 98 signfiicant interactions.
+discovery rate (FDR). There are 105 signfiicant interactions.
 
 ``` r
 DESeq2::resultsNames(dds2)
 #  [1] "Intercept"               "trt_Degs1_KO_vs_Control" "diet_NCD_vs_HFD"         "trtDegs1_KO.dietNCD"
 int <- DESeq2::results(dds2, name = "trtDegs1_KO.dietNCD", alpha = 0.05)
 DESeq2::summary(int)
-#  
-#  out of 19438 with nonzero total read count
+#
+#  out of 19771 with nonzero total read count
 #  adjusted p-value < 0.05
-#  LFC > 0 (up)       : 58, 0.3%
-#  LFC < 0 (down)     : 40, 0.21%
-#  outliers [1]       : 28, 0.14%
-#  low counts [2]     : 9772, 50%
-#  (mean count < 78)
+#  LFC > 0 (up)       : 63, 0.32%
+#  LFC < 0 (down)     : 42, 0.21%
+#  outliers [1]       : 64, 0.32%
+#  low counts [2]     : 6470, 33%
+#  (mean count < 11)
 #  [1] see 'cooksCutoff' argument of ?results
 #  [2] see 'independentFiltering' argument of ?results
 ```
@@ -310,8 +320,8 @@ session.
 
 ``` r
 res_all <- c(res, list(Interactions=int))
-write_deseq(res_all, dds, rld, mouse92)
-save(res, int, dds, rld, file="dds.rda")
+write_deseq(res_all, dds1, rld1, mouse92)
+save(res, int, dds1, rld1, file="dds.rda")
 ```
 
 ## Pathway analysis
@@ -345,10 +355,10 @@ and run `fgsea` using a 10% FDR.
 ``` r
 set.seed(77)
 k1 <- fgsea_all(res, msig_pathways$KEGG)
-#  1. KO_HFD vs. KO_NCD:            38 enriched sets (17 positive, 21 negative)
-#  2. KO_HFD vs. Control_HFD:       84 enriched sets (54 positive, 30 negative)
-#  3. KO_NCD vs. Control_NCD:       33 enriched sets (4 positive, 29 negative)
-#  4. Control_HFD vs. Control_NCD:  39 enriched sets (0 positive, 39 negative)
+#  1. KO_HFD vs. KO_NCD:            63 enriched sets (37 positive, 26 negative)
+#  2. KO_HFD vs. Control_HFD:       113 enriched sets (69 positive, 44 negative)
+#  3. KO_NCD vs. Control_NCD:       25 enriched sets (0 positive, 25 negative)
+#  4. Control_HFD vs. Control_NCD:  32 enriched sets (5 positive, 27 negative)
 ```
 
 Print the top pathways from KO\_HFD vs. KO\_NCD and check the GSEA [user
@@ -359,15 +369,15 @@ for details about the statistics.
 group_by(k1[[1]][, -8], enriched) %>% top_n(4, abs(NES)) %>% ungroup()
 #  # A tibble: 8 x 8
 #    pathway                                          pval    padj     ES   NES nMoreExtreme  size enriched
-#    <chr>                                           <dbl>   <dbl>  <dbl> <dbl>        <dbl> <int> <chr>   
-#  1 Ribosome                                     0.000291 0.00413 -0.869 -3.78            0    82 negative
-#  2 Spliceosome                                  0.000311 0.00413 -0.488 -2.29            0   122 negative
-#  3 Oxidative Phosphorylation                    0.000301 0.00413 -0.497 -2.26            0   103 negative
-#  4 Parkinsons Disease                           0.000301 0.00413 -0.471 -2.13            0    99 negative
-#  5 ECM Receptor Interaction                     0.000156 0.00413  0.545  2.10            0    67 positive
-#  6 Primary Immunodeficiency                     0.000170 0.00413  0.669  2.09            0    25 positive
-#  7 Intestinal Immune Network for IGA Production 0.000168 0.00413  0.652  2.09            0    28 positive
-#  8 Chemokine Signaling Pathway                  0.000144 0.00413  0.449  1.95            0   142 positive
+#    <chr>                                           <dbl>   <dbl>  <dbl> <dbl>        <dbl> <int> <chr>
+#  1 Ribosome                                     0.000387 0.00383 -0.834 -3.74            0    83 negative
+#  2 Oxidative Phosphorylation                    0.000432 0.00383 -0.515 -2.39            0   103 negative
+#  3 Steroid Biosynthesis                         0.000258 0.00320 -0.798 -2.35            0    15 negative
+#  4 Parkinsons Disease                           0.000431 0.00383 -0.484 -2.24            0    99 negative
+#  5 Chemokine Signaling Pathway                  0.000124 0.00233  0.532  2.23            0   142 positive
+#  6 Graft Versus Host Disease                    0.000158 0.00233  0.744  2.16            0    20 positive
+#  7 Allograft Rejection                          0.000162 0.00233  0.775  2.16            0    17 positive
+#  8 Intestinal Immune Network for IGA Production 0.000152 0.00233  0.670  2.14            0    30 positive
 ```
 
 Get the fold change vector and create an enrichment plot for Ribosome.
@@ -376,16 +386,15 @@ Get the fold change vector and create an enrichment plot for Ribosome.
 library(fgsea)
 fc <- write_gsea_rnk(res, write=FALSE)
 head(fc[[1]])
-#   CNTNAP1     CD36   TTC39A   LGALS1   PNLDC1    PLIN4 
-#  2.030035 1.985832 1.983363 1.905122 1.876408 1.839541
+#    COL1A1    GDF15     ORM2     SAA1   PHLDA3   TTC39A
+#  1.927821 1.860799 1.789339 1.744125 1.702428 1.687438
 plotEnrichment(msig_pathways$KEGG[["Ribosome"]],  fc[[1]]) +
 ggplot2::labs(title="Ribosome")
 ```
 
 ![](Liver_files/figure-gfm/enrich1-1.png)<!-- -->
 
-Compare to ECM Receptor Interaction with mostly up-regulated
-genes.
+Compare to ECM Receptor Interaction with mostly up-regulated genes.
 
 ``` r
 plotEnrichment(msig_pathways$KEGG[["ECM Receptor Interaction"]],  fc[[1]]) +
@@ -398,7 +407,7 @@ Plot NES scores from significant pathways in two or more contrasts.
 
 ``` r
 plot_fgsea(k1, fontsize_row=7, sets =2)
-#  57 total sets
+#  74 total sets
 ```
 
 ![](Liver_files/figure-gfm/plotfgsea-1.png)<!-- -->
@@ -419,11 +428,11 @@ motifs, cancer, immunologic and oncogenic sets.
 ``` r
 lapply(msig_hallmark[1:3], head, 7)
 #  $`Tnfa Signaling Via Nfkb`
-#  [1] "ABCA1"      "AC129492.1" "ACKR3"      "AREG"       "ATF3"       "ATP2B1"     "B4GALT1"   
-#  
+#  [1] "ABCA1"   "ACKR3"   "AREG"    "ATF3"    "ATP2B1"  "B4GALT1" "B4GALT5"
+#
 #  $Hypoxia
-#  [1] "ACKR3"   "ADM"     "ADORA2B" "AK4"     "AKAP12"  "ALDOA"   "ALDOB"  
-#  
+#  [1] "ACKR3"   "ADM"     "ADORA2B" "AK4"     "AKAP12"  "ALDOA"   "ALDOB"
+#
 #  $`Cholesterol Homeostasis`
 #  [1] "ABCA2" "ACAT2" "ACSS2" "ACTG1" "ADH4"  "ALCAM" "ALDOC"
 ```
@@ -433,7 +442,8 @@ select a list element like `msig_pathways$REACTOME` to return the sets.
 
 ``` r
 names(msig_pathways)
-#  [1] "BIOCARTA" "KEGG"     "NABA"     "PID"      "REACTOME" "SA"       "SIG"      "WNT"
+#   [1] "BIOCARTA" "KEGG"     "NABA"     "PID"      "REACTOME" "SA"       "SIG"      "ST"       "WNT"
+#  [10] "WP"
 names(msig_go)
 #  [1] "BP" "MF" "CC"
 names(msig_motifs)

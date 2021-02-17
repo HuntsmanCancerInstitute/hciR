@@ -60,7 +60,9 @@ write_deseq <- function(result_all, dds, rld, biomart, sets, fpkm,
    names(res1)  <- gsub( "\\.? ", "_", names(res1))
    ## forward slash will cause Excel errors
    names(res1)  <- gsub( "/", "", names(res1))
-   # A worksheet name cannot exceed 31 characters.
+   # also not allowed  \ * [ ] : ?
+
+   # Worksheet names cannot exceed 31 characters.
    if(any(nchar(names(res1)) > 31)){
 	  message("Note: some contrast names are longer than the 31 characters and will be truncated")
       z <- substr(names(res1), 1, 31)

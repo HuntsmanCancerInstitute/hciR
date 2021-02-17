@@ -13,9 +13,12 @@ options(width=120)
 knitr::opts_chunk$set(warning=FALSE, comment="# ", collapse=TRUE)
 ```
 
-This guide follows the [Bioconductor RNA-Seq workflow] to find differentially expressed
-genes using [DESeq2] version `r gsub("‘’", "", packageVersion("DESeq2"))`. For more details about the
-statistics, check the original [paper] or online tutorials like the one from [Harvard].
+
+
+This guide follows the [Bioconductor RNA-Seq workflow] to find differentially
+expressed genes in [GSE132056] using [DESeq2] version `r gsub("‘’", "",
+packageVersion("DESeq2"))`. For more details about the statistics, check the
+original [paper] or online tutorials like the one from [Harvard].
 
 
 ### Load samples and counts
@@ -41,8 +44,8 @@ counts[, 1:8]
 ```
 
 
-Remove 18059 features with zero counts and 16304 features with 5 or fewer reads
-in every sample to create a final count matrix with 19438 rows.
+Remove 17597 features with zero counts and 16431 features with 5 or fewer reads
+in every sample to create a final count matrix with 19773 rows.
 
 
 ```{r count_matrix}
@@ -60,8 +63,14 @@ library(hciRdata)
 n1 <- rowMeans(as_matrix(counts))
 inner_join( dplyr::select(mouse92, 1:4,8),
  tibble(id= names(n1), mean_count = n1)) %>%
- mutate(description=substr(description, 1, 40)) %>%
+ mutate(description=trimws(substr(description, 1, 40))) %>%
  arrange(desc(mean_count))
+```
+
+Drop the two MT rRNAs.
+
+```{r dropmt}
+counts <- semi_join(counts, filter(mouse92, biotype!="Mt_rRNA"), by=c(geneid="id"))
 ```
 
 
@@ -181,7 +190,7 @@ rld2 <- r_log(dds2)
 ```
 
 Check if the treatment effect differs across diets using  a 5% false discovery rate (FDR).
-There are 98 signfiicant interactions.
+There are 105 signfiicant interactions.
 
 ```{r summary1}
 DESeq2::resultsNames(dds2)
@@ -213,8 +222,8 @@ binary data file to load into a new session.
 
 ```{r write_results_to_Excel, eval=FALSE}
 res_all <- c(res, list(Interactions=int))
-write_deseq(res_all, dds, rld, mouse92)
-save(res, int, dds, rld, file="dds.rda")
+write_deseq(res_all, dds1, rld1, mouse92)
+save(res, int, dds1, rld1, dds2, rld2, file="dds.rda")
 ```
 
 
@@ -275,7 +284,7 @@ ggplot2::labs(title="ECM Receptor Interaction")
 
 Plot NES scores from significant pathways in two or more contrasts.
 
-```{r plotfgsea, fig.height=8, fig.width=3.75}
+```{r plotfgsea, fig.height=9, fig.width=3.75}
 plot_fgsea(k1, fontsize_row=7, sets =2)
 ```
 
@@ -308,6 +317,8 @@ names(msig_cancer)
 
 <br>
 
+
+[GSE132056]: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE132056
 [Harvard]: https://hbctraining.github.io/DGE_workshop/lessons/04_DGE_DESeq2_analysis.html
 [paper]: https://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0550-8
 [Correlation Engine]: https://hci.ussc.informatics.illumina.com/
