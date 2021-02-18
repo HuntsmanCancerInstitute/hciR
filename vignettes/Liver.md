@@ -25,23 +25,23 @@ extdata <- system.file("extdata", package="hciR")
 samples <- read_tsv(paste(extdata, "liver_samples.tsv", sep="/"))
 samples
 #  # A tibble: 16 x 4
-#     id       name      trt      diet
+#     id       name      trt      diet 
 #     <chr>    <chr>     <chr>    <chr>
-#   1 15089X1  194-Liver Control  NCD
-#   2 15089X2  198-Liver Control  NCD
-#   3 15089X3  209-Liver Control  NCD
-#   4 15089X4  220-Liver Control  NCD
-#   5 15089X5  179-Liver Degs1_KO NCD
-#   6 15089X6  185-Liver Degs1_KO NCD
-#   7 15089X7  186-Liver Degs1_KO NCD
-#   8 15089X8  187-Liver Degs1_KO NCD
-#   9 15089X9  61-Liver  Control  HFD
-#  10 15089X10 70-Liver  Control  HFD
-#  11 15089X11 71-Liver  Control  HFD
-#  12 15089X12 76-Liver  Control  HFD
-#  13 15089X13 82-Liver  Degs1_KO HFD
-#  14 15089X14 89-Liver  Degs1_KO HFD
-#  15 15089X15 90-Liver  Degs1_KO HFD
+#   1 15089X1  194-Liver Control  NCD  
+#   2 15089X2  198-Liver Control  NCD  
+#   3 15089X3  209-Liver Control  NCD  
+#   4 15089X4  220-Liver Control  NCD  
+#   5 15089X5  179-Liver Degs1_KO NCD  
+#   6 15089X6  185-Liver Degs1_KO NCD  
+#   7 15089X7  186-Liver Degs1_KO NCD  
+#   8 15089X8  187-Liver Degs1_KO NCD  
+#   9 15089X9  61-Liver  Control  HFD  
+#  10 15089X10 70-Liver  Control  HFD  
+#  11 15089X11 71-Liver  Control  HFD  
+#  12 15089X12 76-Liver  Control  HFD  
+#  13 15089X13 82-Liver  Degs1_KO HFD  
+#  14 15089X14 89-Liver  Degs1_KO HFD  
+#  15 15089X15 90-Liver  Degs1_KO HFD  
 #  16 15089X16 92-Liver  Degs1_KO HFD
 ```
 
@@ -117,7 +117,7 @@ Following the DESeq2 vignette on
 there are a few ways to model the data.
 
 1.  Combine trt and diet into a single column and select the pairwise
-    comparisons of interest, for example Degs1-KO\_NCD vs Control\_NCD.
+    comparisons of interest, for example Degs1 KO\_NCD vs Control\_NCD.
 2.  Test interactions using \~ trt \* diet in the design formula
 3.  Analyze a subset of samples like those from NCD. See the DEseq2
     [FAQ](http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#if-i-have-multiple-groups-should-i-run-all-together-or-split-into-pairs-of-groups)
@@ -155,7 +155,7 @@ top 500 variable genes.
 
 ``` r
 # plot_pca(rld1, "trt_diet", tooltip=c("id", "name", "diet") , width=700)
-plot_pca(rld1, "trt_diet", ggplot=TRUE, label="name")
+plot_pca(rld1, "trt_diet", ggplot=TRUE, label="id")
 ```
 
 ![](Liver_files/figure-gfm/pcaplot-1.png)<!-- -->
@@ -191,39 +191,59 @@ Use the `subset` option to skip the 3rd and 4th contrasts and compare
 the remaining rows using a 5% false discovery rate (FDR).
 
 ``` r
-res <- results_all(dds1, mouse92, subset=c(1,2,5,6) )
+res <- results_all(dds1, mouse92, subset=c(2,5,6,1))
 #  Using adjusted p-value < 0.05
 #  Adding shrunken fold changes to log2FoldChange
-#  1. KO_HFD vs. KO_NCD:           1150 up and 1115 down regulated
-#  2. KO_HFD vs. Control_HFD:      267 up and 415 down regulated
-#  3. KO_NCD vs. Control_NCD:      35 up and 17 down regulated
-#  4. Control_HFD vs. Control_NCD: 494 up and 278 down regulated
+#  1. KO_HFD vs. Control_HFD:      267 up and 415 down regulated
+#  2. KO_NCD vs. Control_NCD:      35 up and 17 down regulated
+#  3. Control_HFD vs. Control_NCD: 494 up and 278 down regulated
+#  4. KO_HFD vs. KO_NCD:           1150 up and 1115 down regulated
 ```
 
-Plot fold changes and p-values from KO\_HFD vs. KO\_NCD in the first
+Plot fold changes and p-values from high fat KO vs. Control in the first
 contrast in a volcano plot.
 
 ``` r
-plot_volcano(res[[1]], pvalue=10)
+plot_volcano(res[[1]], pvalue=3)
 ```
 
 ![](Liver_files/figure-gfm/volcano-1.png)<!-- -->
 
 <br>
 
-Cluster the rlog values from all 2859 significant genes and scale by
+Plot the mean normalized count and fold change in an MA-plot.
+
+``` r
+plot_ma(res[[1]])
+```
+
+![](Liver_files/figure-gfm/plot_ma1-1.png)<!-- -->
+
+<br>
+
+Cluster the rlog values from all 682 significant genes and scale by
 rows, so values represent the number of standard deviations from the
 mean rlog value.
 
 ``` r
-x <- top_counts(res[[1]], rld1, top=3000)
+x <- top_counts(res[[1]], rld1, top=1000)
 nrow(x)
-#  [1] 2265
+#  [1] 682
 plot_genes(x, c("trt", "diet"), scale ="row", annotation_names_col=FALSE,
  show_rownames=FALSE)
 ```
 
 ![](Liver_files/figure-gfm/gene_heatmap2-1.png)<!-- -->
+
+Optionally, drop the normal chow samples.
+
+``` r
+x <- filter_top_counts(x, diet == "HFD")
+plot_genes(x, "trt", scale ="row", annotation_names_col=FALSE,
+ show_rownames=FALSE)
+```
+
+![](Liver_files/figure-gfm/gene_heatmap2b-1.png)<!-- -->
 
 Find genes in the PPAR Signaling Pathway using the MSigDB pathways in
 [hciRdata](https://github.com/HuntsmanCancerInstitute/hciRdata). Note
@@ -235,27 +255,28 @@ dplyr::select(p1, 1:7,12)
 #  # A tibble: 70 x 8
 #     id        gene_name biotype   chromosome description                         human_homolog baseMean    padj
 #     <chr>     <chr>     <chr>     <chr>      <chr>                               <chr>            <dbl>   <dbl>
-#   1 ENSMUSG0… Pparg     protein_… 6          peroxisome proliferator activated … PPARG           219.   0.121
-#   2 ENSMUSG0… Nr1h3     protein_… 2          Mus musculus nuclear receptor subf… NR1H3          1721.   0.864
-#   3 ENSMUSG0… Ppard     protein_… 17         Peroxisome proliferator-activated … PPARD            52.9  0.859
-#   4 ENSMUSG0… Angptl4   protein_… 17         Angiopoietin-related protein 4      ANGPTL4        1921.   0.0366
-#   5 ENSMUSG0… Cd36      protein_… 5          Platelet glycoprotein 4             CD36           1889.   0.00248
-#   6 ENSMUSG0… Apoa2     protein_… 1          Apolipoprotein A-II Proapolipoprot… APOA2         88339.   0.531
-#   7 ENSMUSG0… Cpt1c     protein_… 7          Mus musculus carnitine palmitoyltr… CPT1C             5.15 0.698
-#   8 ENSMUSG0… Ubc       protein_… 5          ubiquitin C                         UBC             871.   0.0382
-#   9 ENSMUSG0… Acaa1b    protein_… 9          acetyl-Coenzyme A acyltransferase … ACAA1         11724.   0.344
-#  10 ENSMUSG0… Lpl       protein_… 8          lipoprotein lipase                  LPL             640.   0.266
+#   1 ENSMUSG0… Pparg     protein_… 6          peroxisome proliferator activated … PPARG           219.    0.565 
+#   2 ENSMUSG0… Nr1h3     protein_… 2          Mus musculus nuclear receptor subf… NR1H3          1721.    0.113 
+#   3 ENSMUSG0… Ppard     protein_… 17         Peroxisome proliferator-activated … PPARD            52.9   0.207 
+#   4 ENSMUSG0… Angptl4   protein_… 17         Angiopoietin-related protein 4      ANGPTL4        1921.    0.959 
+#   5 ENSMUSG0… Cd36      protein_… 5          Platelet glycoprotein 4             CD36           1889.    0.505 
+#   6 ENSMUSG0… Apoa2     protein_… 1          Apolipoprotein A-II Proapolipoprot… APOA2         88339.    0.0723
+#   7 ENSMUSG0… Cpt1c     protein_… 7          Mus musculus carnitine palmitoyltr… CPT1C             5.15 NA     
+#   8 ENSMUSG0… Ubc       protein_… 5          ubiquitin C                         UBC             871.    0.498 
+#   9 ENSMUSG0… Acaa1b    protein_… 9          acetyl-Coenzyme A acyltransferase … ACAA1         11724.    0.914 
+#  10 ENSMUSG0… Lpl       protein_… 8          lipoprotein lipase                  LPL             640.    0.0285
 #  # … with 60 more rows
 ```
 
 Cluster the PPAR genes in a heatmap. There are 70 expressed genes but
-only 24 are significant, so add `filter=FALSE` to plot all genes since
-`top_counts` will filter using an adjusted p-value \< 0.05 by default.
+only 3 are significant - this will plot 37 genes with an FDR \< 50%.
 
 ``` r
-# x <- top_counts( p1, rld1, filter=FALSE)
-x <- top_counts( p1, rld1)
-plot_genes(x, c("trt", "diet"), fontsize_row=8, scale = "row")
+x <- top_counts( filter(p1, padj < 0.5), rld1, filter=FALSE)
+nrow(x)
+#  [1] 37
+x <- filter_top_counts(x, diet == "HFD")
+plot_genes(x, "trt", fontsize_row=8, scale = "row")
 ```
 
 ![](Liver_files/figure-gfm/gene_heatmap3-1.png)<!-- -->
@@ -283,7 +304,7 @@ DESeq2::resultsNames(dds2)
 #  [1] "Intercept"               "trt_Degs1_KO_vs_Control" "diet_NCD_vs_HFD"         "trtDegs1_KO.dietNCD"
 int <- DESeq2::results(dds2, name = "trtDegs1_KO.dietNCD", alpha = 0.05)
 DESeq2::summary(int)
-#
+#  
 #  out of 19771 with nonzero total read count
 #  adjusted p-value < 0.05
 #  LFC > 0 (up)       : 63, 0.32%
@@ -321,7 +342,7 @@ session.
 ``` r
 res_all <- c(res, list(Interactions=int))
 write_deseq(res_all, dds1, rld1, mouse92)
-save(res, int, dds1, rld1, file="dds.rda")
+save(res, int, dds1, rld1, dds2, rld2, file="dds.rda")
 ```
 
 ## Pathway analysis
@@ -355,10 +376,10 @@ and run `fgsea` using a 10% FDR.
 ``` r
 set.seed(77)
 k1 <- fgsea_all(res, msig_pathways$KEGG)
-#  1. KO_HFD vs. KO_NCD:            63 enriched sets (37 positive, 26 negative)
-#  2. KO_HFD vs. Control_HFD:       113 enriched sets (69 positive, 44 negative)
-#  3. KO_NCD vs. Control_NCD:       25 enriched sets (0 positive, 25 negative)
-#  4. Control_HFD vs. Control_NCD:  32 enriched sets (5 positive, 27 negative)
+#  1. KO_HFD vs. Control_HFD:       112 enriched sets (68 positive, 44 negative)
+#  2. KO_NCD vs. Control_NCD:       25 enriched sets (0 positive, 25 negative)
+#  3. Control_HFD vs. Control_NCD:  29 enriched sets (5 positive, 24 negative)
+#  4. KO_HFD vs. KO_NCD:            64 enriched sets (38 positive, 26 negative)
 ```
 
 Print the top pathways from KO\_HFD vs. KO\_NCD and check the GSEA [user
@@ -368,16 +389,16 @@ for details about the statistics.
 ``` r
 group_by(k1[[1]][, -8], enriched) %>% top_n(4, abs(NES)) %>% ungroup()
 #  # A tibble: 8 x 8
-#    pathway                                          pval    padj     ES   NES nMoreExtreme  size enriched
-#    <chr>                                           <dbl>   <dbl>  <dbl> <dbl>        <dbl> <int> <chr>
-#  1 Ribosome                                     0.000387 0.00383 -0.834 -3.74            0    83 negative
-#  2 Oxidative Phosphorylation                    0.000432 0.00383 -0.515 -2.39            0   103 negative
-#  3 Steroid Biosynthesis                         0.000258 0.00320 -0.798 -2.35            0    15 negative
-#  4 Parkinsons Disease                           0.000431 0.00383 -0.484 -2.24            0    99 negative
-#  5 Chemokine Signaling Pathway                  0.000124 0.00233  0.532  2.23            0   142 positive
-#  6 Graft Versus Host Disease                    0.000158 0.00233  0.744  2.16            0    20 positive
-#  7 Allograft Rejection                          0.000162 0.00233  0.775  2.16            0    17 positive
-#  8 Intestinal Immune Network for IGA Production 0.000152 0.00233  0.670  2.14            0    30 positive
+#    pathway                                  pval    padj     ES   NES nMoreExtreme  size enriched
+#    <chr>                                   <dbl>   <dbl>  <dbl> <dbl>        <dbl> <int> <chr>   
+#  1 Oxidative Phosphorylation            0.000260 0.00118 -0.777 -3.65            0   102 negative
+#  2 Ribosome                             0.000254 0.00118 -0.802 -3.62            0    83 negative
+#  3 Parkinsons Disease                   0.000259 0.00118 -0.734 -3.43            0    99 negative
+#  4 Alzheimers Disease                   0.000272 0.00120 -0.637 -3.13            0   133 negative
+#  5 ECM Receptor Interaction             0.000171 0.00117  0.652  2.58            0    58 positive
+#  6 Cell Adhesion Molecules Cams         0.000168 0.00117  0.609  2.53            0    74 positive
+#  7 Leishmania Infection                 0.000171 0.00117  0.628  2.43            0    52 positive
+#  8 Toll Like Receptor Signaling Pathway 0.000169 0.00117  0.565  2.33            0    71 positive
 ```
 
 Get the fold change vector and create an enrichment plot for Ribosome.
@@ -386,8 +407,8 @@ Get the fold change vector and create an enrichment plot for Ribosome.
 library(fgsea)
 fc <- write_gsea_rnk(res, write=FALSE)
 head(fc[[1]])
-#    COL1A1    GDF15     ORM2     SAA1   PHLDA3   TTC39A
-#  1.927821 1.860799 1.789339 1.744125 1.702428 1.687438
+#    COL1A1   PHLDA3    GPNMB     GBP6    GDF15   COL1A2 
+#  2.024805 1.840050 1.437978 1.422271 1.347245 1.346401
 plotEnrichment(msig_pathways$KEGG[["Ribosome"]],  fc[[1]]) +
 ggplot2::labs(title="Ribosome")
 ```
@@ -429,10 +450,10 @@ motifs, cancer, immunologic and oncogenic sets.
 lapply(msig_hallmark[1:3], head, 7)
 #  $`Tnfa Signaling Via Nfkb`
 #  [1] "ABCA1"   "ACKR3"   "AREG"    "ATF3"    "ATP2B1"  "B4GALT1" "B4GALT5"
-#
+#  
 #  $Hypoxia
-#  [1] "ACKR3"   "ADM"     "ADORA2B" "AK4"     "AKAP12"  "ALDOA"   "ALDOB"
-#
+#  [1] "ACKR3"   "ADM"     "ADORA2B" "AK4"     "AKAP12"  "ALDOA"   "ALDOB"  
+#  
 #  $`Cholesterol Homeostasis`
 #  [1] "ABCA2" "ACAT2" "ACSS2" "ACTG1" "ADH4"  "ALCAM" "ALDOC"
 ```
@@ -442,7 +463,7 @@ select a list element like `msig_pathways$REACTOME` to return the sets.
 
 ``` r
 names(msig_pathways)
-#   [1] "BIOCARTA" "KEGG"     "NABA"     "PID"      "REACTOME" "SA"       "SIG"      "ST"       "WNT"
+#   [1] "BIOCARTA" "KEGG"     "NABA"     "PID"      "REACTOME" "SA"       "SIG"      "ST"       "WNT"     
 #  [10] "WP"
 names(msig_go)
 #  [1] "BP" "MF" "CC"

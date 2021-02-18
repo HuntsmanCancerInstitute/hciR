@@ -78,7 +78,7 @@ counts <- semi_join(counts, filter(mouse92, biotype!="Mt_rRNA"), by=c(geneid="id
 Following the DESeq2 vignette on [interactions], there are a few ways to model the data.
 
 1.  Combine trt and diet into a single column and select the pairwise comparisons
-    of interest, for example Degs1-KO_NCD vs Control_NCD.
+    of interest, for example Degs1 KO_NCD vs Control_NCD.
 2.  Test interactions using ~ trt * diet in the design formula
 3.  Analyze a subset of samples like those from NCD. See the DEseq2 [FAQ]
 	for more details on when to split the analysis into pairs of groups.
@@ -108,7 +108,7 @@ variable genes.
 
 ```{r pcaplot, fig.height=4.5, fig.width=6}
 # plot_pca(rld1, "trt_diet", tooltip=c("id", "name", "diet") , width=700)
-plot_pca(rld1, "trt_diet", ggplot=TRUE, label="name")
+plot_pca(rld1, "trt_diet", ggplot=TRUE, label="id")
 ```
 
 <br>
@@ -136,29 +136,46 @@ compare the remaining rows using a 5% false discovery rate (FDR).
 
 
 ```{r results1}
-res <- results_all(dds1, mouse92, subset=c(1,2,5,6) )
+res <- results_all(dds1, mouse92, subset=c(2,5,6,1))
 ```
 
 
-Plot fold changes and p-values from KO_HFD vs. KO_NCD in the first contrast in a volcano plot.
+Plot fold changes and p-values from high fat KO vs. Control in the first contrast in a volcano plot.
 
 
 ```{r volcano, fig.width=7, fig.height=5.5}
-plot_volcano(res[[1]], pvalue=10)
+plot_volcano(res[[1]], pvalue=3)
 ```
 
 <br>
 
+Plot the mean normalized count and fold change in an MA-plot.
 
-Cluster the rlog values from all 2859 significant genes and scale by rows, so
+```{r plot_ma1, fig.width=7, fig.height=5.5}
+plot_ma(res[[1]])
+```
+
+<br>
+
+Cluster the rlog values from all 682 significant genes and scale by rows, so
 values represent the number of standard deviations from the mean rlog value.
 
-```{r gene_heatmap2, fig.width=5.5, fig.height=7}
-x <- top_counts(res[[1]], rld1, top=3000)
+```{r gene_heatmap2, fig.width=6, fig.height=6}
+x <- top_counts(res[[1]], rld1, top=1000)
 nrow(x)
 plot_genes(x, c("trt", "diet"), scale ="row", annotation_names_col=FALSE,
  show_rownames=FALSE)
 ```
+
+Optionally, drop the normal chow samples.
+
+
+```{r gene_heatmap2b, fig.width=4.5, fig.height=6}
+x <- filter_top_counts(x, diet == "HFD")
+plot_genes(x, "trt", scale ="row", annotation_names_col=FALSE,
+ show_rownames=FALSE)
+```
+
 
 Find genes in the PPAR Signaling Pathway using the MSigDB pathways in [hciRdata]. Note
 the mouse annotations include human homologs from MGI.
@@ -168,14 +185,16 @@ p1 <- filter(res[[1]], human_homolog %in% msig_pathways$KEGG[["PPAR Signaling Pa
 dplyr::select(p1, 1:7,12)
 ```
 
-Cluster the PPAR genes in a heatmap.  There are 70 expressed genes but only 24 are significant,
-so add `filter=FALSE` to plot all genes since `top_counts` will filter using
-an adjusted p-value < 0.05 by default.
 
-```{r gene_heatmap3, fig.width=6, fig.height=4.75}
-# x <- top_counts( p1, rld1, filter=FALSE)
-x <- top_counts( p1, rld1)
-plot_genes(x, c("trt", "diet"), fontsize_row=8, scale = "row")
+
+Cluster the PPAR genes in a heatmap.  There are 70 expressed genes but only 3 are significant -
+this will plot 37 genes with an FDR < 50%.
+
+```{r gene_heatmap3, fig.width=5, fig.height=6}
+x <- top_counts( filter(p1, padj < 0.5), rld1, filter=FALSE)
+nrow(x)
+x <- filter_top_counts(x, diet == "HFD")
+plot_genes(x, "trt", fontsize_row=8, scale = "row")
 ```
 
 
