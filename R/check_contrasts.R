@@ -15,9 +15,11 @@
 #'
 #' @examples
 #'  # check_contrasts( samples$trt)
-#'  trt <- c("heart", "lung", "control")
+#'  trt <- factor(c( "control", "heart", "lung"))
 #'  check_contrasts(trt)
-#'  data.frame( vs=check_contrasts(trt))
+#'  trt <- factor(trt, levels = c(  "heart", "lung", "control"))
+#'  check_contrasts(trt, control_first =FALSE)
+#'  data.frame( vs=check_contrasts(trt), control_first =FALSE)
 #'  check_contrasts(trt, vs = "control")
 #'  check_contrasts(trt, vs = "control", vs2=FALSE)
 #'  check_contrasts(factor(trt, levels = trt)  )
@@ -26,12 +28,14 @@
 #'  check_contrasts( trt, vs = "combined")
 #' @export
 
-check_contrasts <- function( trt, vs="all", vs2 = TRUE){
+check_contrasts <- function( trt, vs="all", vs2 = TRUE, control_first = TRUE){
    if(is.factor(trt)){
       n <- levels( trt )
    }else{
+	   # DESeq2 will create factor for characters
       n <- sort(unique(trt))
    }
+   if(control_first) n <- rev(n)
    contrast <- utils::combn(n, 2)
    if( vs == "combined"){
       ## if two columns are combined into a single trt group, compare within first group

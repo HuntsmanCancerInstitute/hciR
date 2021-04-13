@@ -1,6 +1,6 @@
 Package: hciR
 Title: RNA-seq workflows at HCI
-Version: 1.3
+Version: 1.4
 Author: Chris Stubben
 Maintainer: Chris Stubben <chris.stubben@hci.utah.edu>
 Depends:
@@ -22,7 +22,7 @@ Imports:
     htmlwidgets,
     openxlsx,
     biomaRt,
-    gage,
+    clusterProfiler,
     dendsort,
     stringr,
     ggrepel,
@@ -30,9 +30,11 @@ Imports:
     scales,
     limma,
     fgsea
+Suggests:
+    d3heatmap
 License: GPL-3
 Encoding: UTF-8
-Description: This package loads output from RNA-seq workflows to create interactive graphics and reports.
+Description: This package simplifies the R code in a differential expression analysis for markdown reports. The package includes functions to run DESeq2 using sample and count tibbles as input, get annotated DESeq results for all pairwise comparisons and create interactive plots and other visualizations.
 LazyData: true
 biocViews: Software
 RoxygenNote: 7.1.1

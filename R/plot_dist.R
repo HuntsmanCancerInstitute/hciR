@@ -20,7 +20,6 @@
 #' @examples
 #' plot_dist(pasilla$rlog, c("condition", "type"), na_col="white")
 #' plot_dist(pasilla$rlog, c("condition", "type"), palette="Blues", diagNA=FALSE, reverse=TRUE)
-#' plot_dist(pasilla$rlog, output = "d3")
 #' @export
 
 plot_dist <- function( rld, intgroup, col_name, output="pheatmap",

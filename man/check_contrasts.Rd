@@ -4,7 +4,7 @@
 \alias{check_contrasts}
 \title{Check contrasts}
 \usage{
-check_contrasts(trt, vs = "all", vs2 = TRUE)
+check_contrasts(trt, vs = "all", vs2 = TRUE, control_first = TRUE)
 }
 \arguments{
 \item{trt}{a vector}
@@ -25,9 +25,11 @@ If you combine factors of interest into a single group following section 3.3 in 
 }
 \examples{
  # check_contrasts( samples$trt)
- trt <- c("heart", "lung", "control")
+ trt <- factor(c( "control", "heart", "lung"))
  check_contrasts(trt)
- data.frame( vs=check_contrasts(trt))
+ trt <- factor(trt, levels = c(  "heart", "lung", "control"))
+ check_contrasts(trt, control_first =FALSE)
+ data.frame( vs=check_contrasts(trt), control_first =FALSE)
  check_contrasts(trt, vs = "control")
  check_contrasts(trt, vs = "control", vs2=FALSE)
  check_contrasts(factor(trt, levels = trt)  )
