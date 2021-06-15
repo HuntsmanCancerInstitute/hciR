@@ -20,10 +20,15 @@
 #' @export
 
 plot_enricher <- function(x, trim=70, sets, cluster_row=FALSE,  cluster_col=FALSE, ...){
-   if(is.data.frame(x)) stop("A list of from enricher_all is required")
-   y <- dplyr::bind_rows(x, .id = "contrast")
-   ## order columns by order in list (or alphabetical)
-   y$contrast <- factor(y$contrast, levels= names(x))
+  # from enricher_markers
+   if(is.data.frame(x)){
+	   y <- x
+	   names(y)[1]<-"contrast"
+   }else{
+      y <- dplyr::bind_rows(x, .id = "contrast")
+	  ## order columns by order in list (or alphabetical)
+	  y$contrast <- factor(y$contrast, levels= names(x))
+   }
    y$pathway <- ifelse(nchar(y$pathway) > trim,
                    paste0(substr(y$pathway, 1, trim-2), "..."), y$pathway)
    z <- dplyr::select(y, contrast, pathway, p.adjust) %>%

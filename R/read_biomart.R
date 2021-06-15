@@ -121,7 +121,7 @@ read_biomart <- function(dataset="human", attributes, host="www.ensembl.org",
       message("Downloaded ", nrow(bm), " features")
    }
    # will also drop the grouped_df class
-   bm <- tibble::as_data_frame(bm)
+   bm <- tibble::as_tibble(bm)
    attr(bm, "downloaded") <- Sys.Date()
    attr(bm, "version") <- release
    bm

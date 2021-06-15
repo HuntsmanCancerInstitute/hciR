@@ -28,7 +28,7 @@
 #'  check_contrasts( trt, vs = "combined")
 #' @export
 
-check_contrasts <- function( trt, vs="all", vs2 = TRUE, control_first = TRUE){
+check_contrasts <- function( trt, vs="all", vs2 = TRUE, control_first = FALSE){
    if(is.factor(trt)){
       n <- levels( trt )
    }else{
