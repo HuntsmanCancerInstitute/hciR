@@ -8,6 +8,7 @@ plot_enricher(
   x,
   trim = 70,
   sets,
+  max,
   cluster_row = FALSE,
   cluster_col = FALSE,
   ...

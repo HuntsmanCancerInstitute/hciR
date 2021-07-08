@@ -19,7 +19,7 @@
 #'  }
 #' @export
 
-plot_enricher <- function(x, trim=70, sets, cluster_row=FALSE,  cluster_col=FALSE, ...){
+plot_enricher <- function(x, trim=70, sets, max, cluster_row=FALSE, cluster_col=FALSE, ...){
   # from enricher_markers
    if(is.data.frame(x)){
 	   y <- x
@@ -48,6 +48,7 @@ plot_enricher <- function(x, trim=70, sets, cluster_row=FALSE,  cluster_col=FALS
    ## too many NAs to cluster
    z <- as_matrix(z)
    z[is.na(z)] <- 0
+   if(!missing(max)) z[z>max] <- max
    message(nrow(z) , " total sets")
    pheatmap::pheatmap(z, color = clrs, cluster_cols=cluster_col,
        cluster_rows=cluster_row, ...)

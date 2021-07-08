@@ -4,7 +4,7 @@
 \alias{check_contrasts}
 \title{Check contrasts}
 \usage{
-check_contrasts(trt, vs = "all", vs2 = TRUE, control_first = TRUE)
+check_contrasts(trt, vs = "all", vs2 = TRUE, control_first = FALSE)
 }
 \arguments{
 \item{trt}{a vector}

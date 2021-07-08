@@ -8,7 +8,7 @@ write_gsea_rnk(
   res,
   write = TRUE,
   protein_coding = TRUE,
-  na_pvalue = TRUE,
+  na_pvalue = FALSE,
   file = NULL
 )
 }
@@ -20,7 +20,7 @@ write_gsea_rnk(
 \item{protein_coding}{only write protein_coding genes}
 
 \item{na_pvalue}{remove genes with NA p-values (extreme count outliers and
-low mean normalized counts)}
+low mean normalized counts flagged by independent filtering step)}
 }
 \value{
 Tab-delimited file with gene name and log2 fold change
