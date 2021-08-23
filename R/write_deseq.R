@@ -24,7 +24,7 @@
 #' @export
 
 write_deseq <- function(result_all, dds, rld, biomart, sets, fpkm,
-   text_files = FALSE, cutoff, file = "DESeq.xlsx", ...){
+   text_files = FALSE, cutoff, file = "DESeq.xlsx", overwrite = FALSE, ...){
 
    ##  if results are a tibble (since simplify=TRUE by default)
    if(!class(result_all)[1] == "list"){
@@ -103,6 +103,6 @@ write_deseq <- function(result_all, dds, rld, biomart, sets, fpkm,
 
    message("Saving ", length(DESeq_tables), " worksheets to ", file)
   # DESeq_tables
-   openxlsx::write.xlsx(DESeq_tables, file = file, rowNames= sapply(DESeq_tables, is.matrix) )
+   openxlsx::write.xlsx(DESeq_tables, file = file, rowNames = sapply(DESeq_tables, is.matrix), overwrite = overwrite )
   }
 }
