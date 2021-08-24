@@ -8,7 +8,7 @@
 #' then only plot unique sets.  If missing, then plots all sets, default.
 #' @param nes plot NES (or ES if FALSE)
 #' @param cluster_row Cluster dendrogram rows, default is an alphabetical list
-#' @param cluster_row Cluster dendrogram columns, default FALSE
+#' @param cluster_col Cluster dendrogram columns, default FALSE
 #' @param \dots other options passed to \code{pheatmap}
 #' @author Chris Stubben
 #' @examples
@@ -38,9 +38,9 @@ plot_fgsea <- function(x, trim=70, sets, nes=TRUE, cluster_row=FALSE,  cluster_c
    if(!missing(sets)){
      n <- apply(z[, -1], 1, function(x) sum(!is.na(x)))
      if(sets ==1){
-        z <- filter(z, n == 1)
+        z <- dplyr::filter(z, n == 1)
      }else{
-        z <- filter(z, n >= sets)
+        z <- dplyr::filter(z, n >= sets)
      }
    }
    clrs <- grDevices::colorRampPalette(

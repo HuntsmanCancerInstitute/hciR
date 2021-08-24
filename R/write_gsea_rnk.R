@@ -20,7 +20,7 @@
 #' }
 #' @export
 
-write_gsea_rnk <- function(res, write=TRUE, protein_coding = TRUE, na_pvalue = FALSE, file = NULL){
+write_gsea_rnk <- function(res, write=TRUE, protein_coding = TRUE, na_pvalue = FALSE){
    # needs list as input
    if(is.data.frame(res) ){
       n <- attr(res, "contrast")
@@ -35,13 +35,8 @@ write_gsea_rnk <- function(res, write=TRUE, protein_coding = TRUE, na_pvalue = F
       y <- res[[i]]
       vs <- gsub( "\\.* ", "_", names(res[i]))
       vs <- gsub("_+_", "_", vs, fixed=TRUE)
-      ## add txt for GNomEx
-      ## name output file
-      if(is.null(file)){
-          outfile <- paste0( gsub("/", "", vs), ".rnk")
-      } else {
-          outfile = as.character(file)
-      }
+      ## output file name
+      outfile <- paste0( gsub("/", "", vs), ".rnk")
 
       if(protein_coding && "biotype" %in% names(y)){
            y <- dplyr::filter(y, biotype == "protein_coding")

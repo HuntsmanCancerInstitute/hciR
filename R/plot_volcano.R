@@ -93,26 +93,26 @@ plot_volcano<- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
 		     if(sum(n)>0) x$gene_name[n] <- x$id[n]
 		   }
            ## avoid ggrepel warning if missing name
-		   y <- filter(x, !is.na(gene_name))
+		   y <- dplyr::filter(x, !is.na(gene_name))
 		   y1 <- NULL
 		   y2 <- NULL
 		   ## add labels using pvalue, fc or BOTH
            if(!missing(pvalue_cutoff)){
              if(length(pvalue_cutoff) == 2){
-                 y1 <- filter(y,
+                 y1 <- dplyr::filter(y,
 					   padj < 1/10^pvalue_cutoff[1] & log2FoldChange < 0 |
 					   padj < 1/10^pvalue_cutoff[2] & log2FoldChange > 0 )
             }else{
-                 y1 <- filter(y, padj < 1/10^pvalue_cutoff )
+                 y1 <- dplyr::filter(y, padj < 1/10^pvalue_cutoff )
             }
 		  }
 		  ##
 		  if(!missing(foldchange_cutoff)){
             if(length(foldchange_cutoff)==2){
-                 y2 <- filter(y, log2FoldChange < foldchange_cutoff[1] |
+                 y2 <- dplyr::filter(y, log2FoldChange < foldchange_cutoff[1] |
                                  log2FoldChange > foldchange_cutoff[2])
             }else{
-                 y2 <- filter(y, abs(log2FoldChange) > foldchange_cutoff)
+                 y2 <- dplyr::filter(y, abs(log2FoldChange) > foldchange_cutoff)
             }
 		  }
 		  # combine cutoffs

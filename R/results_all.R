@@ -1,14 +1,14 @@
 #' Extract and annotate all results from a DESeq analysis
 #'
 #' Extract all possible contrasts and annotate result tables from a DESeq object.
-#' Currently supports simple designs with a single variable.
-#'
-#' Uses the first treatment in the design formula for contrasts.  Levels are
-#' taken from levels(dds$trt) or use the levels option to re-order or compare a subset of levels.
+#' Currently supports simple designs with a single variable.  Following
+#' DESeq2 conventions, control group should be listed first and then pairswise
+#' comparisons are selected in reverse order, so A, B, C levels will return
+#' C vs. B, C vs. A, and B vs. A
 #'
 #' @param object a DESeqDataSet
 #' @param biomart annotations from \code{read_biomart} with column 1 matching row names in results
-#' @param vs either compare all vs. all (default) or all vs specific treatment, or see note.
+#' @param vs either compare all vs. all (default) or all vs specific treatment like control, or see note.
 #' @param subset index to subset all pairwise comparisons, try \code{combn(sort(samples$trt),2)}
 #' @param relevel Levels to compare, if missing then levels(dds$trt)
 #' @param alpha the significance cutoff for the adjusted p-value cutoff (FDR)
@@ -21,9 +21,6 @@
 #'
 #' @note If you combine factors of interest into a single group following section 3.3 in the DESeq2 vignette,
 #'  you can set vs = "combined" to limit the comparisons.  See \code{\link{check_contrasts}} for details.
-#'  If you combine 3 cell types and 2 treatments, then the default
-#' returns 18 contrasts while "combined" returns 3 contrasts comparing treatment within cell types (first group).
-#' Factors should be separated by space, dash or underscore in the combined treatment group for parsing.
 #'
 #' @return A list of tibbles for each contrast
 #'
@@ -37,8 +34,8 @@
 #' }
 #' @export
 
-results_all <- function( object, biomart,  vs= "all", subset, relevel, alpha = 0.05,
- add_columns, trt, lfcShrink= TRUE, simplify=TRUE,  ...){
+results_all <- function( object, biomart,  vs="all", subset, relevel, alpha = 0.05,
+ add_columns, trt, lfcShrink=TRUE, simplify=TRUE,  ...){
    message("Using adjusted p-value < ", alpha)
    if(missing(trt)){
       n <- as.character( DESeq2::design(object))
@@ -56,6 +53,7 @@ results_all <- function( object, biomart,  vs= "all", subset, relevel, alpha = 0
     }else{
       n <- relevel
    }
+   n <- rev(n)
    contrast <- utils::combn(n, 2)
 
    if( vs == "combined"){
@@ -63,11 +61,11 @@ results_all <- function( object, biomart,  vs= "all", subset, relevel, alpha = 0
       n1 <- apply(contrast, 2, function(x) length(unique( gsub("[ _-].+", "", x)))==1)
       contrast <- contrast[, n1]
     }else if( vs %in% n){
-         contrast <- rbind( n[n!=vs], vs)
+         contrast <- rbind(n[n != vs], vs)
          #contrast <- rbind( vs, n[n!=vs])
     }
-      vs <- apply(contrast, 2, paste, collapse = " vs. ")
-    if(length(vs)==0) stop("No contrasts found")
+    vs <- apply(contrast, 2, paste, collapse = " vs. ")
+    if(length(vs) == 0) stop("No contrasts found")
     if(!missing(subset)){
          if(!all(subset %in% 1:length(vs))) stop("Subset values do not match possible contrasts, see check_contrasts")
           vs <- vs[subset]

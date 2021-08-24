@@ -24,7 +24,9 @@ then only plot unique sets.  If missing, then plots all sets, default.}
 
 \item{nes}{plot NES (or ES if FALSE)}
 
-\item{cluster_row}{Cluster dendrogram columns, default FALSE}
+\item{cluster_row}{Cluster dendrogram rows, default is an alphabetical list}
+
+\item{cluster_col}{Cluster dendrogram columns, default FALSE}
 
 \item{\dots}{other options passed to \code{pheatmap}}
 }

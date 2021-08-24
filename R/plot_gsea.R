@@ -35,9 +35,9 @@ plot_gsea <- function(x, trim=70, n_sets, nes=TRUE, ...){
    if(!missing(n_sets)){
      n <- apply(z[, -1], 1, function(x) sum(!is.na(x)))
      if(n_sets ==1){
-        z <- filter(z, n == 1)
+        z <- dplyr::filter(z, n == 1)
      }else{
-        z <- filter(z, n >= n_sets)
+        z <- dplyr::filter(z, n >= n_sets)
      }
    }
    clrs <- grDevices::colorRampPalette(rev(

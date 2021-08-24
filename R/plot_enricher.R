@@ -6,8 +6,9 @@
 #' @param trim trim long names, default more than 70 characters
 #' @param sets display contrasts sharing n or more sets for n > 1.  If n = 1,
 #' then only plot unique sets.  If missing, then plots all sets, default.
+#' @param max Maximum number of sets to plot
 #' @param cluster_row Cluster dendrogram rows, default FALSE for an alphabetical list
-#' @param cluster_row Cluster dendrogram columns, default FALSE
+#' @param cluster_col Cluster dendrogram columns, default FALSE
 #' @param \dots other options passed to \code{pheatmap}
 #' @author Chris Stubben
 #' @examples
@@ -38,9 +39,9 @@ plot_enricher <- function(x, trim=70, sets, max, cluster_row=FALSE, cluster_col=
    if(!missing(sets)){
      n <- apply(z[, -1], 1, function(x) sum(!is.na(x)))
      if(sets ==1){
-        z <- filter(z, n == 1)
+        z <- dplyr::filter(z, n == 1)
      }else{
-        z <- filter(z, n >= sets)
+        z <- dplyr::filter(z, n >= sets)
      }
    }
    clrs <- grDevices::colorRampPalette(

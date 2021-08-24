@@ -56,7 +56,7 @@ scale midpoint at zero.
 \examples{
 x <- top_counts(pasilla$results, pasilla$rlog)
 plot_genes(x, c("condition", "type"), scale="row", annotation_names_col=FALSE)
-plot_genes(x, output = "d3")
+# plot_genes(x, output = "d3")
 }
 \author{
 Chris Stubben

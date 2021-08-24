@@ -6,4 +6,6 @@ utils::globalVariables( c("-log(p-value)", "INTGRP", "PC1", "PC2",
    "sig",  "stat", "stat.mean", "status", "value", "enriched", "NES", "biotype", "total",
    "ES", "Match", "Percent", "down", "chromosome", "chromosome_name", "logFC",
    "de", "es", "fdr", "guide_legend", "id", "overlap", "pathway", "percent",
-   "pvalue", "row_number", "size", "stage", "term", "up", "feature", "x1"))
+   "pvalue", "row_number", "size", "stage", "term", "up", "feature", "x1",
+  "Ingenuity Canonical Pathways", "Molecules", "N", "Ratio",  "p.adjust", "pValue",
+  "zScore"))

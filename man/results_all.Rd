@@ -23,7 +23,7 @@ results_all(
 
 \item{biomart}{annotations from \code{read_biomart} with column 1 matching row names in results}
 
-\item{vs}{either compare all vs. all (default) or all vs specific treatment, or see note.}
+\item{vs}{either compare all vs. all (default) or all vs specific treatment like control, or see note.}
 
 \item{subset}{index to subset all pairwise comparisons, try \code{combn(sort(samples$trt),2)}}
 
@@ -47,18 +47,14 @@ A list of tibbles for each contrast
 }
 \description{
 Extract all possible contrasts and annotate result tables from a DESeq object.
-Currently supports simple designs with a single variable.
-}
-\details{
-Uses the first treatment in the design formula for contrasts.  Levels are
-taken from levels(dds$trt) or use the levels option to re-order or compare a subset of levels.
+Currently supports simple designs with a single variable.  Following
+DESeq2 conventions, control group should be listed first and then pairswise
+comparisons are selected in reverse order, so A, B, C levels will return
+C vs. B, C vs. A, and B vs. A
 }
 \note{
 If you combine factors of interest into a single group following section 3.3 in the DESeq2 vignette,
  you can set vs = "combined" to limit the comparisons.  See \code{\link{check_contrasts}} for details.
- If you combine 3 cell types and 2 treatments, then the default
-returns 18 contrasts while "combined" returns 3 contrasts comparing treatment within cell types (first group).
-Factors should be separated by space, dash or underscore in the combined treatment group for parsing.
 }
 \examples{
 \dontrun{

@@ -22,7 +22,11 @@ plot_enricher(
 \item{sets}{display contrasts sharing n or more sets for n > 1.  If n = 1,
 then only plot unique sets.  If missing, then plots all sets, default.}
 
-\item{cluster_row}{Cluster dendrogram columns, default FALSE}
+\item{max}{Maximum number of sets to plot}
+
+\item{cluster_row}{Cluster dendrogram rows, default FALSE for an alphabetical list}
+
+\item{cluster_col}{Cluster dendrogram columns, default FALSE}
 
 \item{\dots}{other options passed to \code{pheatmap}}
 }
