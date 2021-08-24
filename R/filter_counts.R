@@ -1,11 +1,12 @@
 #' Filter count matrix
 #'
 #' Remove features with zero counts and less than the low count cutoff.  The
-#'  default method is a maximum-based filter unless sum=TRUE
+#' default method is a maximum-based filter where every sample is less than or
+#' equal to the low count cutoff.
 #'
 #' @param count_tbl a count matrix, data.frame or tibble
 #' @param n low count cutoff, default 1
-#' @param sum Use total read counts to apply the cutoff.  The default is the maximum reads.
+#' @param sum Use total read counts instead of the maximum.
 #'
 #' @return A count matrix
 #'
