@@ -14,6 +14,7 @@ write_deseq(
   text_files = FALSE,
   cutoff,
   file = "DESeq.xlsx",
+  overwrite = FALSE,
   ...
 )
 }
@@ -35,6 +36,8 @@ write_deseq(
 \item{cutoff}{if text_files is TRUE, only write genes below this p-value cutoff}
 
 \item{file}{file name}
+
+\item{overwrite}{overwrite existing Excel file. Default is FALSE.}
 
 \item{\dots}{additional options passed to \code{annotate_results}}
 }

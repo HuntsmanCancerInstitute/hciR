@@ -11,6 +11,7 @@
 #' @param text_files write results to separate txt files, mainly for IPA input
 #' @param cutoff if text_files is TRUE, only write genes below this p-value cutoff
 #' @param file file name
+#' @param overwrite overwrite existing Excel file. Default is FALSE.
 #' @param \dots additional options passed to \code{annotate_results}
 #'
 #' @return A tibble
@@ -41,7 +42,7 @@ write_deseq <- function(result_all, dds, rld, biomart, sets, fpkm,
          vs <- gsub("_+_", "_", vs, fixed=TRUE)
          vs <- paste0(vs, ".txt")
          message( "Saving ",  vs)
-         if(!missing(cutoff))  res[[i]] <- filter(res[[i]], padj < cutoff)
+         if(!missing(cutoff))  res[[i]] <- dplyr::filter(res[[i]], padj < cutoff)
          readr::write_tsv(res[[i]], vs)
       }
    }else{
