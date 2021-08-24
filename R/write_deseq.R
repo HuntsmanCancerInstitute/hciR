@@ -11,6 +11,7 @@
 #' @param text_files write results to separate txt files, mainly for IPA input
 #' @param cutoff if text_files is TRUE, only write genes below this p-value cutoff
 #' @param file file name
+#' @param overwrite overwrite existing Excel file. Default is FALSE.
 #' @param \dots additional options passed to \code{annotate_results}
 #'
 #' @return A tibble
@@ -24,7 +25,7 @@
 #' @export
 
 write_deseq <- function(result_all, dds, rld, biomart, sets, fpkm,
-   text_files = FALSE, cutoff, file = "DESeq.xlsx", ...){
+   text_files = FALSE, cutoff, file = "DESeq.xlsx", overwrite = FALSE, ...){
 
    ##  if results are a tibble (since simplify=TRUE by default)
    if(!class(result_all)[1] == "list"){
@@ -41,7 +42,7 @@ write_deseq <- function(result_all, dds, rld, biomart, sets, fpkm,
          vs <- gsub("_+_", "_", vs, fixed=TRUE)
          vs <- paste0(vs, ".txt")
          message( "Saving ",  vs)
-         if(!missing(cutoff))  res[[i]] <- filter(res[[i]], padj < cutoff)
+         if(!missing(cutoff))  res[[i]] <- dplyr::filter(res[[i]], padj < cutoff)
          readr::write_tsv(res[[i]], vs)
       }
    }else{
@@ -103,6 +104,6 @@ write_deseq <- function(result_all, dds, rld, biomart, sets, fpkm,
 
    message("Saving ", length(DESeq_tables), " worksheets to ", file)
   # DESeq_tables
-   openxlsx::write.xlsx(DESeq_tables, file = file, rowNames= sapply(DESeq_tables, is.matrix) )
+   openxlsx::write.xlsx(DESeq_tables, file = file, rowNames = sapply(DESeq_tables, is.matrix), overwrite = overwrite )
   }
 }
