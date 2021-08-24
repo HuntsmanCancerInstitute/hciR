@@ -55,7 +55,6 @@ results_all <- function( object, biomart,  vs="all", subset, relevel, alpha = 0.
    }
    n <- rev(n)
    contrast <- utils::combn(n, 2)
-
    if( vs == "combined"){
       ## if two columns are combined into a single trt group, compare within first group
       n1 <- apply(contrast, 2, function(x) length(unique( gsub("[ _-].+", "", x)))==1)
@@ -74,10 +73,8 @@ results_all <- function( object, biomart,  vs="all", subset, relevel, alpha = 0.
        }
       res <- vector("list", length(vs))
       names(res) <- vs
-
    ## padded for message
    vs1 <- sprintf(paste0("%-", max(nchar(vs))+2, "s"), paste0(vs, ":") )
-
    if(missing(add_columns)){
         add_columns <- c("gene_name", "biotype", "chromosome", "description")
         if(!missing(biomart)){
