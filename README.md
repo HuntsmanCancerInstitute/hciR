@@ -6,6 +6,9 @@ package includes functions to run [DESeq2] using sample and count tibbles as
 input, get annotated DESeq results for all pairwise comparisons and create
 interactive plots and other visualizations.
 
+NOTE: Starting in hciR version 1.5, the control group should be listed first
+and then pairswise comparisons are selected in reverse order, so A, B, C levels
+will return results for C vs. B, C vs. A, and B vs. A from `results_all`.
 
 Use `devtools` to install `hciR` and the [hciRdata] package
 with Ensembl annotations.

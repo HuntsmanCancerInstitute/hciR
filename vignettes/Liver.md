@@ -1,6 +1,6 @@
 DESeq analysis of mouse liver samples
 ================
-February 17, 2021
+August 24, 2021
 
 This guide follows the [Bioconductor RNA-Seq
 workflow](http://master.bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html)
@@ -8,7 +8,7 @@ to find differentially expressed genes in
 [GSE132056](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE132056)
 using
 [DESeq2](http://www.bioconductor.org/packages/release/bioc/html/DESeq2.html)
-version 1.30.0. For more details about the statistics, check the
+version 1.30.1. For more details about the statistics, check the
 original
 [paper](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0550-8)
 or online tutorials like the one from
@@ -91,18 +91,18 @@ inner_join( dplyr::select(mouse92, 1:4,8),
  arrange(desc(mean_count))
 #  Joining, by = "id"
 #  # A tibble: 19,773 x 6
-#     id                 gene_name biotype        chromosome description                              mean_count
-#     <chr>              <chr>     <chr>          <chr>      <chr>                                         <dbl>
-#   1 ENSMUSG00000029368 Alb       protein_coding 5          Serum albumin                              1179072.
-#   2 ENSMUSG00000064339 mt-Rnr2   Mt_rRNA        MT         mitochondrially encoded 16S rRNA            445705.
-#   3 ENSMUSG00000020609 Apob      protein_coding 12         Apolipoprotein B-100 Apolipoprotein B-48    363466.
-#   4 ENSMUSG00000002985 Apoe      protein_coding 7          Apolipoprotein E                            277628.
-#   5 ENSMUSG00000058207 Serpina3k protein_coding 12         serine (or cysteine) peptidase inhibitor    198378.
-#   6 ENSMUSG00000064351 mt-Co1    protein_coding MT         mitochondrially encoded cytochrome c oxi    194757.
-#   7 ENSMUSG00000037071 Scd1      protein_coding 19         stearoyl-Coenzyme A desaturase 1            145974.
-#   8 ENSMUSG00000066154 Mup3      protein_coding 4          major urinary protein 3                     129677.
-#   9 ENSMUSG00000024164 C3        protein_coding 17         Complement C3 Complement C3 beta chain C    121210.
-#  10 ENSMUSG00000025479 Cyp2e1    protein_coding 7          Cytochrome P450 2E1                         114009.
+#     id                 gene_name biotype        chromosome description                               mean_count
+#     <chr>              <chr>     <chr>          <chr>      <chr>                                          <dbl>
+#   1 ENSMUSG00000029368 Alb       protein_coding 5          "Serum albumin"                             1179072.
+#   2 ENSMUSG00000064339 mt-Rnr2   Mt_rRNA        MT         "mitochondrially encoded 16S rRNA"           445705.
+#   3 ENSMUSG00000020609 Apob      protein_coding 12         "Apolipoprotein B-100 Apolipoprotein B-4…    363466.
+#   4 ENSMUSG00000002985 Apoe      protein_coding 7          "Apolipoprotein E"                           277628.
+#   5 ENSMUSG00000058207 Serpina3k protein_coding 12         "serine (or cysteine) peptidase inhibito…    198378.
+#   6 ENSMUSG00000064351 mt-Co1    protein_coding MT         "mitochondrially encoded cytochrome c ox…    194757.
+#   7 ENSMUSG00000037071 Scd1      protein_coding 19         "stearoyl-Coenzyme A desaturase 1"           145974.
+#   8 ENSMUSG00000066154 Mup3      protein_coding 4          ""                                           129677.
+#   9 ENSMUSG00000024164 C3        protein_coding 17         "Complement C3 Complement C3 beta chain …    121210.
+#  10 ENSMUSG00000025479 Cyp2e1    protein_coding 7          "Cytochrome P450 2E1"                        114009.
 #  # … with 19,763 more rows
 ```
 
@@ -126,12 +126,13 @@ there are a few ways to model the data.
 ## Model 1, combine factors
 
 Combine treatment and diet into a new column and order the factor
-levels.
+levels. NOTE: Starting in hciR version 1.5, control groups should be
+listed first and pairwise combinations are selected in reverse order.
 
 ``` r
 samples <- mutate(samples, trt_diet = gsub("Degs1_", "", paste(trt, diet, sep="_")))
 samples$trt_diet <- factor(samples$trt_diet,
-     levels = c("KO_HFD",  "KO_NCD", "Control_HFD", "Control_NCD"))
+     levels = c("Control_NCD", "Control_HFD", "KO_NCD", "KO_HFD"))
 ```
 
 Run DESeq using the new trt\_diet column in the design formula and get
@@ -264,12 +265,12 @@ dplyr::select(p1, 1:7,12)
 #   7 ENSMUSG0… Cpt1c     protein_… 7          Mus musculus carnitine palmitoyltr… CPT1C             5.15 NA     
 #   8 ENSMUSG0… Ubc       protein_… 5          ubiquitin C                         UBC             871.    0.498 
 #   9 ENSMUSG0… Acaa1b    protein_… 9          acetyl-Coenzyme A acyltransferase … ACAA1         11724.    0.914 
-#  10 ENSMUSG0… Lpl       protein_… 8          lipoprotein lipase                  LPL             640.    0.0285
+#  10 ENSMUSG0… Lpl       protein_… 8          lipoprotein lipase                  LPL             640.    0.0284
 #  # … with 60 more rows
 ```
 
 Cluster the PPAR genes in a heatmap. There are 70 expressed genes but
-only 3 are significant - this will plot 37 genes with an FDR \< 50%.
+only 3 are significant - this will plot 37 genes with an FDR &lt; 50%.
 
 ``` r
 x <- top_counts( filter(p1, padj < 0.5), rld1, filter=FALSE)
@@ -376,10 +377,10 @@ and run `fgsea` using a 10% FDR.
 ``` r
 set.seed(77)
 k1 <- fgsea_all(res, msig_pathways$KEGG)
-#  1. KO_HFD vs. Control_HFD:       112 enriched sets (68 positive, 44 negative)
-#  2. KO_NCD vs. Control_NCD:       25 enriched sets (0 positive, 25 negative)
-#  3. Control_HFD vs. Control_NCD:  29 enriched sets (5 positive, 24 negative)
-#  4. KO_HFD vs. KO_NCD:            64 enriched sets (38 positive, 26 negative)
+#  1. KO_HFD vs. Control_HFD:       114 enriched sets (68 positive, 46 negative)
+#  2. KO_NCD vs. Control_NCD:       38 enriched sets (3 positive, 35 negative)
+#  3. Control_HFD vs. Control_NCD:  28 enriched sets (4 positive, 24 negative)
+#  4. KO_HFD vs. KO_NCD:            65 enriched sets (36 positive, 29 negative)
 ```
 
 Print the top pathways from KO\_HFD vs. KO\_NCD and check the GSEA [user
@@ -391,14 +392,14 @@ group_by(k1[[1]][, -8], enriched) %>% top_n(4, abs(NES)) %>% ungroup()
 #  # A tibble: 8 x 8
 #    pathway                                  pval    padj     ES   NES nMoreExtreme  size enriched
 #    <chr>                                   <dbl>   <dbl>  <dbl> <dbl>        <dbl> <int> <chr>   
-#  1 Oxidative Phosphorylation            0.000260 0.00118 -0.777 -3.65            0   102 negative
-#  2 Ribosome                             0.000254 0.00118 -0.802 -3.62            0    83 negative
-#  3 Parkinsons Disease                   0.000259 0.00118 -0.734 -3.43            0    99 negative
-#  4 Alzheimers Disease                   0.000272 0.00120 -0.637 -3.13            0   133 negative
-#  5 ECM Receptor Interaction             0.000171 0.00117  0.652  2.58            0    58 positive
-#  6 Cell Adhesion Molecules Cams         0.000168 0.00117  0.609  2.53            0    74 positive
-#  7 Leishmania Infection                 0.000171 0.00117  0.628  2.43            0    52 positive
-#  8 Toll Like Receptor Signaling Pathway 0.000169 0.00117  0.565  2.33            0    71 positive
+#  1 Ribosome                             0.000353 0.00168 -0.830 -3.68            0    83 negative
+#  2 Oxidative Phosphorylation            0.000387 0.00171 -0.779 -3.60            0   107 negative
+#  3 Parkinsons Disease                   0.000381 0.00171 -0.748 -3.45            0   104 negative
+#  4 Alzheimers Disease                   0.000458 0.00189 -0.618 -3.01            0   149 negative
+#  5 Cell Adhesion Molecules Cams         0.000135 0.00126  0.594  2.40            0   106 positive
+#  6 ECM Receptor Interaction             0.000140 0.00126  0.620  2.40            0    78 positive
+#  7 Leishmania Infection                 0.000145 0.00126  0.642  2.38            0    60 positive
+#  8 Toll Like Receptor Signaling Pathway 0.000139 0.00126  0.603  2.36            0    84 positive
 ```
 
 Get the fold change vector and create an enrichment plot for Ribosome.
@@ -407,8 +408,8 @@ Get the fold change vector and create an enrichment plot for Ribosome.
 library(fgsea)
 fc <- write_gsea_rnk(res, write=FALSE)
 head(fc[[1]])
-#    COL1A1   PHLDA3    GPNMB     GBP6    GDF15   COL1A2 
-#  2.024805 1.840050 1.437978 1.422271 1.347245 1.346401
+#    COL1A1   PHLDA3    GPNMB     GBP6     CD8A    GDF15 
+#  2.024805 1.840050 1.437978 1.422271 1.381950 1.347245
 plotEnrichment(msig_pathways$KEGG[["Ribosome"]],  fc[[1]]) +
 ggplot2::labs(title="Ribosome")
 ```
@@ -428,7 +429,7 @@ Plot NES scores from significant pathways in two or more contrasts.
 
 ``` r
 plot_fgsea(k1, fontsize_row=7, sets =2)
-#  74 total sets
+#  82 total sets
 ```
 
 ![](Liver_files/figure-gfm/plotfgsea-1.png)<!-- -->

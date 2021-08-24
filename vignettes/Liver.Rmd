@@ -86,12 +86,14 @@ Following the DESeq2 vignette on [interactions], there are a few ways to model t
 
 ## Model 1, combine factors
 
-Combine treatment and diet into a new column and order the factor levels.
+Combine treatment and diet into a new column and order the factor levels.  NOTE:  Starting in
+hciR version 1.5, control groups should be listed first and pairwise combinations are selected
+in reverse order.
 
 ```{r addtrt}
 samples <- mutate(samples, trt_diet = gsub("Degs1_", "", paste(trt, diet, sep="_")))
 samples$trt_diet <- factor(samples$trt_diet,
-     levels = c("KO_HFD",  "KO_NCD", "Control_HFD", "Control_NCD"))
+	 levels = c("Control_NCD", "Control_HFD", "KO_NCD", "KO_HFD"))
 ```
 
 Run DESeq using the new trt_diet column in the design formula and get the regularized log
