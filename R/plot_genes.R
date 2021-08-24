@@ -27,7 +27,7 @@
 #' @examples
 #' x <- top_counts(pasilla$results, pasilla$rlog)
 #' plot_genes(x, c("condition", "type"), scale="row", annotation_names_col=FALSE)
-#' plot_genes(x, output = "d3")
+#' # plot_genes(x, output = "d3")
 #' @export
 
 plot_genes <-  function( x, intgroup, output="pheatmap", palette="RdBu",
@@ -48,7 +48,7 @@ plot_genes <-  function( x, intgroup, output="pheatmap", palette="RdBu",
                 levels(df[, i]) <- paste0(levels(df[, i]), "    ")
             }
        }
-    }	
+    }
    ## convert tibble to matrix
    x <- as_matrix(x)
    brks <- NA

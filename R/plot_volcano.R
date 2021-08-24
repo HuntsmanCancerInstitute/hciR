@@ -83,7 +83,7 @@ plot_volcano<- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
          ggplot2::xlab("Log2 Fold Change") +
          ggplot2::ylab("-Log10 Adjusted P-value") +
          ggplot2::scale_fill_gradientn(colors=clrs, limits=c(-fc, fc),
-             guide=FALSE)
+             guide="none")
 		if( missing(pvalue_cutoff) & missing(foldchange_cutoff)){
 			p1
 		}else{
