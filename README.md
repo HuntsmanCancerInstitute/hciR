@@ -26,18 +26,19 @@ listed below.
 ```r
 library(hciR)
 samples <- read_tsv("samples.txt")
+samples$trt <- factor(samples$trt, levels = c("WT", "OE", "KO"))
 counts <- read_tsv("counts.txt")
 counts <- filter_counts(counts, n = 5)
 dds <- deseq_from_tibble(counts, samples, design = ~ trt)
 rld <- r_log(dds)
-plot_pca(rld,  "trt", tooltip= c("id", "name"))
+plot_pca(rld, "trt", tooltip= c("id", "name"))
 plot_dist(rld, "trt", na_col="white")
 library(hciRdata)
-res <- results_all(dds, mouse98)
+res <- results_all(dds, mouse104)
 plot_volcano(res[[1]])
 x <- top_counts(res[[1]], rld, top=40)
 plot_genes(x, "trt", scale ="row", annotation_names_col=FALSE)
-write_deseq(res, dds, rld, mouse98)
+write_deseq(res, dds, rld, mouse104)
 ```
 
 
