@@ -1,12 +1,12 @@
 DESeq analysis of Pasilla knock-downs
 ================
-October 18, 2019
+August 24, 2021
 
 This guide follows the [Bioconductor RNA-Seq
 workflow](http://master.bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html)
 to find differentially expressed genes using
 [DESeq2](http://www.bioconductor.org/packages/release/bioc/html/DESeq2.html)
-version 1.24.0. The
+version 1.30.1. The
 [hciR](https://github.com/HuntsmanCancerInstitute/hciR) package works
 best with [tidyverse](http://tidyverse.org/) packages (readr, dplyr,
 tibble, etc.) and simplifies the code in a typical differential
@@ -83,12 +83,13 @@ counts <- filter_counts(counts, n = 5)
 
 The [hciRdata](https://github.com/HuntsmanCancerInstitute/hciRdata)
 package includes the latest Ensembl annotations for twelve common
-reference genomes (version 98).
+reference genomes.
 
 ``` r
 library(hciRdata)
-dplyr::select(fly98, 1:4,8)
-#  # A tibble: 17,753 x 5
+# data(package="hciRdata")
+dplyr::select(fly104, 1:4,8)
+#  # A tibble: 23,932 x 5
 #     id          gene_name      biotype        chromosome description                                
 #     <chr>       <chr>          <chr>          <chr>      <chr>                                      
 #   1 FBgn0000003 7SLRNA:CR32864 ncRNA          3R         Signal recognition particle 7SL RNA CR32864
@@ -101,26 +102,26 @@ dplyr::select(fly98, 1:4,8)
 #   8 FBgn0000024 Ace            protein_coding 3R         Acetylcholine esterase                     
 #   9 FBgn0000028 acj6           protein_coding X          abnormal chemosensory jump 6               
 #  10 FBgn0000032 Acph-1         protein_coding 3R         Acid phosphatase 1                         
-#  # … with 17,743 more rows
+#  # … with 23,922 more rows
 ```
 
 The
 [pasilla](http://bioconductor.org/packages/release/data/experiment/html/pasilla.html)
-dataset was analyzed using Ensembl version 62, so 708 gene ids have been
+dataset was analyzed using Ensembl version 62, so 737 gene ids have been
 removed from the latest release. See the
 [Ensembl](https://github.com/HuntsmanCancerInstitute/hciR/vignettes/Ensembl.md)
-vignette to download an earlier release.
+vignette to download and use an earlier release.
 
 ``` r
-filter(counts, !id %in% fly98$id) %>% nrow()
-#  [1] 708
+filter(counts, !id %in% fly104$id) %>% nrow()
+#  [1] 737
 ```
 
 Check genes with the highest number of assigned reads.
 
 ``` r
 n1 <- rowMeans(as_matrix(counts))
-right_join( dplyr::select(fly98, 1:4,8),
+right_join( dplyr::select(fly104, 1:4,8),
  tibble(id= names(n1), mean_count = n1)) %>%
  arrange(desc(mean_count))
 #  Joining, by = "id"
@@ -142,7 +143,7 @@ right_join( dplyr::select(fly98, 1:4,8),
 
 ### Run DESeq
 
-Run `DESeq` using ~ condition + type in the design formula to control
+Run `DESeq` using \~ condition + type in the design formula to control
 for paired vs single end effects on gene expression and get the
 regularized log (rlog) counts for sample visualizations. These values
 are similar to the log2 normalized counts except the variance in low
@@ -151,6 +152,8 @@ count genes is reduced.
 ``` r
 dds <- deseq_from_tibble(counts, samples,  design = ~ condition + type)
 #  Reordering columns in counts to match samples
+#  Warning in DESeqDataSet(se, design = design, ignoreRank): some variables in design formula are characters,
+#  converting to factors
 #  estimating size factors
 #  estimating dispersions
 #  gene-wise dispersion estimates
@@ -187,36 +190,37 @@ plot_dist(rld , c("condition", "type"), na_col="white")
 
 ### Results
 
-The `results_all` function will run ***all*** pairwise comparisons in
-alphabetical order (A vs B, A vs C and B vs C). Use `check_contrasts` to
-list the contrasts.
+DESeq will convert any character columns in the design formula to
+factors (see warning above). In this case, the values will be ordered
+alphabetically and the `results_all` function will run ***all***
+pairwise comparisons in reverse order (for example C vs. B, C vs. A and
+B vs. A if samples groups are A, B, C).
+
+Check the possible contrasts using `check_contrasts`.
 
 ``` r
 check_contrasts(dds$condition)
 #  1 contrasts:
-#  [1] "treated vs. untreated"
+#  [1] "untreated vs. treated"
 ```
 
-The control group should be the reference level and listed second. If
-you need to reorder the groups, use `factor` to set the factor levels
-***before*** running `DESeq` above. For example, if you have a `trt`
-column with KO and control groups, set the factor levels so the control
-group is listed last. Note the standard DESeq2 workflow typically wants
-the control group listed first.
+The best way to ensure that control groups are set as the reference
+level is to factor the columns before running `deseq_from_tibble`.
 
 ``` r
-samples$trt <- factor(samples$trt, levels = c( "KO", "control"))
+samples$condition <- factor(samples$condition, levels = c("untreated", "treated"))
 ```
 
-Compare treated vs. untreated using a 5% FDR and add gene annotations to
-the result tables.
+Another option is to use the relevel option in `results_all` below to
+compare treated vs. untreated using a 5% FDR (or setting
+`vs="untreated"` would also work in this case).
 
 ``` r
-res <- results_all(dds, fly98, alpha= 0.05)
+res <- results_all(dds, fly104, alpha= 0.05, relevel =c("untreated", "treated"))
 #  Using adjusted p-value < 0.05
 #  Adding shrunken fold changes to log2FoldChange
 #  1. treated vs. untreated: 492 up and 598 down regulated
-#  Note: 708 rows in results are missing from biomart table
+#  Note: 737 rows in results are missing from biomart table
 ```
 
 The results are a tibble or list of tibbles if there is more than one
@@ -228,16 +232,16 @@ arrange(res, padj)  %>%
 #  # A tibble: 9,405 x 8
 #     id        gene_name biotype      chromosome description                   baseMean log2FoldChange      padj
 #     <chr>     <chr>     <chr>        <chr>      <chr>                            <dbl>          <dbl>     <dbl>
-#   1 FBgn0003… sesB      protein_cod… X          stress-sensitive B               4342.          -2.96 2.13e-176
-#   2 FBgn0026… SPARC     protein_cod… 3R         Secreted protein, acidic, cy…   43914.          -2.38 4.34e-170
-#   3 FBgn0039… Kal1      protein_cod… 3R         Kallmann syndrome 1               730.          -4.09 3.74e-166
-#   4 FBgn0025… Ant2      protein_cod… X          Adenine nucleotide transloca…    1501.           2.71 3.06e-160
-#   5 FBgn0029… Hml       protein_cod… 3L         Hemolectin                       3706.          -2.10 5.31e-111
-#   6 FBgn0035… CG3770    protein_cod… 2R         <NA>                              638.          -2.39 9.53e- 86
-#   7 FBgn0039… CG1544    protein_cod… 3R         <NA>                              262.          -3.46 2.15e- 80
-#   8 FBgn0034… gas       protein_cod… 2R         gasoline                          226.          -2.96 9.24e- 64
-#   9 FBgn0000… Ama       protein_cod… 3R         Amalgam                           342.           2.36 7.82e- 59
-#  10 FBgn0029… CG3168    protein_cod… X          <NA>                              490.          -2.22 8.59e- 59
+#   1 FBgn0003… sesB      protein_cod… X          "stress-sensitive B"             4342.          -2.96 2.13e-176
+#   2 FBgn0026… SPARC     protein_cod… 3R         "Secreted protein, acidic, c…   43914.          -2.38 4.34e-170
+#   3 FBgn0039… Kal1      protein_cod… 3R         "Kallmann syndrome 1"             730.          -4.09 3.74e-166
+#   4 FBgn0025… Ant2      protein_cod… X          "Adenine nucleotide transloc…    1501.           2.71 3.06e-160
+#   5 FBgn0029… Hml       protein_cod… 3L         "Hemolectin"                     3706.          -2.10 5.31e-111
+#   6 FBgn0035… CG3770    protein_cod… 2R         ""                                638.          -2.39 9.53e- 86
+#   7 FBgn0039… CG1544    protein_cod… 3R         ""                                262.          -3.46 2.15e- 80
+#   8 FBgn0034… gas       protein_cod… 2R         "gasoline"                        226.          -2.96 9.24e- 64
+#   9 FBgn0000… Ama       protein_cod… 3R         "Amalgam"                         342.           2.36 7.82e- 59
+#  10 FBgn0029… CG3168    protein_cod… X          ""                                490.          -2.22 8.59e- 59
 #  # … with 9,395 more rows
 ```
 
@@ -293,7 +297,7 @@ counts and fly annotations to a single Excel file in `DESeq.xlsx` and R
 objects to a binary data file to load into a new session.
 
 ``` r
-write_deseq(res, dds, rld, fly98)
+write_deseq(res, dds, rld, fly104)
 save(res, dds, rld, file="dds.rda")
 ```
 

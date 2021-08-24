@@ -9,7 +9,7 @@ vignette: >
 ---
 
 ```{r global_options, include=FALSE}
-knitr::opts_chunk$set(warning=FALSE, comment="# ", collapse=TRUE)
+knitr::opts_chunk$set(comment="# ", collapse=TRUE)
 ```
 
 This guide follows the [Bioconductor RNA-Seq workflow] to find differentially
@@ -62,33 +62,33 @@ counts <- filter_counts(counts, n = 5)
 ### Load annotations
 
 The [hciRdata] package includes the latest Ensembl annotations for
-twelve common reference genomes (version 98).
+twelve common reference genomes.
 
-```{r fly98, echo=-1}
+```{r fly104, echo=-1}
 options(width=110)
 library(hciRdata)
-dplyr::select(fly98, 1:4,8)
+# data(package="hciRdata")
+dplyr::select(fly104, 1:4,8)
 ```
 
-The [pasilla] dataset was analyzed using Ensembl version 62, so 708 gene ids have
-been removed from the latest release.  See the [Ensembl] vignette to download an
+
+The [pasilla] dataset was analyzed using Ensembl version 62, so 737 gene ids have
+been removed from the latest release.  See the [Ensembl] vignette to download and use an
 earlier release.
 
 ```{r missinggene}
-filter(counts, !id %in% fly98$id) %>% nrow()
+filter(counts, !id %in% fly104$id) %>% nrow()
 ```
-
 
 Check genes with the highest number of assigned reads.
 
 ```{r topgenes, echo=-1}
 options(width=110)
 n1 <- rowMeans(as_matrix(counts))
-right_join( dplyr::select(fly98, 1:4,8),
+right_join( dplyr::select(fly104, 1:4,8),
  tibble(id= names(n1), mean_count = n1)) %>%
  arrange(desc(mean_count))
 ```
-
 
 
 ### Run DESeq
@@ -130,31 +130,31 @@ plot_dist(rld , c("condition", "type"), na_col="white")
 
 ### Results
 
+DESeq will convert any character columns in the design formula to factors (see
+warning above).  In this case, the values will be ordered alphabetically and the
+`results_all` function will run ***all***  pairwise comparisons in reverse order
+(for example C vs. B, C vs. A and B vs. A if samples groups are A, B, C).
 
-The `results_all` function will run ***all***  pairwise comparisons
-in alphabetical order (A vs B, A vs C and B vs C).  Use `check_contrasts` to
-list the contrasts.
+Check the possible contrasts using `check_contrasts`.
 
-
-```{r checkcontrasts}
+```{r check_condition}
 check_contrasts(dds$condition)
 ```
 
-The control group should be the reference level and listed second.  If you need  to reorder the
-groups, use `factor` to set the factor levels ***before*** running `DESeq` above.   For example,
-if you have a `trt` column with KO and control groups, set the factor levels so the control group
-is listed last.  Note the standard DESeq2 workflow typically wants the control group listed first.
+The best way to ensure that control groups are set as the reference level is to factor
+the columns before running `deseq_from_tibble`.
 
-```{r relevel, eval=FALSE}
-samples$trt <- factor(samples$trt, levels = c( "KO", "control"))
+
+```{r factor_condition, eval=FALSE}
+samples$condition <- factor(samples$condition, levels = c("untreated", "treated"))
 ```
 
-Compare treated vs. untreated using a 5% FDR and add gene annotations to the result tables.
-
+Another option is to use the relevel option in `results_all` below to compare
+treated vs. untreated using a 5% FDR (or setting `vs="untreated"` would also work in this case).
 
 
 ```{r DESeq_results}
-res <- results_all(dds, fly98, alpha= 0.05)
+res <- results_all(dds, fly104, alpha= 0.05, relevel =c("untreated", "treated"))
 ```
 
 The results are a tibble or list of tibbles if there is more than one contrast.
@@ -203,7 +203,7 @@ and fly annotations to a single Excel file in `DESeq.xlsx` and R objects to a
 binary data file to load into a new session.
 
 ```{r write_results_to_Excel, eval=FALSE}
-write_deseq(res, dds, rld, fly98)
+write_deseq(res, dds, rld, fly104)
 save(res, dds, rld, file="dds.rda")
 ```
 
