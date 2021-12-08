@@ -21,7 +21,7 @@
 #' @export
 
 plot_fgsea <- function(x, trim=70, sets, nes=TRUE, cluster_row=FALSE,  cluster_col=FALSE, ...){
-   if(is.data.frame(x)) stop("A list of from fgsea_all is required")
+   if(is.data.frame(x)) stop("A list from fgsea_all is required")
    y <- dplyr::bind_rows(x, .id = "contrast")
    ## order columns by order in list (or alphabetical)
    y$contrast <- factor(y$contrast, levels= names(x))

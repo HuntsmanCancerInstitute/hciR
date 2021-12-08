@@ -25,7 +25,7 @@
 #' @export
 
 write_deseq <- function(result_all, dds, rld, biomart, sets, fpkm,
-   text_files = FALSE, cutoff, file = "DESeq.xlsx", overwrite = FALSE, ...){
+   text_files = FALSE, cutoff, file = "DESeq.xlsx", overwrite = TRUE, ...){
 
    ##  if results are a tibble (since simplify=TRUE by default)
    if(!class(result_all)[1] == "list"){

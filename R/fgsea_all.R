@@ -46,10 +46,11 @@ fgsea_all <- function(res, gsets, FDR = 0.1, nperm=10000, ...){
       if(nrow(f1) == 0){
           message( i, ". ", vs1[[i]], " No enriched sets found")
       }else{
+		 f1$leadingN <- lengths(f1$leadingEdge)
          f1$enriched <- "negative"
          f1$enriched[f1$ES>0] <- "positive"
-         # f1 <- dplyr::arrange(f1, enriched, padj, dplyr::desc( abs(NES) ))
-         f1 <- dplyr::arrange(f1, enriched,  dplyr::desc( abs(NES) ), padj )
+          f1 <- dplyr::arrange(f1, enriched, padj, dplyr::desc( abs(NES) ))
+         # f1 <- dplyr::arrange(f1, desc(enriched),  dplyr::desc( abs(NES) ), padj )
       message( i, ". ", vs1[[i]], " ", nrow(f1), " enriched sets (",
          sum(f1$enriched=="positive"), " positive, ", sum(f1$enriched=="negative"), " negative)")
       }

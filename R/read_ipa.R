@@ -56,8 +56,10 @@ read_ipa <- function(file,  excel=FALSE, mylists=FALSE){
                N = nchar( gsub("[^,]" , "", Molecules))+1 ,
          setSize = round( N / Ratio, 0)) %>%
        dplyr::arrange(pValue)
-  ## NaN read as #NUM! in Excel
+    ## NaN read as #NUM! in Excel
     z[["Canonical Pathways"]]$zScore[ is.nan( z[["Canonical Pathways"]]$zScore)] <- NA
+    ## add adjusted p-value
+    z[["Canonical Pathways"]]$padj <- p.adjust(z[["Canonical Pathways"]]$pValue, method="BH")
 
     # drop Analysis name and empty ID
     z[["Upstream Regulators"]] <- z[["Upstream Regulators"]][,-(1:2)]

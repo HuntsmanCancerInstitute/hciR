@@ -9,6 +9,7 @@
 #' @param protein_coding only write protein_coding genes
 #' @param na_pvalue remove genes with NA p-values (extreme count outliers and
 #' low mean normalized counts flagged by independent filtering step)
+#' @param run add run ID to file name
 #'
 #' @return Tab-delimited file with gene name and log2 fold change
 #'
@@ -20,13 +21,14 @@
 #' }
 #' @export
 
-write_gsea_rnk <- function(res, write=TRUE, protein_coding = TRUE, na_pvalue = FALSE){
+write_gsea_rnk <- function(res, write=TRUE, protein_coding = TRUE, na_pvalue = FALSE, run){
    # needs list as input
    if(is.data.frame(res) ){
       n <- attr(res, "contrast")
       res <- list(res)
       names(res) <- n
    }
+   if(!missing(run)) names(res)  <- paste(run, names(res))
    ## add check for mouse or human
    n <- length(res)
    rnk <- vector("list", n)
