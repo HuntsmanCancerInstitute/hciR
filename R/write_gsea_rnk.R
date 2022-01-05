@@ -10,6 +10,7 @@
 #' @param na_pvalue remove genes with NA p-values (extreme count outliers and
 #' low mean normalized counts flagged by independent filtering step)
 #' @param run add run ID to file name
+#' @param filename name for output file, strig, e.g. "treatment_vs_control.rnk"
 #'
 #' @return Tab-delimited file with gene name and log2 fold change
 #'
@@ -21,7 +22,7 @@
 #' }
 #' @export
 
-write_gsea_rnk <- function(res, write=TRUE, protein_coding = TRUE, na_pvalue = FALSE, run){
+write_gsea_rnk <- function(res, write=TRUE, protein_coding = TRUE, na_pvalue = FALSE, run, filename = NULL){
    # needs list as input
    if(is.data.frame(res) ){
       n <- attr(res, "contrast")
@@ -35,39 +36,42 @@ write_gsea_rnk <- function(res, write=TRUE, protein_coding = TRUE, na_pvalue = F
    names(rnk) <- names(res)
    for(i in 1:n){
       y <- res[[i]]
-      vs <- gsub( "\\.* ", "_", names(res[i]))
-      vs <- gsub("_+_", "_", vs, fixed=TRUE)
       ## output file name
-      outfile <- paste0( gsub("/", "", vs), ".rnk")
-
+      if(filename == NULL){
+        vs <- gsub("\\.* ", "_", names(res[i]))
+        vs <- gsub("_+_", "_", vs, fixed=TRUE)
+        outfile <- paste0( gsub("/", "", vs), ".rnk")
+      } else {
+          outfile = filename
+      }
       if(protein_coding && "biotype" %in% names(y)){
            y <- dplyr::filter(y, biotype == "protein_coding")
       }
       if("padj" %in% names(y) ){
          nna <- sum(is.na(y$padj))
          if(na_pvalue & nna>0){
-           message("Removing ", nna,  " genes with NA p-values")
+           message("Removing ", nna, " genes with NA p-values")
            y <- dplyr::filter(y, !is.na(padj))
         }
      }
       if("human_homolog" %in% colnames(y)){
           ## include NAs?  extreme outliers and low mean normalized count
-          x <- dplyr::filter( y, human_homolog != "") %>%
+          x <- dplyr::filter(y, human_homolog != "") %>%
                 dplyr::select(human_homolog, log2FoldChange)
           names(x)[1] <- "gene_name"
           ## split comma-separated lists!
           x <- tidyr::separate_rows(x, gene_name, sep=",")
       }
       else{
-          x <- dplyr::filter( y, gene_name != "") %>%
+          x <- dplyr::filter(y, gene_name != "") %>%
                 dplyr::select(gene_name, log2FoldChange)
       }
       ## remove duplicates
-      x <- dplyr::arrange(x, gene_name, dplyr::desc( abs(log2FoldChange)) )
+      x <- dplyr::arrange(x, gene_name, dplyr::desc( abs(log2FoldChange)))
       n <- duplicated(x$gene_name)
-      if( i == 1) message( "Removing ", sum(n), " duplicate genes")
+      if(i == 1) message( "Removing ", sum(n), " duplicate genes")
       x <- x[!n,]
-      x <- dplyr::arrange(x, dplyr::desc( log2FoldChange))
+      x <- dplyr::arrange(x, dplyr::desc(log2FoldChange))
       if(write){
           message("Saving ", outfile)
           readr::write_tsv(x, outfile, col_names=FALSE)

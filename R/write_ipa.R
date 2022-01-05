@@ -2,7 +2,8 @@
 #'
 #' @param result_all a list from \code{results_all}
 #' @param run add run ID to file name
-#'
+#' @param filename a name for the output file, string, e.g., "ipa_formatted_results.txt"
+#' 
 #' @return Text files
 #'
 #' @author Chris Stubben
@@ -13,7 +14,7 @@
 #' }
 #' @export
 
-write_ipa <- function(result_all, run){
+write_ipa <- function(result_all, run, filename = NULL){
 
    ##  if results are a tibble (since simplify=TRUE by default)
    if(!class(result_all)[1] == "list"){
@@ -26,9 +27,14 @@ write_ipa <- function(result_all, run){
 if(!missing(run)) names(res)  <- paste(run, names(res))
    
    for (i in 1:length(res)){
-      vs <- gsub( "\\.* ", "_", names(res[i]))
-      vs <- gsub("_+_", "_", vs, fixed=TRUE)
-      vs <- paste0(vs, ".txt")
+      # name output file
+      if(filename == NULL){
+        vs <- gsub( "\\.* ", "_", names(res[i]))
+        vs <- gsub("_+_", "_", vs, fixed=TRUE)
+        vs <- paste0(vs, ".txt")
+      } else {
+          vs = filename
+      }
       message( "Saving ",  vs)
       z <- dplyr::select(res[[i]], id, baseMean, log2FoldChange, padj)
       readr::write_tsv(z, vs)

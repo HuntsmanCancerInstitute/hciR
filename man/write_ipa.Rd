@@ -4,12 +4,14 @@
 \alias{write_ipa}
 \title{Write DESeq results to text files for bulk uploading into IPA}
 \usage{
-write_ipa(result_all, run)
+write_ipa(result_all, run, filename = NULL)
 }
 \arguments{
 \item{result_all}{a list from \code{results_all}}
 
 \item{run}{add run ID to file name}
+
+\item{filename}{a name for the output file, string, e.g., "ipa_formatted_results.txt"}
 }
 \value{
 Text files

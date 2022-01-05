@@ -48,7 +48,7 @@ A list of tibbles for each contrast
 \description{
 Extract all possible contrasts and annotate result tables from a DESeq object.
 Currently supports simple designs with a single variable.  Following
-DESeq2 conventions, control group should be listed first and then pairswise
+DESeq2 conventions, control group should be listed first and then pairwise
 comparisons are selected in reverse order, so A, B, C levels will return
 C vs. B, C vs. A, and B vs. A
 }

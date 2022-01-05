@@ -14,7 +14,7 @@ write_deseq(
   text_files = FALSE,
   cutoff,
   file = "DESeq.xlsx",
-  overwrite = FALSE,
+  overwrite = TRUE,
   ...
 )
 }

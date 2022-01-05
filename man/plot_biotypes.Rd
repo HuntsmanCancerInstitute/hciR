@@ -9,6 +9,7 @@ plot_biotypes(
   n = 12,
   group = FALSE,
   stack = "percent",
+  sort = TRUE,
   barwidth = NULL,
   ...
 )
@@ -21,6 +22,8 @@ plot_biotypes(
 \item{group}{plot all features in 12 groups, default FALSE}
 
 \item{stack, }{plot percent or total reads (percent or normal)}
+
+\item{sort}{}
 
 \item{barwidth}{bar width, default null}
 
