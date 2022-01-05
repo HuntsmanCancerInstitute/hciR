@@ -50,7 +50,7 @@ change cutoffs have mouseover labels.
 Plot mean normalized counts and fold changes in an interactive MA-plot
 }
 \examples{
-plot_ma(pasilla$results, ggplot=TRUE)
+plot_ma(pasilla$results, ggplot = TRUE)
 }
 \author{
 Chris Stubben

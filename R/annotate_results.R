@@ -16,19 +16,19 @@
 #'
 #' @examples
 #' \dontrun{
-#'  annotate_results(res, human98)
+#' annotate_results(res, human98)
 #' }
 #' @export
 
-annotate_results <- function(result, biomart, add, id = 1 ){
-   n1 <- match( rownames(result), biomart[[id]])
-   if(missing(add)){
-        add <- c("gene_name", "biotype", "description")
-        if("human_homolog" %in% names(biomart)) add <- c(add, "human_homolog")
-    }
-   if(all(is.na(n1))) stop("Rownames in results do not match column ", id, " in biomart table")
-   if(any(is.na(n1))) message(sum(is.na(n1)), " rows in results are missing from biomart table")
-   #use data.frame to avoid tibble error ... Each variable must be a 1d atomic vector or list.
-   res1 <- data.frame(id=rownames(result), biomart[n1,  add], result, stringsAsFactors=FALSE)
-   tibble::as_tibble(res1)
+annotate_results <- function(result, biomart, add, id = 1) {
+  n1 <- match(rownames(result), biomart[[id]])
+  if (missing(add)) {
+    add <- c("gene_name", "biotype", "description")
+    if ("human_homolog" %in% names(biomart)) add <- c(add, "human_homolog")
+  }
+  if (all(is.na(n1))) stop("Rownames in results do not match column ", id, " in biomart table")
+  if (any(is.na(n1))) message(sum(is.na(n1)), " rows in results are missing from biomart table")
+  # use data.frame to avoid tibble error ... Each variable must be a 1d atomic vector or list.
+  res1 <- data.frame(id = rownames(result), biomart[n1, add], result, stringsAsFactors = FALSE)
+  tibble::as_tibble(res1)
 }

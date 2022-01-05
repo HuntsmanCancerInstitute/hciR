@@ -37,9 +37,9 @@ A ggplot
 Plot counts for many genes
 }
 \examples{
- x <- top_counts( pasilla$res, pasilla$rlog, top=25)
- # no interaction from single or paired end as expected
- plot_interactions(x,  c("condition", "type"))
+x <- top_counts(pasilla$res, pasilla$rlog, top = 25)
+# no interaction from single or paired end as expected
+plot_interactions(x, c("condition", "type"))
 }
 \author{
 Chris Stubben

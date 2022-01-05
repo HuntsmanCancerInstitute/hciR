@@ -22,10 +22,10 @@ default method is a maximum-based filter where every sample is less than or
 equal to the low count cutoff.
 }
 \examples{
-c1 <- matrix(c(0,0,0,2,12,0,0,1,1,0,0,1,1,1,0), ncol=3)
+c1 <- matrix(c(0, 0, 0, 2, 12, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0), ncol = 3)
 c1
 filter_counts(c1)
-filter_counts(c1, sum=TRUE)
+filter_counts(c1, sum = TRUE)
 }
 \author{
 Chris Stubben

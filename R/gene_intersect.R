@@ -11,13 +11,13 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#' gene_intersect(letters[5:8], list(x=letters[3:6], y=letters[6:14], z=letters[10:15]))
+#' gene_intersect(letters[5:8], list(x = letters[3:6], y = letters[6:14], z = letters[10:15]))
 #' @export
 
-gene_intersect <- function(genes, sets, min=2){
-message("Comparing ", length(genes), " genes to ", length(sets), " sets")
-   n <- sapply(sets, function(x) length( dplyr::intersect(genes, x) ))
-   y <- tibble::tibble(term = names(sets), size= sapply(sets, length), overlap=n)
-   y <- dplyr::mutate(y, percent = round( overlap/size*100,1))
-   dplyr::filter(y, overlap >= 2) %>% dplyr::arrange(dplyr::desc(percent))
+gene_intersect <- function(genes, sets, min = 2) {
+  message("Comparing ", length(genes), " genes to ", length(sets), " sets")
+  n <- sapply(sets, function(x) length(dplyr::intersect(genes, x)))
+  y <- tibble::tibble(term = names(sets), size = sapply(sets, length), overlap = n)
+  y <- dplyr::mutate(y, percent = round(overlap / size * 100, 1))
+  dplyr::filter(y, overlap >= 2) %>% dplyr::arrange(dplyr::desc(percent))
 }

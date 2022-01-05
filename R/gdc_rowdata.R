@@ -21,13 +21,13 @@
 #' @export
 
 
-gdc_rowdata <- function(gdc, ensembl){
-   genes <- tibble::as_tibble(as.data.frame(SummarizedExperiment::rowData(gdc)))
-   if(names(genes)[1] != "ensembl_gene_id"){
-      message("Missing ensembl_gene_id in Summarized Experiment")
-   }else{
-       # drop original_ensembl_gene_id
-      genes <- dplyr::left_join(genes[, 1:2], ensembl, by=c(ensembl_gene_id="id"))
-   }
-   genes
+gdc_rowdata <- function(gdc, ensembl) {
+  genes <- tibble::as_tibble(as.data.frame(SummarizedExperiment::rowData(gdc)))
+  if (names(genes)[1] != "ensembl_gene_id") {
+    message("Missing ensembl_gene_id in Summarized Experiment")
+  } else {
+    # drop original_ensembl_gene_id
+    genes <- dplyr::left_join(genes[, 1:2], ensembl, by = c(ensembl_gene_id = "id"))
+  }
+  genes
 }

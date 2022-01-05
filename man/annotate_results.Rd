@@ -26,7 +26,7 @@ Add BioMart annotations to a DESeq2 result table
 }
 \examples{
 \dontrun{
- annotate_results(res, human98)
+annotate_results(res, human98)
 }
 }
 \author{

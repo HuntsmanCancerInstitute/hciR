@@ -20,7 +20,7 @@ simple workflows
 }
 \examples{
 \dontrun{
-  rlog_dds(dds)
+rlog_dds(dds)
 }
 }
 \author{

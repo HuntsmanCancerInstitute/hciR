@@ -16,34 +16,34 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#'  # check_contrasts(samples$trt)
-#'  trt <- c("B", "A", "C")
-#'  # sorted alphabetically and then reverse order combn
-#'  check_contrasts(trt)
-#'  # or specify factor levels with control first
-#'  check_contrasts(factor(trt, levels = c("C", "B", "A")))
-#'  # combine 2 trt groups  (66 possible contrasts)
-#'  trt <- paste( 1:4, rep(c("A", "B", "C"), each=4))
-#'  check_contrasts( trt, vs = "combined")
+#' # check_contrasts(samples$trt)
+#' trt <- c("B", "A", "C")
+#' # sorted alphabetically and then reverse order combn
+#' check_contrasts(trt)
+#' # or specify factor levels with control first
+#' check_contrasts(factor(trt, levels = c("C", "B", "A")))
+#' # combine 2 trt groups  (66 possible contrasts)
+#' trt <- paste(1:4, rep(c("A", "B", "C"), each = 4))
+#' check_contrasts(trt, vs = "combined")
 #' @export
 
-check_contrasts <- function(trt, vs="all"){
-   if(is.factor(trt)){
-      n <- levels( trt )
-   }else{
-	   # DESeq2 will create factor for character strings in alphabetical order
-      n <- sort(unique(trt))
-   }
-   n <- rev(n)
-   contrast <- utils::combn(n, 2)
-   if( vs == "combined"){
-      ## if two columns are combined into a single trt group, compare within first group
-      n1 <- apply(contrast, 2, function(x) length(unique( gsub("[ _-].+", "", x)))==1)
-      contrast <- contrast[, n1]
-   }else if( vs %in% n){
-      contrast <- rbind( vs, n[n!=vs])
-   }
-   vs <- apply(contrast, 2, paste, collapse = " vs. ")
-   message(length(vs), " contrasts: ")
-   vs
+check_contrasts <- function(trt, vs = "all") {
+  if (is.factor(trt)) {
+    n <- levels(trt)
+  } else {
+    # DESeq2 will create factor for character strings in alphabetical order
+    n <- sort(unique(trt))
+  }
+  n <- rev(n)
+  contrast <- utils::combn(n, 2)
+  if (vs == "combined") {
+    ## if two columns are combined into a single trt group, compare within first group
+    n1 <- apply(contrast, 2, function(x) length(unique(gsub("[ _-].+", "", x))) == 1)
+    contrast <- contrast[, n1]
+  } else if (vs %in% n) {
+    contrast <- rbind(vs, n[n != vs])
+  }
+  vs <- apply(contrast, 2, paste, collapse = " vs. ")
+  message(length(vs), " contrasts: ")
+  vs
 }

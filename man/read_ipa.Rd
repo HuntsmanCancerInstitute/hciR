@@ -21,11 +21,11 @@ Read an IPA Expression Analysis export all and optionally
 write to an  Excel file with each table in a separate tab.
 }
 \examples{
- \dontrun{
- x <- read_ipa("RPR2_vs_RPM.txt")
- names(x)
- read_ipa("RPR2_vs_RPM.txt",  excel=TRUE)
- }
+\dontrun{
+x <- read_ipa("RPR2_vs_RPM.txt")
+names(x)
+read_ipa("RPR2_vs_RPM.txt", excel = TRUE)
+}
 }
 \author{
 Chris Stubben

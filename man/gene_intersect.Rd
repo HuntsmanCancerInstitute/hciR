@@ -20,7 +20,7 @@ a tibble with gene set names, size and number of overlapping genes
 Intersect genes and a list of gene sets
 }
 \examples{
-gene_intersect(letters[5:8], list(x=letters[3:6], y=letters[6:14], z=letters[10:15]))
+gene_intersect(letters[5:8], list(x = letters[3:6], y = letters[6:14], z = letters[10:15]))
 }
 \author{
 Chris Stubben

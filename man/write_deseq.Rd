@@ -49,7 +49,7 @@ Write DESeq result files, raw counts, rlog values, normalized counts to an Excel
 }
 \examples{
 \dontrun{
- write_deseq(res, dds, rld, human98)
+write_deseq(res, dds, rld, human98)
 }
 }
 \author{

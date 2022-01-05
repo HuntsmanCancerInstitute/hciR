@@ -19,9 +19,9 @@ Expands palettes into 255 colors  for \code{plot_genes} and \code{plot_volcano}
 }
 \examples{
 x <- palette255("RdGn")
-plot(c(1,256),c(0,3), type = "n", axes = FALSE,  xlab="", ylab="")
+plot(c(1, 256), c(0, 3), type = "n", axes = FALSE, xlab = "", ylab = "")
 i <- 1:255
-rect(i, 1, i+1, 2, col=x, border=NA)
+rect(i, 1, i + 1, 2, col = x, border = NA)
 }
 \author{
 Chris Stubben

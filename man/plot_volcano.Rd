@@ -58,7 +58,7 @@ avoid stacking close overlapping points.  Labels are added using
 \code{ggrepel}, so avoid labeling too many points (200 is the limit).
 }
 \examples{
-plot_volcano(pasilla$results, pvalue=c(35,25), foldchange=2.5)
+plot_volcano(pasilla$results, pvalue = c(35, 25), foldchange = 2.5)
 }
 \author{
 Chris Stubben

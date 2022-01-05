@@ -19,7 +19,7 @@ Remove columns from count matrix returned by \code{link{top_counts}} by subsetti
 }
 \examples{
 \dontrun{
- filter_top_counts( top_counts(res, rld),  type == "paired-end")
+filter_top_counts(top_counts(res, rld), type == "paired-end")
 }
 }
 \author{

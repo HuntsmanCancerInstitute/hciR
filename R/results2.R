@@ -17,22 +17,22 @@
 #' @examples
 #' \dontrun{
 #' library(hciRdata)
-#' res <- results2(pasilla$dds, fly98, "treated", "untreated", trt="condition")
+#' res <- results2(pasilla$dds, fly98, "treated", "untreated", trt = "condition")
 #' }
 #' @export
 
-results2 <- function(dds, biomart, exp, ref, trt="trt", alpha =0.05, lfcShrink=TRUE){
-      vs <- paste(c(exp, ref), collapse= " vs. ")
-      res1 <- DESeq2::results(dds, contrast = c(trt, exp, ref), alpha= alpha)
-      if(lfcShrink) res1 <- DESeq2::lfcShrink(dds, contrast = c(trt, exp, ref), res = res1, type = "normal")
-      ft <- S4Vectors::metadata(res1)$filterThreshold
-      Columns <- c("gene_name", "biotype", "chromosome",  "description")
-      if("human_homolog" %in% names(biomart)) Columns <- c(Columns, "human_homolog")
-      res1 <- annotate_results(res1, biomart, Columns)
-       x <- suppressMessages(summary_deseq(res1))
-      message(vs, ": ", x[1, 2], " up and ", x[2, 2],  " down regulated")
-      attr(res1, "contrast") <- vs
-      attr(res1, "alpha") <- alpha
-      attr(res1, "filterThreshold") <- ft
-      res1
-    }
+results2 <- function(dds, biomart, exp, ref, trt = "trt", alpha = 0.05, lfcShrink = TRUE) {
+  vs <- paste(c(exp, ref), collapse = " vs. ")
+  res1 <- DESeq2::results(dds, contrast = c(trt, exp, ref), alpha = alpha)
+  if (lfcShrink) res1 <- DESeq2::lfcShrink(dds, contrast = c(trt, exp, ref), res = res1, type = "normal")
+  ft <- S4Vectors::metadata(res1)$filterThreshold
+  Columns <- c("gene_name", "biotype", "chromosome", "description")
+  if ("human_homolog" %in% names(biomart)) Columns <- c(Columns, "human_homolog")
+  res1 <- annotate_results(res1, biomart, Columns)
+  x <- suppressMessages(summary_deseq(res1))
+  message(vs, ": ", x[1, 2], " up and ", x[2, 2], " down regulated")
+  attr(res1, "contrast") <- vs
+  attr(res1, "alpha") <- alpha
+  attr(res1, "filterThreshold") <- ft
+  res1
+}

@@ -15,34 +15,34 @@
 #'
 #' @examples
 #' \dontrun{
-#' count_tbl <-  sort_counts(counts, samples)
+#' count_tbl <- sort_counts(counts, samples)
 #' }
 #' @export
 
-sort_counts <- function(count_tbl, sample_tbl, id=1){
-   cname <- deparse(substitute(count_tbl))
-   orig_count_tbl <- count_tbl
-   if( class(count_tbl)[1] != "matrix"){
-        count_tbl <- as_matrix(count_tbl)
-        if( !is.numeric(count_tbl)) stop("Count table is not numeric.
+sort_counts <- function(count_tbl, sample_tbl, id = 1) {
+  cname <- deparse(substitute(count_tbl))
+  orig_count_tbl <- count_tbl
+  if (class(count_tbl)[1] != "matrix") {
+    count_tbl <- as_matrix(count_tbl)
+    if (!is.numeric(count_tbl)) stop("Count table is not numeric.
   Counts should be the first option and you used ", shQuote(cname))
-   }
-   # match first column in sample data by default
-   if( ncol(count_tbl) !=  nrow(sample_tbl) ){
-         stop("count_tbl should have one more column than sample_tbl rows")
-   }
-   n <- match(sample_tbl[[id]], colnames(count_tbl ) )
-   if(any(is.na(n))) stop( "Column names in count_tbl do not match sample names in column ", id)
-   if(all(diff(n)==1) ){
-       # message("counts are already sorted by samples")
-       c1 <- orig_count_tbl
-   }else{
-      message("Reordering columns in counts to match samples")
-      if( dplyr::is.tbl( orig_count_tbl)){
-         c1 <- orig_count_tbl[, c(1, n+1) ]
-      }else{
-         c1 <- orig_count_tbl[, n ]
-      }
-   }
-   c1
+  }
+  # match first column in sample data by default
+  if (ncol(count_tbl) != nrow(sample_tbl)) {
+    stop("count_tbl should have one more column than sample_tbl rows")
+  }
+  n <- match(sample_tbl[[id]], colnames(count_tbl))
+  if (any(is.na(n))) stop("Column names in count_tbl do not match sample names in column ", id)
+  if (all(diff(n) == 1)) {
+    # message("counts are already sorted by samples")
+    c1 <- orig_count_tbl
+  } else {
+    message("Reordering columns in counts to match samples")
+    if (dplyr::is.tbl(orig_count_tbl)) {
+      c1 <- orig_count_tbl[, c(1, n + 1)]
+    } else {
+      c1 <- orig_count_tbl[, n]
+    }
+  }
+  c1
 }

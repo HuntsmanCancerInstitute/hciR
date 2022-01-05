@@ -47,8 +47,8 @@ A highchart
 Highchart version of sample PCA plot
 }
 \examples{
-plot_pca(pasilla$rlog, "condition", tooltip=c("file", "type"))
-plot_pca(pasilla$rlog, "condition", label="file", ggplot=TRUE)
+plot_pca(pasilla$rlog, "condition", tooltip = c("file", "type"))
+plot_pca(pasilla$rlog, "condition", label = "file", ggplot = TRUE)
 }
 \author{
 Chris Stubben

@@ -24,7 +24,7 @@ names in a count table to the first column in sample data and reorders columns t
 }
 \examples{
 \dontrun{
-count_tbl <-  sort_counts(counts, samples)
+count_tbl <- sort_counts(counts, samples)
 }
 }
 \author{

@@ -26,7 +26,7 @@ A tibble of top genes
 Return top genes in DESeq results
 }
 \examples{
-top_genes(pasilla$results) \%>\% dplyr::select(1:7,11)
+top_genes(pasilla$results) \%>\% dplyr::select(1:7, 11)
 }
 \author{
 Chris Stubben

@@ -25,15 +25,15 @@ If you combine factors of interest into a single group following section 3.3 in 
  you can set vs = "combined" to limit the comparisons to those within the first group.
 }
 \examples{
- # check_contrasts(samples$trt)
- trt <- c("B", "A", "C")
- # sorted alphabetically and then reverse order combn
- check_contrasts(trt)
- # or specify factor levels with control first
- check_contrasts(factor(trt, levels = c("C", "B", "A")))
- # combine 2 trt groups  (66 possible contrasts)
- trt <- paste( 1:4, rep(c("A", "B", "C"), each=4))
- check_contrasts( trt, vs = "combined")
+# check_contrasts(samples$trt)
+trt <- c("B", "A", "C")
+# sorted alphabetically and then reverse order combn
+check_contrasts(trt)
+# or specify factor levels with control first
+check_contrasts(factor(trt, levels = c("C", "B", "A")))
+# combine 2 trt groups  (66 possible contrasts)
+trt <- paste(1:4, rep(c("A", "B", "C"), each = 4))
+check_contrasts(trt, vs = "combined")
 }
 \author{
 Chris Stubben

@@ -23,8 +23,6 @@ plot_biotypes(
 
 \item{stack, }{plot percent or total reads (percent or normal)}
 
-\item{sort}{}
-
 \item{barwidth}{bar width, default null}
 
 \item{\dots}{additional options passed to \code{hc_size}}
@@ -37,8 +35,8 @@ Plot reads assigned to biotypes
 }
 \examples{
 \dontrun{
- x <- read_tsv("biotypes.txt")
- plot_biotypes(x)
+x <- read_tsv("biotypes.txt")
+plot_biotypes(x)
 }
 }
 \author{

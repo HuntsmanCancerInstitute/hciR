@@ -17,9 +17,9 @@ Sample names are parsed from file names without the extension.  If the file name
    the parent directory is used.
 }
 \examples{
- # File name or parent directory should be unique
- extract_samples(c("align1/1355X1.counts", "align2/1355X2.counts"))
- extract_samples(c("align1/1355X1/Log.out", "align2/1355X2/Log.out"))
+# File name or parent directory should be unique
+extract_samples(c("align1/1355X1.counts", "align2/1355X2.counts"))
+extract_samples(c("align1/1355X1/Log.out", "align2/1355X2/Log.out"))
 }
 \author{
 Chris Stubben

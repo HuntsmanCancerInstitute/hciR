@@ -23,7 +23,7 @@ meta <- gdc_coldata(brca)
 meta
 x <- summary_tibble(meta)
 x
-filter(x, unique==2)
+filter(x, unique == 2)
 }
 }
 \author{

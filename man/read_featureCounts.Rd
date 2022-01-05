@@ -25,15 +25,15 @@ Reads featureCount count or alignment summary files and optionally reshape into
 }
 \examples{
 \dontrun{
- ft_counts <- read_featureCounts(".")
- fc <- read_featureCounts(".", stats=TRUE)
- fc
- fc <- read_featureCounts(".", stats=TRUE, reshape=FALSE)
- fc
- filter(fc, count!=0) \%>\%
-   hchart("bar", x=sample,  y=count, group=status) \%>\%
-     hc_plotOptions(bar = list(stacking = "normal"))  \%>\%
-      hc_yAxis(reversedStacks = FALSE)
+ft_counts <- read_featureCounts(".")
+fc <- read_featureCounts(".", stats = TRUE)
+fc
+fc <- read_featureCounts(".", stats = TRUE, reshape = FALSE)
+fc
+filter(fc, count != 0) \%>\%
+  hchart("bar", x = sample, y = count, group = status) \%>\%
+  hc_plotOptions(bar = list(stacking = "normal")) \%>\%
+  hc_yAxis(reversedStacks = FALSE)
 }
 }
 \author{

@@ -21,7 +21,7 @@ Write DESeq results to text files for bulk uploading into IPA
 }
 \examples{
 \dontrun{
- write_ipa(res)
+write_ipa(res)
 }
 }
 \author{

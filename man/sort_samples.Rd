@@ -24,9 +24,9 @@ Sort samples names using the first and last run of numbers in a string
 }}
 
 \examples{
- ids <- c("135X1", "135X21", "135X2", "135X10", "81X5", "81X15")
- sort(ids)
- sort_samples(ids)
+ids <- c("135X1", "135X21", "135X2", "135X10", "81X5", "81X15")
+sort(ids)
+sort_samples(ids)
 }
 \author{
 Chris Stubben

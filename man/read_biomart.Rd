@@ -46,23 +46,29 @@ ensembl_gene_id causing duplicate ensembl ids to be added.
 }
 \examples{
 \dontrun{
-x1 <- read_biomart( list= "datasets")
+x1 <- read_biomart(list = "datasets")
 x1
 # Download latest version
- mmu <- read_biomart("mouse")
- # Download mouse genes and human homologs
- x1 <- read_biomart("mouse", list= "attributes")
- dplyr::count(x1, page)
- filter(x1, grepl("hsapiens_homolog", name))
- mmu_homologs <- read_biomart("mouse",  attributes = c("ensembl_gene_id",
-   "hsapiens_homolog_ensembl_gene", "hsapiens_homolog_associated_gene_name",
-   "hsapiens_homolog_perc_id"))
- # Human genes with SignalP
- x2 <- read_biomart("human", list= "filters")
- filter(x2, grepl("signal", name))
- hsa_signalp <- read_biomart("human", attributes = c("ensembl_transcript_id",
-  "ensembl_gene_id",  "external_gene_name", "signalp_start",  "signalp_end"),
-  filter="with_signalp", values=TRUE)
+mmu <- read_biomart("mouse")
+# Download mouse genes and human homologs
+x1 <- read_biomart("mouse", list = "attributes")
+dplyr::count(x1, page)
+filter(x1, grepl("hsapiens_homolog", name))
+mmu_homologs <- read_biomart("mouse", attributes = c(
+  "ensembl_gene_id",
+  "hsapiens_homolog_ensembl_gene", "hsapiens_homolog_associated_gene_name",
+  "hsapiens_homolog_perc_id"
+))
+# Human genes with SignalP
+x2 <- read_biomart("human", list = "filters")
+filter(x2, grepl("signal", name))
+hsa_signalp <- read_biomart("human",
+  attributes = c(
+    "ensembl_transcript_id",
+    "ensembl_gene_id", "external_gene_name", "signalp_start", "signalp_end"
+  ),
+  filter = "with_signalp", values = TRUE
+)
 }
 }
 \author{

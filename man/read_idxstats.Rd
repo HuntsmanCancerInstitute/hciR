@@ -24,7 +24,7 @@ Read mapped reads by sequence in samtools idxstats output
 }
 \examples{
 \dontrun{
-   read_idxstats( pattern = "idxstats.txt$")
+read_idxstats(pattern = "idxstats.txt$")
 }
 }
 \author{

@@ -24,15 +24,17 @@ Reading output files requires a unique sample identifier in either the file name
 }
 \examples{
 \dontrun{
- x <- read_STAR( pattern=".star.out$")
-  reads <- c("Uniquely mapped",  "Mapped to multiple loci",
-               "Mapped to too many loci", "Unmapped reads")
-  y <- filter(x, stat \%in\% reads) \%>\% mutate( stat= factor(stat, levels=reads ))
-         hchart(y, "bar", x=sample ,  y=value, group=stat ) \%>\%
-            hc_plotOptions(bar = list(stacking = "normal")) \%>\%
-             hc_colors( c('#437bb1', '#7cb5ec', '#f7a35c', '#b1084c') ) \%>\%
-               hc_yAxis(reversedStacks = FALSE)
- read_STAR( pattern=".star.out$", reshape=TRUE)
+x <- read_STAR(pattern = ".star.out$")
+reads <- c(
+  "Uniquely mapped", "Mapped to multiple loci",
+  "Mapped to too many loci", "Unmapped reads"
+)
+y <- filter(x, stat \%in\% reads) \%>\% mutate(stat = factor(stat, levels = reads))
+hchart(y, "bar", x = sample, y = value, group = stat) \%>\%
+  hc_plotOptions(bar = list(stacking = "normal")) \%>\%
+  hc_colors(c("#437bb1", "#7cb5ec", "#f7a35c", "#b1084c")) \%>\%
+  hc_yAxis(reversedStacks = FALSE)
+read_STAR(pattern = ".star.out$", reshape = TRUE)
 }
 }
 \author{

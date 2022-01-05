@@ -28,7 +28,7 @@ require a matrix as input.
 }}
 
 \examples{
-x <- top_counts(pasilla$results, pasilla$rlog, top=25)
+x <- top_counts(pasilla$results, pasilla$rlog, top = 25)
 x
 as_matrix(x)
 }

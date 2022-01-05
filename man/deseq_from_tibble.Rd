@@ -32,7 +32,7 @@ run \code{DESeq(dds, betaPrior =TRUE)}'
 }
 \examples{
 \dontrun{
-   deseq_from_tibble(counts, samples, design = ~ trt)
+deseq_from_tibble(counts, samples, design = ~trt)
 }
 }
 \author{

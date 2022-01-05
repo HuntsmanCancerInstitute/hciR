@@ -33,8 +33,8 @@ with many rows will be slow and not recommended.
 }}
 
 \examples{
- summary_tibble(mtcars)
- #drop_empty_columns( tibble( a=1:5, b=NA, c="x", d="") )
+summary_tibble(mtcars)
+# drop_empty_columns( tibble( a=1:5, b=NA, c="x", d="") )
 }
 \author{
 Chris Stubben

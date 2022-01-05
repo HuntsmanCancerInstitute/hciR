@@ -37,7 +37,7 @@ Duplicate gene name with the lowest absolute fold change are removed.
 }
 \examples{
 \dontrun{
-  write_gsea_rnk(res)
+write_gsea_rnk(res)
 }
 }
 \author{

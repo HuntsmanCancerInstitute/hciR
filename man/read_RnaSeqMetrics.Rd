@@ -21,10 +21,10 @@ Reads CollectRnaSeqMetric output files and creates metrics and coverage tables.
 }
 \examples{
 \dontrun{
-   # read all *.txt files in out/ directory
-   read_RnaSeqMetrics( "out")
-   # read output files matching Control-1 in current directory
-   read_RnaSeqMetrics( pattern="Control-1")
+# read all *.txt files in out/ directory
+read_RnaSeqMetrics("out")
+# read output files matching Control-1 in current directory
+read_RnaSeqMetrics(pattern = "Control-1")
 }
 }
 \author{

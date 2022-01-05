@@ -9,15 +9,15 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#' x <- top_counts(pasilla$results, pasilla$rlog, top=25)
+#' x <- top_counts(pasilla$results, pasilla$rlog, top = 25)
 #' x
 #' as_matrix(x)
 #' @export
 
 
-as_matrix <- function(x){
-   if(!tibble::is_tibble(x) ) stop("x must be a tibble")
-  y <- as.matrix.data.frame(x[,-1])
+as_matrix <- function(x) {
+  if (!tibble::is_tibble(x)) stop("x must be a tibble")
+  y <- as.matrix.data.frame(x[, -1])
   rownames(y) <- x[[1]]
   y
 }
@@ -26,7 +26,7 @@ as_matrix <- function(x){
 #' @param var name of column, default id
 #' @export
 
-as_tbl <- function(x, var="id"){
-  if(!is.matrix(x)) stop("x must be a matrix")
-  tibble::as_tibble(tibble::rownames_to_column(data.frame(x, check.names=FALSE), var))
+as_tbl <- function(x, var = "id") {
+  if (!is.matrix(x)) stop("x must be a matrix")
+  tibble::as_tibble(tibble::rownames_to_column(data.frame(x, check.names = FALSE), var))
 }

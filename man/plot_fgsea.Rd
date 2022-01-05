@@ -35,11 +35,11 @@ Plot heatmap with enrichment scores by contrast
 }
 \examples{
 \dontrun{
-  library(hciRdata)
-  fc <- write_gsea_rnk(res, write=FALSE)
-  x <- fgsea_all(fc, msig_pathways$KEGG, FDR= 0.25)
-  plot_fgsea(x)
- }
+library(hciRdata)
+fc <- write_gsea_rnk(res, write = FALSE)
+x <- fgsea_all(fc, msig_pathways$KEGG, FDR = 0.25)
+plot_fgsea(x)
+}
 }
 \author{
 Chris Stubben

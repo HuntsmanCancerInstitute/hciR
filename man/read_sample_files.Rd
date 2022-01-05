@@ -27,11 +27,11 @@ Sample names are parsed from file names without extensions.  If the file name is
 }
 \examples{
 \dontrun{
-   #FeatureCounts summary (second column name with *.bam is always unique, so skip and assign)
-   fc <- read_sample_files(".summary$", skip=1, col_names=c("status", "count"))
- filter(fc, count!=0) \%>\%
-   hchart("bar", x=sample, y=count, group=status) \%>\%
-    hc_plotOptions(bar = list(stacking = "normal"))
+# FeatureCounts summary (second column name with *.bam is always unique, so skip and assign)
+fc <- read_sample_files(".summary$", skip = 1, col_names = c("status", "count"))
+filter(fc, count != 0) \%>\%
+  hchart("bar", x = sample, y = count, group = status) \%>\%
+  hc_plotOptions(bar = list(stacking = "normal"))
 }
 }
 \author{

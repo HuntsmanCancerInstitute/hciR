@@ -10,24 +10,24 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#'  # File name or parent directory should be unique
-#'  extract_samples(c("align1/1355X1.counts", "align2/1355X2.counts"))
-#'  extract_samples(c("align1/1355X1/Log.out", "align2/1355X2/Log.out"))
+#' # File name or parent directory should be unique
+#' extract_samples(c("align1/1355X1.counts", "align2/1355X2.counts"))
+#' extract_samples(c("align1/1355X1/Log.out", "align2/1355X2/Log.out"))
 #' @export
 
 
-extract_samples <- function(files){
+extract_samples <- function(files) {
   ## capture sample in file name  or path
-  x <- lapply( strsplit(files, "/"), rev)
-  samples <- sapply(x, "[", 1 )
+  x <- lapply(strsplit(files, "/"), rev)
+  samples <- sapply(x, "[", 1)
   # remove file extension
   samples <- gsub("\\..*", "", samples)
-  if( any(duplicated(samples )) ){
-      # use parent directory, 13555X2/Log.final.out
-      samples <- sapply(x, "[", 2 )
+  if (any(duplicated(samples))) {
+    # use parent directory, 13555X2/Log.final.out
+    samples <- sapply(x, "[", 2)
   }
-  if( any(duplicated(samples )) ){
-     stop("Sample names are not unique:  \n  ", paste(files, collapse="\n  "), call.=FALSE)
+  if (any(duplicated(samples))) {
+    stop("Sample names are not unique:  \n  ", paste(files, collapse = "\n  "), call. = FALSE)
   }
   samples
 }

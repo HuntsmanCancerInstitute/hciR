@@ -27,7 +27,7 @@ Plot counts for a single gene
 See \code{link{plot_interactions}} to plot many genes.
 }
 \examples{
- plot_counts(pasilla$rlog, "FBgn0033635",  c("type","condition"), title = "Prip")
+plot_counts(pasilla$rlog, "FBgn0033635", c("type", "condition"), title = "Prip")
 }
 \author{
 Chris Stubben

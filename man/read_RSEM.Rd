@@ -35,12 +35,12 @@ and the parser may fail.
 }
 \examples{
 \dontrun{
- # count matrix
-rsem_counts <- read_RSEM( "Alignments")
- # read TPM
-tpm <- read_RSEM("Alignments", value="TPM")
- # reshape uses alignments stats only (rows 1-3 in *.cnt files)
-read_RSEM( ".", stats=TRUE)
+# count matrix
+rsem_counts <- read_RSEM("Alignments")
+# read TPM
+tpm <- read_RSEM("Alignments", value = "TPM")
+# reshape uses alignments stats only (rows 1-3 in *.cnt files)
+read_RSEM(".", stats = TRUE)
 }
 }
 \references{

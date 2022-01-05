@@ -12,11 +12,11 @@
 #'
 #' @examples
 #' \dontrun{
-#'   rlog_dds(dds)
+#' rlog_dds(dds)
 #' }
 #' @export
 
-r_log <- function(dds,  ...){
-   rld <- DESeq2::rlog(dds, ...)
-   rld
+r_log <- function(dds, ...) {
+  rld <- DESeq2::rlog(dds, ...)
+  rld
 }
