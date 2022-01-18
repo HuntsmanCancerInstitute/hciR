@@ -22,7 +22,7 @@
 #' }
 #' @export
 
-write_gsea_rnk <- function(res, write = TRUE, protein_coding = TRUE, na_pvalue = FALSE, run, filename = FALSE) {
+write_gsea_rnk <- function(res, write = TRUE, protein_coding = TRUE, na_pvalue = FALSE, run, file = FALSE) {
   # needs list as input
   if (is.data.frame(res)) {
     n <- attr(res, "contrast")
@@ -37,7 +37,7 @@ write_gsea_rnk <- function(res, write = TRUE, protein_coding = TRUE, na_pvalue =
   for (i in 1:n) {
     y <- res[[i]]
     ## output file name
-    if (filename == FALSE) {
+    if (file == FALSE) {
       vs <- gsub("\\.* ", "_", names(res[i]))
       vs <- gsub("_+_", "_", vs, fixed = TRUE)
       outfile <- paste0(gsub("/", "", vs), ".rnk")

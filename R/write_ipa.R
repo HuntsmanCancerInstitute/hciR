@@ -14,7 +14,7 @@
 #' }
 #' @export
 
-write_ipa <- function(result_all, run, filename = NULL) {
+write_ipa <- function(result_all, run, file = FALSE) {
 
   ##  if results are a tibble (since simplify=TRUE by default)
   if (!class(result_all)[1] == "list") {
@@ -28,7 +28,7 @@ write_ipa <- function(result_all, run, filename = NULL) {
 
   for (i in 1:length(res)) {
     # name output file
-    if (filename == NULL) {
+    if (file == FALSE) {
       vs <- gsub("\\.* ", "_", names(res[i]))
       vs <- gsub("_+_", "_", vs, fixed = TRUE)
       vs <- paste0(vs, ".txt")
