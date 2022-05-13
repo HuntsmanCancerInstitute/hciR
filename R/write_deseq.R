@@ -100,8 +100,10 @@ write_deseq <- function(result_all, dds, rld, biomart, sets, fpkm,
                 tibble::rownames_to_column( as.data.frame(y), "id"), by="id"))
    }
    DESeq_tables <-  c( sum1, res1, Counts, Meta)
-   if(!missing(sets)) DESeq_tables <-  c( sum1, res1, list(Sets=sets), Counts, Meta)
-
+   if(!missing(sets)){
+       if(class(sets)[1]!="list")  sets <- list(Sets=sets)
+       DESeq_tables <-  c( sum1, res1, sets, Counts, Meta)
+   }
    message("Saving ", length(DESeq_tables), " worksheets to ", file)
   # DESeq_tables
    openxlsx::write.xlsx(DESeq_tables, file = file, rowNames = sapply(DESeq_tables, is.matrix), overwrite = overwrite )

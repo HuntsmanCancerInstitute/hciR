@@ -31,12 +31,12 @@ plot_interactions <- function(x, intgroups, ylab = "scaled rlog", scaled = TRUE,
    x1 <- t( as_matrix(x))
    if(scaled) x1 <- scale(x1)
    if(ncol(x1) > n){
-      message("Displaying top ", n, " genes from top_counts")
+       # message("Displaying top ", n, " genes from top_counts")
        x1 <- x1[, 1:n]
    }
 
    y <- data.frame(s1[, intgroups], x1)
-   z <- tidyr::gather(y, -intgroups, key="gene", value = "rlog")
+   z <- tidyr::gather(y, -intgroups, key="gene2", value = "rlog")
     ## reorder?
     if(!missing(reorder)) z[[1]] <- factor(z[[1]], levels = reorder)
 
@@ -48,6 +48,6 @@ plot_interactions <- function(x, intgroups, ylab = "scaled rlog", scaled = TRUE,
       group =names(z)[2], shape =names(z)[2], color=names(z)[2])) +
      ggplot2::geom_point() +
        ggplot2::stat_summary( fun="mean", geom="line") +
-        ggplot2::facet_wrap(~gene, ...) + ggplot2::ylab( ylab)
+        ggplot2::facet_wrap(~gene2, ...) + ggplot2::ylab( ylab)
 
 }

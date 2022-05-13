@@ -8,7 +8,7 @@
 #' @param attributes vector of column names to pass to \code{getBM}, default
 #' ensembl_gene_id, external_gene_name, gene_biotype, chromosome_name,
 #' start_position, end_position, strand, description and transcript_count
-#' @param host host for connection, default www.ensembl.org
+#' @param host host for connection, default https://www.ensembl.org
 #' @param version Ensembl version for previous releases
 #' @param patch Keep features on patches starting with CHR_, default FALSE
 #' @param list return a list of either datasets, attributes or filters only.
@@ -43,7 +43,7 @@
 #'   filter="with_signalp", values=TRUE)
 #' }
 #' @export
-read_biomart <- function(dataset="human", attributes, host="www.ensembl.org",
+read_biomart <- function(dataset="human", attributes, host="https://www.ensembl.org",
    version=NULL, patch=FALSE, list=NULL, ...){
       common <- c(human     = "hsapiens",
                   mouse     = "mmusculus",

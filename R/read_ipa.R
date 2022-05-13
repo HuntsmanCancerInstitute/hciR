@@ -44,7 +44,7 @@ read_ipa <- function(file,  excel=FALSE, mylists=FALSE){
       ## fix 1 row with  3 columns
       if(i == 1)  y <- gsub("\tand consider Both up", " and consider Both up", y)
 	  ## first table with Analysis Details returns Warning: 5 parsing failures.
-      z[[i]] <- suppressWarnings( readr::read_tsv( paste( gsub("\t$", "", y), collapse ="\n")) )
+      z[[i]] <- suppressWarnings( readr::read_tsv( paste( gsub("\t$", "", y), collapse ="\n"), show_col_types = FALSE) )
     }
     ## fix Pathways, rename columns, add total matches, set size
 
