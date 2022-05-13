@@ -4,7 +4,14 @@
 \alias{write_gsea_rnk}
 \title{Write DESeq results to GSEA rank file}
 \usage{
-write_gsea_rnk(res, write = TRUE, protein_coding = TRUE, na_pvalue = FALSE)
+write_gsea_rnk(
+  res,
+  write = TRUE,
+  protein_coding = TRUE,
+  na_pvalue = FALSE,
+  run,
+  filename = NULL
+)
 }
 \arguments{
 \item{res}{a list of DESeq results}
@@ -15,6 +22,10 @@ write_gsea_rnk(res, write = TRUE, protein_coding = TRUE, na_pvalue = FALSE)
 
 \item{na_pvalue}{remove genes with NA p-values (extreme count outliers and
 low mean normalized counts flagged by independent filtering step)}
+
+\item{run}{add run ID to file name}
+
+\item{filename}{name for output file, strig, e.g. "treatment_vs_control.rnk"}
 }
 \value{
 Tab-delimited file with gene name and log2 fold change

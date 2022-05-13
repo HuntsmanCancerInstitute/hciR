@@ -11,14 +11,15 @@ filter_counts(count_tbl, n = 1, sum = FALSE)
 
 \item{n}{low count cutoff, default 1}
 
-\item{sum}{Use total read counts to apply the cutoff.  The default is the maximum reads.}
+\item{sum}{Use total read counts instead of the maximum.}
 }
 \value{
 A count matrix
 }
 \description{
 Remove features with zero counts and less than the low count cutoff.  The
- default method is a maximum-based filter unless sum=TRUE
+default method is a maximum-based filter where every sample is less than or
+equal to the low count cutoff.
 }
 \examples{
 c1 <- matrix(c(0,0,0,2,12,0,0,1,1,0,0,1,1,1,0), ncol=3)

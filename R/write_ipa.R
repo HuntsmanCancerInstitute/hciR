@@ -27,6 +27,7 @@ write_ipa <- function(result_all, run, homolog=FALSE){
 if(!missing(run)) names(res)  <- paste(run, names(res))
 
    for (i in 1:length(res)){
+      # name output file
       vs <- gsub( "\\.* ", "_", names(res[i]))
       vs <- gsub("_+_", "_", vs, fixed=TRUE)
       vs <- paste0(vs, ".txt")
