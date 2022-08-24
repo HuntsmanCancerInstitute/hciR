@@ -56,11 +56,11 @@ plot_genes <-  function( x, intgroup, output="pheatmap", palette="RdBu",
       # subtract the row mean ...
       x <- x - rowMeans(x)
       scale <- "none"   #for pheatmap
-      if(midpoint0){
-          n <- max_scale
-          if(is.na(n)) n <- max(abs(range(x)))
-          brks <- seq(-n, n, length=255)
-      }
+   }
+   if(scale == "none" & midpoint0){
+       n <- max_scale
+       if(is.na(n)) n <- max(abs(range(x)))
+       brks <- seq(-n, n, length=255)
    }
    if(output == "pheatmap"){
       ## use  dendsort to reorder branches

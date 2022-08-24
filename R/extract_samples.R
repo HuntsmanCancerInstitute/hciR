@@ -27,6 +27,9 @@ extract_samples <- function(files){
       samples <- sapply(x, "[", 2 )
   }
   if( any(duplicated(samples )) ){
+      samples <- sapply(x, "[", 3 )
+  }
+  if( any(duplicated(samples )) ){
      stop("Sample names are not unique:  \n  ", paste(files, collapse="\n  "), call.=FALSE)
   }
   samples

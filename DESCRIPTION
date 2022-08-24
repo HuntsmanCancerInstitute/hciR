@@ -21,7 +21,6 @@ Imports:
     htmlwidgets,
     openxlsx,
     biomaRt,
-    clusterProfiler,
     dendsort,
     stringr,
     ggrepel,
@@ -30,6 +29,7 @@ Imports:
     limma,
     fgsea
 Suggests:
+    clusterProfiler,
     d3heatmap
 License: GPL-3
 Encoding: UTF-8
