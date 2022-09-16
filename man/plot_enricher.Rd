@@ -24,6 +24,8 @@ plot_enricher(
 \item{sets}{display contrasts sharing n or more sets for n > 1.  If n = 1,
 then only plot unique sets.  If missing, then plots all sets, default.}
 
+\item{top_n}{Number of top sets to plot}
+
 \item{min_p}{Minimum p-value on -log10 scale}
 
 \item{max_rows}{Maximun number of rows to cluster}

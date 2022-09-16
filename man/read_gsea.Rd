@@ -24,9 +24,9 @@ Reads both positive and negative enrichment results from Broad's GSEA into a sin
 }
 \section{Functions}{
 \itemize{
-\item \code{read_gsea_file}: Read a single GSEA output file
-}}
+\item \code{read_gsea_file()}: Read a single GSEA output file
 
+}}
 \examples{
 \dontrun{
 x <- read_gsea("~/gsea_home/output/dec15/my_analysis.GseaPreranked.1513361740375")

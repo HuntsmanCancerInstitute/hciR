@@ -22,7 +22,7 @@
 
 top_counts <- function(res, rld, by="id",  filter = TRUE, col_names, row_names="gene_name",
      collapse,  ...){
-   if(!class(rld) == "DESeqTransform") stop("rld shoud be a DESeqTransform")
+   if(!inherits(rld, "DESeqTransform")) stop("rld shoud be a DESeqTransform")
    ## update  on Jan 3, 2018 set blind = FALSE
    rldx <- SummarizedExperiment::assay(rld, blind=FALSE)
    colx <- data.frame( SummarizedExperiment::colData(rld) , drop=FALSE)

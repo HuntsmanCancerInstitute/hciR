@@ -4,7 +4,7 @@
 #' @param n number of top features to plot, default 12
 #' @param group plot all features in 12 groups, default FALSE
 #' @param stack, plot percent or total reads (percent or normal)
-#' @param sort 
+#' @param sort sort by total genes assigned to biotype
 #' @param barwidth bar width, default null
 #' @param \dots additional options passed to \code{hc_size}
 #'
@@ -32,7 +32,7 @@ plot_biotypes <- function(x, n = 12, group = FALSE, stack = "percent", sort=TRUE
    if(!group){
       m1 <- round(rowMeans(as_matrix(x)),0)
       m2 <- tibble::tibble(name = names(m1), total = m1)
-      y <- dplyr::top_n(m2, n, total) %>% arrange(desc(total))
+      y <- dplyr::top_n(m2, n, total) %>% dplyr::arrange(dplyr::desc(total))
       z <- dplyr::filter(x, feature %in% y$name)
       df <- tidyr::gather(z, "sample", "count", -feature)
 	  if(sort) df$feature <- factor(df$feature, levels=y$name)

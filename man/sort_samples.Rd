@@ -20,9 +20,9 @@ Sort samples names using the first and last run of numbers in a string
 }
 \section{Functions}{
 \itemize{
-\item \code{order_samples}: Order sample names
-}}
+\item \code{order_samples()}: Order sample names
 
+}}
 \examples{
  ids <- c("135X1", "135X21", "135X2", "135X10", "81X5", "81X15")
  sort(ids)

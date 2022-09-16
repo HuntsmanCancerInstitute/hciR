@@ -6,6 +6,7 @@
 #' @param trim trim long names, default more than 70 characters
 #' @param sets display contrasts sharing n or more sets for n > 1.  If n = 1,
 #' then only plot unique sets.  If missing, then plots all sets, default.
+#' @param top_n Number of top sets to plot
 #' @param min_p Minimum p-value on -log10 scale
 #' @param max_rows Maximun number of rows to cluster
 #' @param cluster_row Cluster dendrogram rows, default FALSE for an alphabetical list
@@ -32,13 +33,11 @@ plot_enricher <- function(x, trim=70, sets, top_n, min_p, max_rows, cluster_row=
 	  y$contrast <- factor(y$contrast, levels= names(x))
    }
    if(!missing(top_n)){
-	   y <- group_by(y, contrast) %>% top_n(top_n, -p.adjust) %>% ungroup()
+	   y <- dplyr::group_by(y, contrast) %>% top_n(top_n, -p.adjust) %>% dplyr::ungroup()
    }
-
    z <- dplyr::select(y, contrast, pathway, p.adjust) %>%
         dplyr::mutate(p.adjust = -log10(p.adjust)) %>%
          tidyr::spread(contrast, p.adjust)
-
    if(!missing(sets)){
      n <- apply(z[, -1], 1, function(x) sum(!is.na(x)))
      if(sets ==1){
@@ -54,7 +53,6 @@ plot_enricher <- function(x, trim=70, sets, top_n, min_p, max_rows, cluster_row=
    z[is.na(z)] <- 0
    if(!missing(min_p)) z[z>min_p] <- min_p
    message(nrow(z) , " total sets")
-
    if(!missing(max_rows)){
 	  if(max_rows< nrow(z)){
 		   z <- z[order(rowSums(z), decreasing=TRUE), ]
@@ -65,8 +63,6 @@ plot_enricher <- function(x, trim=70, sets, top_n, min_p, max_rows, cluster_row=
    }
   rownames(z) <- ifelse(nchar(rownames(z)) > trim,
 				  paste0(substr(rownames(z), 1, trim-2), "..."), rownames(z))
-
-
-   pheatmap::pheatmap(z, color = clrs, cluster_cols=cluster_col,
+  pheatmap::pheatmap(z, color = clrs, cluster_cols=cluster_col,
        cluster_rows=cluster_row, ...)
 }

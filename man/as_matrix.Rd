@@ -24,9 +24,9 @@ require a matrix as input.
 }
 \section{Functions}{
 \itemize{
-\item \code{as_tbl}: Convert matrix to tibble
-}}
+\item \code{as_tbl()}: Convert matrix to tibble
 
+}}
 \examples{
 x <- top_counts(pasilla$results, pasilla$rlog, top=25)
 x

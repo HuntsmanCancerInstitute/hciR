@@ -14,6 +14,7 @@ results_all(
   add_columns,
   trt,
   lfcShrink = TRUE,
+  type = "normal",
   simplify = TRUE,
   ...
 )
@@ -36,7 +37,9 @@ gene_name, biotype, chromosome, description and human_homolog if present}
 
 \item{trt}{Compare groups within trt group, default is first term in the design formula}
 
-\item{lfcShrink}{shrink fold changes using \code{lfcShrink} with type = "normal"}
+\item{lfcShrink}{shrink fold changes using \code{lfcShrink}}
+
+\item{type}{shrinkage estimator type, default normal}
 
 \item{simplify}{return a tibble if only 1 contrast present}
 

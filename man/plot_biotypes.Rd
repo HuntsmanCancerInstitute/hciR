@@ -23,7 +23,7 @@ plot_biotypes(
 
 \item{stack, }{plot percent or total reads (percent or normal)}
 
-\item{sort}{}
+\item{sort}{sort by total genes assigned to biotype}
 
 \item{barwidth}{bar width, default null}
 

@@ -10,7 +10,7 @@ write_gsea_rnk(
   protein_coding = TRUE,
   na_pvalue = FALSE,
   run,
-  filename = NULL
+  filename = FALSE
 )
 }
 \arguments{

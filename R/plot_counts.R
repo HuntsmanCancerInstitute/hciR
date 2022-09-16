@@ -17,7 +17,7 @@
 #' @export
 
 plot_counts <- function(rld, gene, intgroups, ylab="count", title){
-   if(!class(rld) == "DESeqTransform") stop("rld shoud be a DESeqTransform")
+   if(!inherits(rld, "DESeqTransform")) stop("rld shoud be a DESeqTransform")
    if(length(gene) > 1) gene <- gene[1]
    if(!gene %in% rownames(rld)){
        stop(gene, " is not found in rld, check rownames(rld) for valid input")

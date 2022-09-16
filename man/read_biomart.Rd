@@ -7,7 +7,6 @@
 read_biomart(
   dataset = "human",
   attributes,
-  host = "www.ensembl.org",
   version = NULL,
   patch = FALSE,
   list = NULL,
@@ -23,15 +22,13 @@ for human, mouse, rat, fruitfly, yeast and zebrafish.}
 ensembl_gene_id, external_gene_name, gene_biotype, chromosome_name,
 start_position, end_position, strand, description and transcript_count}
 
-\item{host}{host for connection, default www.ensembl.org}
-
 \item{version}{Ensembl version for previous releases}
 
 \item{patch}{Keep features on patches starting with CHR_, default FALSE}
 
 \item{list}{return a list of either datasets, attributes or filters only.}
 
-\item{\dots}{additional options passed to \code{getBM} or
+\item{\dots}{additional options like filters and values passed to \code{getBM} or
 \code{listAttributes}}
 }
 \value{

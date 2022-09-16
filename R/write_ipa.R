@@ -33,9 +33,9 @@ if(!missing(run)) names(res)  <- paste(run, names(res))
       vs <- paste0(vs, ".txt")
       message( "Saving ",  vs)
       if(homolog){
-          z <- filter( res[[i]], human_homolog != "")  %>%
+          z <- dplyr::filter( res[[i]], human_homolog != "")  %>%
           dplyr::select(human_homolog, baseMean, log2FoldChange, padj) %>%
-          rename(human_homolog="id")
+          dplyr::rename(human_homolog="id")
       }else{
           z <- dplyr::select(res[[i]], id, baseMean, log2FoldChange, padj)
       }

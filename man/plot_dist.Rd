@@ -8,7 +8,6 @@ plot_dist(
   rld,
   intgroup,
   col_name,
-  output = "pheatmap",
   palette = "RdYlBu",
   reverse_pal = FALSE,
   diagNA = TRUE,
@@ -24,8 +23,6 @@ plot_dist(
 
 \item{col_name}{Column name in `colData(rld)` for labels, default is sample IDs in colnames(rld)}
 
-\item{output}{pheatmap or d3heatmap}
-
 \item{palette}{a color palette name or vector of colors}
 
 \item{reverse_pal}{reverse the color palette}
@@ -39,7 +36,7 @@ plot_dist(
 \item{\dots}{Additional options like colors passed to \code{d3heatmap} or \code{pheatmap}}
 }
 \value{
-A pheatmap or d3heatmap
+A pheatmap
 }
 \description{
 Plot sample distances using rlog or other counts.

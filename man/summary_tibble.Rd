@@ -27,11 +27,11 @@ with many rows will be slow and not recommended.
 }
 \section{Functions}{
 \itemize{
-\item \code{top3}: Top three values
+\item \code{top3()}: Top three values
 
-\item \code{drop_empty_columns}: Drop empty columns
+\item \code{drop_empty_columns()}: Drop empty columns
+
 }}
-
 \examples{
  summary_tibble(mtcars)
  #drop_empty_columns( tibble( a=1:5, b=NA, c="x", d="") )

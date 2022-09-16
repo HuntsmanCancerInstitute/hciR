@@ -7,7 +7,6 @@
 plot_genes(
   x,
   intgroup,
-  output = "pheatmap",
   palette = "RdBu",
   dendsort = TRUE,
   scale = "none",
@@ -23,8 +22,6 @@ plot_genes(
 
 \item{intgroup}{one or more column names for pheatmap \code{annotation_col}
 bar}
-
-\item{output}{pheatmap or d3heatmap}
 
 \item{palette}{RColorBrewer palette name, vector of colors, or "RdGn" for
 Red-Green color scale.}
@@ -47,7 +44,7 @@ max(abs(range(x)))}
 \item{\dots}{additional options passed to \code{pheatmap} or \code{d3heatmap}}
 }
 \value{
-A pheatmap or d3heatmap
+A pheatmap
 }
 \description{
 Plot heatmap of top genes with annoation bars, reordered branches, and color
