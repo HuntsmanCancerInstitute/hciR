@@ -16,7 +16,7 @@
 #'        gene_name, biotype, chromosome, description and human_homolog if present
 #' @param trt Compare groups within trt group, default is first term in the design formula
 #' @param lfcShrink  shrink fold changes using \code{lfcShrink}
-#' @param type shrinkage estimator type, default normal
+#' @param type shrinkage estimator type, ashr or default normal (use new results_apeglm for apeglm shrinkage)
 #' @param simplify return a tibble if only 1 contrast present
 #' @param \dots additional options passed to \code{results}
 #'
@@ -38,6 +38,7 @@
 results_all <- function( object, biomart,  vs="all", subset, relevel, alpha = 0.05,
  add_columns, trt, lfcShrink=TRUE, type = "normal", simplify=TRUE,  ...){
    message("Using adjusted p-value < ", alpha)
+   if(type == "apeglm") stop("apeglm is not supported, try results_apeglm instead")
    if(missing(trt)){
       n <- as.character( DESeq2::design(object))
       ## [1] "~"   "trt"
@@ -82,12 +83,14 @@ results_all <- function( object, biomart,  vs="all", subset, relevel, alpha = 0.
            if("human_homolog" %in% names(biomart)) add_columns <- c(add_columns, "human_homolog")
         }
    }
-   if(lfcShrink)  message("Adding shrunken fold changes to log2FoldChange")
+   if(lfcShrink)  message("Adding shrunken fold changes to log2FoldChange, saving unshrunken in MLE_log2FC")
    for(i in seq_along( vs )){
        res1 <- DESeq2::results(object, contrast = c( trt, contrast[1,i], contrast[2,i] ), alpha = alpha, ...)
       if(lfcShrink){
+         mle_log2FC <- res1$log2FoldChange
         ## GET shrunken fold change - requires DESeq2 version >= 1.16
          res1 <-  DESeq2::lfcShrink(object, contrast=c( trt, contrast[1,i], contrast[2,i] ), res=res1, type = type, quiet=TRUE)
+         res1$MLE_log2FC <- mle_log2FC
       }
        ft <- S4Vectors::metadata(res1)$filterThreshold
        x <- suppressMessages( summary_deseq(res1) )

@@ -39,7 +39,7 @@ gene_name, biotype, chromosome, description and human_homolog if present}
 
 \item{lfcShrink}{shrink fold changes using \code{lfcShrink}}
 
-\item{type}{shrinkage estimator type, default normal}
+\item{type}{shrinkage estimator type, ashr or default normal (use new results_apeglm for apeglm shrinkage)}
 
 \item{simplify}{return a tibble if only 1 contrast present}
 

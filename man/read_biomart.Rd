@@ -22,7 +22,7 @@ for human, mouse, rat, fruitfly, yeast and zebrafish.}
 ensembl_gene_id, external_gene_name, gene_biotype, chromosome_name,
 start_position, end_position, strand, description and transcript_count}
 
-\item{version}{Ensembl version for previous releases}
+\item{version}{Ensembl version for previous releases, check biomaRt::listEnsemblArchives() to see if versions < 90 are available}
 
 \item{patch}{Keep features on patches starting with CHR_, default FALSE}
 

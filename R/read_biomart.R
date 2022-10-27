@@ -8,7 +8,7 @@
 #' @param attributes vector of column names to pass to \code{getBM}, default
 #' ensembl_gene_id, external_gene_name, gene_biotype, chromosome_name,
 #' start_position, end_position, strand, description and transcript_count
-#' @param version Ensembl version for previous releases
+#' @param version Ensembl version for previous releases, check biomaRt::listEnsemblArchives() to see if versions < 90 are available
 #' @param patch Keep features on patches starting with CHR_, default FALSE
 #' @param list return a list of either datasets, attributes or filters only.
 #' @param \dots additional options like filters and values passed to \code{getBM} or
