@@ -66,6 +66,8 @@ write_gsea_rnk <- function(res, write=TRUE, protein_coding = TRUE, na_pvalue = F
           x <- dplyr::filter(y, gene_name != "") %>%
                 dplyr::select(gene_name, log2FoldChange)
       }
+      ## remove NA fold change.
+      x <- dplyr::filter(x, !is.na(log2FoldChange))
       ## remove duplicates
       x <- dplyr::arrange(x, gene_name, dplyr::desc( abs(log2FoldChange)))
       n <- duplicated(x$gene_name)

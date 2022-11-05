@@ -23,8 +23,8 @@ summary_tibble <- function(x){
       unique = sapply(x, function(y) length( stats::na.omit( unique(y)))),
          NAs = sapply(x, function(y) sum(is.na(y) ) ),
         ### suppressWarnings to avoid :  min(c(NA, NA), na.rm=TRUE)
-        min  = suppressWarnings( apply(x, 2, min, na.rm=TRUE )),
-        max  = suppressWarnings( apply(x, 2, max, na.rm=TRUE )),
+        min  = trimws(suppressWarnings( apply(x, 2, min, na.rm=TRUE ))),
+        max  = trimws(suppressWarnings( apply(x, 2, max, na.rm=TRUE ))),
         ## will be slow with many rows...
        top3 = sapply(x, top3)
    )

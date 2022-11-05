@@ -55,8 +55,7 @@ results_all <- function( object, biomart,  vs="all", subset, relevel, alpha = 0.
     }else{
       n <- relevel
    }
-   n <- rev(n)
-   contrast <- utils::combn(n, 2)
+   contrast <- utils::combn(n, 2)[2:1,, drop=FALSE]
    if( vs == "combined"){
       ## if two columns are combined into a single trt group, compare within first group
       n1 <- apply(contrast, 2, function(x) length(unique( gsub("[ _-].+", "", x)))==1)

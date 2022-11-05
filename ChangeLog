@@ -1,0 +1,7 @@
+changes in version 1.7 (2022-11-22)
+	* add results_apeglm to apply apeglm shrinkage on all contrasts
+	* add print_genes to print scaled values from plot_genes
+	* fix order of contrasts in results_all and check_contrasts
+
+changes in version 1.6 (2021-09-01)
+	* adding leadingN to fgsea_all output with number of leading edge genes
