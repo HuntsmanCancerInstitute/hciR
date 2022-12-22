@@ -24,9 +24,9 @@ gdc_coldata <- function(gdc){
    x <- as.data.frame(SummarizedExperiment::colData(gdc))
    # treatments is a list of dataframes
    x <- x[, colnames(x) != "treatments"]
-   # Fix other AsIs columns... disease_type, primary_site
+   # Fix other list columns... disease_type, primary_site
    ## table( sapply(x, class))
-   n <- which(sapply(x, class)=="AsIs")
+   n <- which(sapply(x, class)=="list")
    #for(i in n) x[[i]] <- unlist(x[[i]])
    for(i in n) x[[i]] <- sapply( x[[i]], paste, collapse=",")
    ## some columns with all values =  Not reported

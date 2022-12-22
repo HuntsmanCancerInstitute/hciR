@@ -21,10 +21,10 @@ Imports:
     biomaRt,
     dendsort,
     ggrepel,
-    ggplot2,
-    fgsea
+    ggplot2
 Suggests:
     clusterProfiler,
+    fgsea,
     dendextend
 License: GPL-3
 Encoding: UTF-8
