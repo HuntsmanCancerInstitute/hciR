@@ -3,6 +3,7 @@
 #' @param object a DESeqDataSet
 #' @param biomart annotations from \code{read_biomart} with column 1 matching row names in results
 #' @param alpha the significance cutoff for the adjusted p-value cutoff (FDR)
+#' @param subset sorted index to subset all pairwise comparisons, see check_contrasts for possible contrasts
 #' @param add_columns a vector of biomart columns to add to result table, default
 #'        gene_name, biotype, chromosome, description and human_homolog if present
 #' @param trt Compare groups within trt group, default is first term in the design formula
@@ -21,7 +22,7 @@
 #' }
 #' @export
 
-results_apeglm <- function( object, biomart, alpha = 0.05, add_columns, trt, simplify=TRUE,  ...){
+results_apeglm <- function( object, biomart, alpha = 0.05, subset, add_columns, trt, simplify=TRUE,  ...){
    message("Using adjusted p-value < ", alpha)
 
    if(missing(trt)){
@@ -49,6 +50,12 @@ results_apeglm <- function( object, biomart, alpha = 0.05, add_columns, trt, sim
    resNames <- paste0( trt, "_", gsub(" ", "_", vs))
    ## number contrasts for each reference level 1 1 1 2 2 3
    n2 <- rep(1:(n-1), (n-1):1)
+   # subset should be sorted, 1,6,2,5 will change to 1,2,5,6
+   if(missing(subset)){
+       subset <- 1:length(vs)
+   }else{
+       subset <- sort(subset)
+   }
 
    res <- vector("list", length(vs))
    names(res) <- vs
@@ -59,6 +66,7 @@ results_apeglm <- function( object, biomart, alpha = 0.05, add_columns, trt, sim
         }
    }
    message("Adding apeglm's shrunken estimates to log2FoldChange, saving unshrunken in MLE_log2FC")
+   k <- 0
    for(i in 1:(n-1)){
       if(i > 1){
        #  message("Setting ", grps[i], " as reference level")
@@ -67,28 +75,32 @@ results_apeglm <- function( object, biomart, alpha = 0.05, add_columns, trt, sim
         object <- suppressMessages( DESeq2::nbinomWaldTest(object))
       }
       for(j in which(n2 %in% i)){
-        res1 <- DESeq2::results(object, name=resNames[j] , alpha = alpha, ...)
-          mle_log2FC <- res1$log2FoldChange
-          res1 <-  DESeq2::lfcShrink(object, resNames[j], res=res1, type = "apeglm", quiet=TRUE)
-          res1$MLE_log2FC <- mle_log2FC
-
-          ft <- S4Vectors::metadata(res1)$filterThreshold
-          x <- suppressMessages( summary_deseq(res1) )
-          message(j, ". ", vs1[j], x[1,2], " up and ", x[2,2], " down regulated" )
-          if(!missing(biomart)){
-              # suppress messages like 70 rows in results are missing from biomart table and print once
-              res1 <- suppressMessages( annotate_results( res1, biomart, add_columns) )
-          }else{
-             ## gene_name or id?
-             res1 <- tibble::as_tibble(tibble::rownames_to_column(data.frame(res1), var="id"))
+          if(j %in% subset){
+             k <- k+1
+             res1 <- DESeq2::results(object, name=resNames[j] , alpha = alpha, ...)
+             mle_log2FC <- res1$log2FoldChange
+             res1 <-  DESeq2::lfcShrink(object, resNames[j], res=res1, type = "apeglm", quiet=TRUE)
+             res1$MLE_log2FC <- mle_log2FC
+             res1 <- res1[, c(1,6,2:5)]
+             ft <- S4Vectors::metadata(res1)$filterThreshold
+             x <- suppressMessages( summary_deseq(res1) )
+             message(k, ". ", vs1[j], x[1,2], " up and ", x[2,2], " down regulated" )
+             if(!missing(biomart)){
+                # suppress messages like 70 rows in results are missing from biomart table and print once
+                res1 <- suppressMessages( annotate_results( res1, biomart, add_columns) )
+             }else{
+                ## gene_name or id?
+                res1 <- tibble::as_tibble(tibble::rownames_to_column(data.frame(res1), var="id"))
+             }
+             attr(res1, "contrast") <- vs[j]
+             attr(res1, "alpha") <- alpha
+             attr(res1, "filterThreshold") <- ft
+             res[[j]] <- res1
           }
-          attr(res1, "contrast") <- vs[j]
-          attr(res1, "alpha") <- alpha
-          attr(res1, "filterThreshold") <- ft
-          res[[j]] <- res1
       }
    }
-   n1 <-is.na(res[[1]][[3]])
+   res <- res[subset]
+   n1 <- is.na(res[[1]][[3]])
    if(any(n1)) message("Note: ", sum(n1), " rows in results are missing from biomart table")
    if(simplify & length(res) == 1)  res <- res[[1]]
    res
