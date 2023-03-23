@@ -13,8 +13,7 @@ results_all(
   alpha = 0.05,
   add_columns,
   trt,
-  lfcShrink = TRUE,
-  type = "normal",
+  lfcShrink = "normal",
   simplify = TRUE,
   ...
 )
@@ -37,9 +36,8 @@ gene_name, biotype, chromosome, description and human_homolog if present}
 
 \item{trt}{Compare groups within trt group, default is first term in the design formula}
 
-\item{lfcShrink}{shrink fold changes using \code{lfcShrink}}
-
-\item{type}{shrinkage estimator type, ashr or default normal (use new results_apeglm for apeglm shrinkage)}
+\item{lfcShrink}{shrink fold changes using \code{lfcShrink}, default normal, ashr or none.
+Use results_apeglm for apeglm shrinkage.  The MLE or unshrunken fold change is saved and added to the results as MLE_log2FC}
 
 \item{simplify}{return a tibble if only 1 contrast present}
 
@@ -50,10 +48,7 @@ A list of tibbles for each contrast
 }
 \description{
 Extract all possible contrasts and annotate result tables from a DESeq object.
-Currently supports simple designs with a single variable.  Following
-DESeq2 conventions, control group should be listed first and then pairwise
-comparisons are selected in reverse order, so A, B, C levels will return
-C vs. B, C vs. A, and B vs. A
+Currently supports simple designs with a single variable.
 }
 \note{
 If you combine factors of interest into a single group following section 3.3 in the DESeq2 vignette,

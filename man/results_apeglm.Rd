@@ -8,6 +8,7 @@ results_apeglm(
   object,
   biomart,
   alpha = 0.05,
+  subset,
   add_columns,
   trt,
   simplify = TRUE,
@@ -20,6 +21,8 @@ results_apeglm(
 \item{biomart}{annotations from \code{read_biomart} with column 1 matching row names in results}
 
 \item{alpha}{the significance cutoff for the adjusted p-value cutoff (FDR)}
+
+\item{subset}{sorted index to subset all pairwise comparisons, see check_contrasts for possible contrasts}
 
 \item{add_columns}{a vector of biomart columns to add to result table, default
 gene_name, biotype, chromosome, description and human_homolog if present}

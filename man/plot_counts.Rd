@@ -4,18 +4,36 @@
 \alias{plot_counts}
 \title{Plot counts for a single gene}
 \usage{
-plot_counts(rld, gene, intgroups, ylab = "count", title)
+plot_counts(
+  x,
+  intgroup,
+  n = 25,
+  geom = "jitter",
+  ylab = "Log2 counts",
+  reorder,
+  ncol = NULL,
+  scales = "fixed",
+  ...
+)
 }
 \arguments{
-\item{rld}{rlog or other counts in DESeqTransform object}
+\item{x}{a tibble from \code{\link{top_counts}}}
 
-\item{gene}{gene id, should match rownames in rld}
+\item{intgroup}{column name in \code{attr(x, "colData")} to use for grouping}
 
-\item{intgroups}{one or two names in colData(rld) to use for grouping}
+\item{n}{total number of genes to plot, default 25}
+
+\item{geom}{geom type, default jitter or point, boxplot and violin}
 
 \item{ylab}{y-axis label}
 
-\item{title}{ggplot title, use NULL for no title}
+\item{reorder}{level names to reorder factor levels on x-axis}
+
+\item{ncol}{number of columsn for facet_wrap}
+
+\item{scales}{scales for facet_wrap, default fixed}
+
+\item{\dots}{additional options passed to geom_jitter or other geom}
 }
 \value{
 A ggplot
@@ -27,7 +45,7 @@ Plot counts for a single gene
 See \code{link{plot_interactions}} to plot many genes.
 }
 \examples{
- plot_counts(pasilla$rlog, "FBgn0033635",  c("type","condition"), title = "Prip")
+ plot_counts(pasilla$count, "FBgn0033635",  c("type","condition"), title = "Prip")
 }
 \author{
 Chris Stubben

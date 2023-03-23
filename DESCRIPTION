@@ -31,4 +31,4 @@ Encoding: UTF-8
 Description: This package simplifies the R code in a differential expression analysis for markdown reports. The package includes functions to run DESeq2 using sample and count tibbles as input, get annotated DESeq results for all pairwise comparisons and create interactive plots and other visualizations.
 LazyData: true
 biocViews: Software
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
