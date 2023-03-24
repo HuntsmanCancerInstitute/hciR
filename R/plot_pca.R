@@ -68,8 +68,8 @@ plot_pca <- function(object, intgroup="trt", tooltip, label, ntop = 500, relevel
    if(ggplot){
       p <- ggplot2::ggplot(data=d, ggplot2::aes(x=PC1, y=PC2, color=INTGRP,
           shape=INTGRP)) +  ggplot2::geom_point(size=2) +
-       ggplot2::xlab(paste0("PC1: ", percentVar[pc[1]],"% variance")) +
-       ggplot2::ylab(paste0("PC2: ", percentVar[pc[2]],"% variance")) +
+       ggplot2::xlab(paste0("PC", pc[1], ": ", percentVar[pc[1]],"% variance")) +
+       ggplot2::ylab(paste0("PC", pc[2], ": ", percentVar[pc[2]],"% variance")) +
        ggplot2::theme_bw() +
        ggplot2::theme(legend.title = ggplot2::element_blank(),
            legend.key = ggplot2::element_blank())
