@@ -26,7 +26,7 @@ gdc_coldata <- function(gdc){
    x <- x[, colnames(x) != "treatments"]
    # Fix other list columns... disease_type, primary_site
    ## table( sapply(x, class))
-   n <- which(sapply(x, class)=="list")
+   n <- which(sapply(x, class) %in% c("list", "AsIs"))
    #for(i in n) x[[i]] <- unlist(x[[i]])
    for(i in n) x[[i]] <- sapply( x[[i]], paste, collapse=",")
    ## some columns with all values =  Not reported

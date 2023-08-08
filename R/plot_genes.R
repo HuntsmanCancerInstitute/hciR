@@ -43,7 +43,7 @@ plot_genes <-  function( x, intgroup, palette="RdBu", dendsort=TRUE, scale="none
              # hack to fix right margin by padding with spaces
             if(is.character(df[,i])) df[, i] <- as.factor(df[, i])
             if(is.factor(df[,i])){
-                levels(df[, i]) <- paste0(levels(df[, i]), "    ")
+                levels(df[, i]) <- paste0(levels(df[, i]), "      ")
             }
        }
     }

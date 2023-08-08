@@ -54,6 +54,10 @@ plot_volcano<- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
          res$gene_name <- gsub(", .*", "", res$gene_name)
       }
    }
+   ## missing gene_name column
+   if(!"gene_name" %in% colnames(res) ){
+       res$gene_name <- res$id
+   }
    x <- dplyr::filter(res, !is.na(padj))
    ## center at zero...
    fc <- max(abs(x$log2FoldChange), na.rm=TRUE)
