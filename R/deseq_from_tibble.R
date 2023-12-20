@@ -6,7 +6,7 @@
 #' @param samples a sample table with names matching count table column names in row 1
 #' @param run_deseq Run \code{\link{DESeq}}, default TRUE
 #' @param minReplicates minimum number of replicates required in order to use
-#' replaceOutliers on a sample, default 7. 
+#' replaceOutliers on a sample, default 7.
 #' @param \dots additional options like the design formula are passed to \code{DESeqDataSetFromMatrix}
 #' @return A DESeqDataSet object
 #'
@@ -35,9 +35,11 @@ deseq_from_tibble <- function( counts, samples, run_deseq = TRUE, minReplicates 
    ## use hciR::as_matrix to convert to matrix
    counts <- as_matrix(counts)
    ## round for RSEM?
-   if (any(round(counts[1:20,]) != counts[1:20,])) {
-     message("Rounding counts (from RSEM?)")
-     counts <- round( counts, 0)
+   if (nrow(counts) > 20){
+      if (any(round(counts[1:20,]) != counts[1:20,])) {
+        message("Rounding counts (from RSEM?)")
+        counts <- round( counts, 0)
+      }
    }
    mode(counts) <- "integer"
    dds <- DESeq2::DESeqDataSetFromMatrix(counts, samples, ...)
