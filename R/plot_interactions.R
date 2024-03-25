@@ -20,7 +20,7 @@
 #' @export
 
 plot_interactions <- function(x, intgroups, ylab = "scaled rlog", scaled = TRUE,
- n=40, reorder, ...){
+ n=40, max_scale, reorder, ...){
    if(length(intgroups) != 2) stop( "intgroups should be a vector of two names")
    if(!tibble::is_tibble(x)) stop("x should be a tibble from top_counts")
    s1  <- attr(x, "colData")
@@ -30,6 +30,10 @@ plot_interactions <- function(x, intgroups, ylab = "scaled rlog", scaled = TRUE,
    }
    x1 <- t( as_matrix(x))
    if(scaled) x1 <- scale(x1)
+   if(!missing(max_scale)){
+       x1[x1 > max_scale] <-  max_scale
+       x1[x1 < -max_scale] <-  -max_scale
+   }
    if(ncol(x1) > n){
        # message("Displaying top ", n, " genes from top_counts")
        x1 <- x1[, 1:n]
