@@ -17,7 +17,7 @@
 read_deseq <- function(file,  object="results"){
    if(object =="results"){
      ## load all worksheets with _vs_ ???
-    wk <- excel_sheets(file)
+    wk <- readxl::excel_sheets(file)
     n <- grep("_vs_", wk)
     if(length(n)==0) stop("No results with _vs_ in worksheet names")
       res <- vector("list", length(n))
@@ -27,7 +27,7 @@ read_deseq <- function(file,  object="results"){
           res[[i]] <- read_excel(file, sheet= n[i])
       }
    } else{
-      s1 <- read_excel(file, sheet="samples")
+      s1 <- readxl::read_excel(file, sheet="samples")
       message("Loading ", object, " worksheet")
       r1 <- read_excel(file, sheet= object)
       ## delete gene_name and biotype
