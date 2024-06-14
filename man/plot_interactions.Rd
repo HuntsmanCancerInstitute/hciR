@@ -10,6 +10,7 @@ plot_interactions(
   ylab = "scaled rlog",
   scaled = TRUE,
   n = 40,
+  max_scale,
   reorder,
   ...
 )
