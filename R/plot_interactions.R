@@ -6,6 +6,7 @@
 #' @param ylab y-axis label
 #' @param scaled scale counts
 #' @param n total number of genes to plot
+#' @param max_scale maximum values for scaled values in case of outliers
 #' @param reorder level names to reorder factor levels on x-axis
 #' @param \dots additional options like ncol or nrow passed to facet_wrap
 #'
@@ -14,7 +15,7 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#'  x <- top_counts( pasilla$res, pasilla$rlog, top=25)
+#'  x <- top_counts( pasilla$results, pasilla$rlog, top=25)
 #'  # no interaction from single or paired end as expected
 #'  plot_interactions(x,  c("condition", "type"))
 #' @export

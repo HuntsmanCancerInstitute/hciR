@@ -24,12 +24,12 @@ read_deseq <- function(file,  object="results"){
       names(res) <- gsub("_vs_", " vs. ", wk[n])
       for(i in seq_along(n))  {
           message("Loading ", names(res)[i])
-          res[[i]] <- read_excel(file, sheet= n[i])
+          res[[i]] <- readxl::read_excel(file, sheet= n[i])
       }
    } else{
       s1 <- readxl::read_excel(file, sheet="samples")
       message("Loading ", object, " worksheet")
-      r1 <- read_excel(file, sheet= object)
+      r1 <- readxl::read_excel(file, sheet= object)
       ## delete gene_name and biotype
       n2 <- which(colnames(r1) %in% c("gene_name", "biotype"))
       if(length(n2) !=2) message("Note: Gene name and biotype columns are missing?")

@@ -1,11 +1,14 @@
 Package: hciR
 Title: RNA-seq workflows at HCI
-Version: 1.7
+Version: 1.8
 Author: Chris Stubben
 Maintainer: Chris Stubben <chris.stubben@hci.utah.edu>
+Depends:
+    R (>= 2.10)
 Imports:
     dplyr,
     readr,
+    readxl,
     tidyr,
     tibble,
     magrittr,
@@ -30,5 +33,6 @@ License: GPL-3
 Encoding: UTF-8
 Description: This package simplifies the R code in a differential expression analysis for markdown reports. The package includes functions to run DESeq2 using sample and count tibbles as input, get annotated DESeq results for all pairwise comparisons and create interactive plots and other visualizations.
 LazyData: true
+LazyDataCompression: xz
 biocViews: Software
 RoxygenNote: 7.3.1

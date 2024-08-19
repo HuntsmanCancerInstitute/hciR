@@ -17,7 +17,8 @@
 #' @author Chris Stubben
 #'
 #' @examples
-#'  plot_counts(pasilla$count, "FBgn0033635",  c("type","condition"), title = "Prip")
+#'  x <- top_counts(pasilla$results, pasilla$rlog, top=12)
+#'  plot_counts(x, "condition")
 #' @export
 
 plot_counts <- function(x, intgroup, n=25, geom="jitter", ylab = "Log2 counts", reorder, ncol=NULL, scales="fixed", ...){
@@ -32,7 +33,7 @@ plot_counts <- function(x, intgroup, n=25, geom="jitter", ylab = "Log2 counts", 
       x1 <- x1[, 1:n]
   }
   y <- data.frame(s1[, intgroup, drop=FALSE], x1)
-  z <- tidyr::gather(y, -all_of(intgroup), key="gene2", value = "count")
+  z <- tidyr::gather(y, -dplyr::all_of(intgroup), key="gene2", value = "count")
    ## reorder?
    if(!missing(reorder)) z[[1]] <- factor(z[[1]], levels = reorder)
 

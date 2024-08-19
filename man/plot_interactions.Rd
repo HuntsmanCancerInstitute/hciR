@@ -27,6 +27,8 @@ grouping}
 
 \item{n}{total number of genes to plot}
 
+\item{max_scale}{maximum values for scaled values in case of outliers}
+
 \item{reorder}{level names to reorder factor levels on x-axis}
 
 \item{\dots}{additional options like ncol or nrow passed to facet_wrap}
@@ -38,7 +40,7 @@ A ggplot
 Plot counts for many genes
 }
 \examples{
- x <- top_counts( pasilla$res, pasilla$rlog, top=25)
+ x <- top_counts( pasilla$results, pasilla$rlog, top=25)
  # no interaction from single or paired end as expected
  plot_interactions(x,  c("condition", "type"))
 }
