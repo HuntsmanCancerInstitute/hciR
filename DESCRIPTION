@@ -16,10 +16,8 @@ Imports:
     SummarizedExperiment,
     Biobase,
     S4Vectors,
-    highcharter,
     pheatmap,
     RColorBrewer,
-    htmlwidgets,
     openxlsx,
     biomaRt,
     dendsort,
@@ -27,6 +25,8 @@ Imports:
     ggplot2
 Suggests:
     clusterProfiler,
+    highcharter,
+    htmlwidgets,
     fgsea,
     dendextend
 License: GPL-3

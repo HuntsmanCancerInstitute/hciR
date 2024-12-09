@@ -77,7 +77,8 @@ plot_pca <- function(object, intgroup="trt", tooltip, label, ntop = 500, relevel
 		   p
 	   }else{
 		   if(!label %in% names(colMetadata) ) stop("name is missing from colData(object)")
-           p + ggrepel::geom_text_repel(ggplot2::aes(label=colMetadata[[label]]), cex=3, box.padding=.2, show.legend=FALSE)
+        dotlabels <- colMetadata[[label]]
+        p + ggrepel::geom_text_repel(ggplot2::aes(label=dotlabels), cex=3, box.padding=.2, show.legend=FALSE)
 	   }
    }else{
       # if tooltip is missing use column names
