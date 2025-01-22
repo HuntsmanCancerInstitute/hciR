@@ -34,8 +34,6 @@ read_featureCounts <- function( path=".", pattern, reshape=TRUE, stats=FALSE){
       fc <- read_sample_files(path, pattern, col_names=c("status", "count"), skip=1)
       if(reshape){
            fc <- dplyr::filter(fc, count!=0) %>% tidyr::spread(status, count)
-           #fix for Autoanalysis
-           fc$sample <- gsub("_Hg38|_GRCm39", "", fc$sample )
            #  add option to sort HCI samples as X1, X2, ..., X10, X11
            fc  <-  fc[ order_samples(fc$sample), ]
       }
@@ -43,6 +41,8 @@ read_featureCounts <- function( path=".", pattern, reshape=TRUE, stats=FALSE){
    else{
      if(missing(pattern))  pattern <- "\\.counts$"
       fc <- read_sample_files(path, pattern, col_names=c("geneid",	"chr", "start",	"end", "strand", "length", "count"), skip=2)
+      #fix for Autoanalysis
+      fc$sample <- gsub("_Hg38|_GRCm39", "", fc$sample )
       if(reshape){
           fc  <- dplyr::select(fc, sample, geneid, count) %>% tidyr::spread(sample, count)
           fc  <-  fc[, c(1, order_samples(colnames(fc)[-1])+1) ]
