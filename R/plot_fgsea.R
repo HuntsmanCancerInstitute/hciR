@@ -32,7 +32,7 @@ plot_fgsea <- function(x, trim=70, sets, nes=TRUE, cluster_row=FALSE,  cluster_c
    z <- dplyr::select(y, contrast, pathway, NES) %>%
          tidyr::spread(contrast, NES)
    }else{
-   z <- dplyr::select(y, contrast, pathway, ES) %>%
+   z <- dplyr::select(y, contrast, pathway, ES) %>% 
          tidyr::spread(contrast, ES)
    }
    if(!missing(sets)){
