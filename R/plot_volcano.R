@@ -59,6 +59,10 @@ plot_volcano<- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
        res$gene_name <- res$id
    }
    x <- dplyr::filter(res, !is.na(padj))
+   # fewer points for PDFs and highchart
+   x$xy <- paste0(round(-log10(x$padj),1), round(x$log2FoldChange,1))
+   x <- dplyr::filter(x, !duplicated(xy))
+
    ## center at zero...
    fc <- max(abs(x$log2FoldChange), na.rm=TRUE)
 
