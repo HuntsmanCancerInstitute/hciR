@@ -82,8 +82,8 @@ write_deseq <- function(result_all, dds, rld, biomart, sets, fpkm,
     samp1$replaceable <- NULL
   Counts <-    list(
        "raw_counts" = DESeq2::counts(dds),
-       "log2_norm"  = SummarizedExperiment::assay(DESeq2::normTransform(dds)),
-       "rlog"       = SummarizedExperiment::assay(rld))
+       "log2_norm"  = round(SummarizedExperiment::assay(DESeq2::normTransform(dds)),3),
+       "rlog"       = round(SummarizedExperiment::assay(rld),3))
 
      if(!missing(fpkm)){
        if(class(fpkm)[1] == "list"){

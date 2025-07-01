@@ -23,6 +23,7 @@
 #' ggplot
 #' @param missing Replace missing gene names with Ensembl IDs
 #' @param labelsize label size, default 3
+#' @param remove_overlap=FALSE remove overlapping points with same pvalue and fold change
 #' @param \dots other options passed to \code{hc_chart} or \code{geom_text_repel}
 #'
 #' @return A highchart or ggplot.
@@ -34,7 +35,7 @@
 #' @export
 
 plot_volcano<- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
- radius=3, ggplot=TRUE, palette="RdBu", missing=FALSE, labelsize=3, ...){
+ radius=3, ggplot=TRUE, palette="RdBu", missing=FALSE, labelsize=3, remove_overlap=FALSE, ...){
    if(!tibble::is_tibble(res)){
       if(is.list(res)){
         message("Plotting the first table in the list")
@@ -60,9 +61,11 @@ plot_volcano<- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
    }
    x <- dplyr::filter(res, !is.na(padj))
    # fewer points for PDFs and highchart
-   x$xy <- paste0(round(-log10(x$padj),1), round(x$log2FoldChange,1))
-   x <- dplyr::filter(x, !duplicated(xy))
-
+   ## doesn't work if most p-values are 1
+   if(remove_overlap){
+      x$xy <- paste0(round(-log10(x$padj),1), round(x$log2FoldChange,1))
+      x <- dplyr::filter(x, !duplicated(xy))
+   }
    ## center at zero...
    fc <- max(abs(x$log2FoldChange), na.rm=TRUE)
 
