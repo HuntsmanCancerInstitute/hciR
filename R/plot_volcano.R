@@ -55,6 +55,16 @@ plot_volcano<- function(res, pvalue_cutoff, foldchange_cutoff, max_pvalue = 200,
          res$gene_name <- gsub(", .*", "", res$gene_name)
       }
    }
+   ## Seurat FindMarkers
+   n <- match(c("avg_log2FC", "p_val_adj"), names(res))
+   if( !any(is.na(n))){
+      names(res)[n] <- c("log2FoldChange", "padj")
+      # gene in rownames?
+      n <- which( names(res) %in% c("gene"))
+      if(length(n)==1){
+         names(res)[n] <- "gene_name"
+      }
+   }
    ## missing gene_name column
    if(!"gene_name" %in% colnames(res) ){
        res$gene_name <- res$id

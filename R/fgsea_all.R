@@ -5,6 +5,7 @@
 #' @param res A list of DESeq results
 #' @param gsets Gene sets
 #' @param FDR FDR cutoff, default 0.1
+#' @param simplify Return tibble if list of 1
 #' @param nperm Number of permutations, default 10000
 #' @param \dots Additional options passed to \code{fgsea}
 #'
@@ -20,7 +21,7 @@
 #' }
 #' @export
 
-fgsea_all <- function(res, gsets, FDR = 0.1, nperm=10000, ...){
+fgsea_all <- function(res, gsets, FDR = 0.1, simplify=TRUE, nperm=10000, ...){
    ##  if results are a tibble (since simplify=TRUE by default)
    if( class(res)[1] != "list"){
          n <- attr(res, "contrast")
@@ -57,6 +58,8 @@ fgsea_all <- function(res, gsets, FDR = 0.1, nperm=10000, ...){
       fgsea_res[[i]] <-  f1
    }
    fgsea_res <- fgsea_res[sapply(fgsea_res, nrow) > 0]
-   if(length( fgsea_res) == 1 ) fgsea_res <- fgsea_res[[1]]
+   if(length( fgsea_res) == 1 ){
+     if(simplify) fgsea_res <- fgsea_res[[1]]
+   }
    fgsea_res
 }
